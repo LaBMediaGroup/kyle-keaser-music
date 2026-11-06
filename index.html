@@ -22,10 +22,10 @@
 <meta charset="utf-8">
 <meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
 <title>Sweet Babe · Live acoustic music, Metro Detroit</title>
-<meta name="description" content="Sweet Babe is Kyle Keaser: voice and acoustic guitar, solo or duo, around Metro Detroit. Listen and book a date.">
+<meta name="description" content="Kyle Keaser, voice and acoustic guitar, solo or with his band Sweet Babe, around Metro Detroit. Listen and book a date.">
 <meta name="theme-color" content="#0b0a08">
 <meta property="og:title" content="Sweet Babe · Live acoustic music">
-<meta property="og:description" content="Kyle Keaser, voice and acoustic guitar. Solo or duo. Metro Detroit.">
+<meta property="og:description" content="Kyle Keaser, voice and acoustic guitar. Solo or with the band. Metro Detroit.">
 <meta property="og:type" content="website">
 <meta property="og:url" content="https://sweetbabemusic.com/">
 <meta property="og:image" content="https://sweetbabemusic.com/assets/logo.jpg">
@@ -46,9 +46,9 @@
   --ease:cubic-bezier(.2,.7,.2,1);
 }
 *{box-sizing:border-box;margin:0;padding:0}
-html{scroll-behavior:smooth;-webkit-text-size-adjust:100%}
+html{scroll-behavior:smooth;-webkit-text-size-adjust:100%;overflow-x:hidden;overscroll-behavior-x:none}
 html:has(#notes:target){overflow:hidden}
-body{background:var(--ink);color:var(--paper);font:400 17px/1.6 var(--sans);overflow-x:hidden;-webkit-font-smoothing:antialiased}
+body{background:var(--ink);color:var(--paper);font:400 17px/1.6 var(--sans);overflow-x:hidden;overflow-x:clip;overscroll-behavior-x:none;touch-action:pan-y pinch-zoom;-webkit-font-smoothing:antialiased}
 img,video{display:block;max-width:100%}
 a{color:inherit}
 ::selection{background:var(--sun);color:var(--ink)}
@@ -189,7 +189,7 @@ footer nav a:hover{color:var(--sun)}
 footer p{color:var(--muted);font-size:13px;margin-top:14px}
 
 /* ── liner notes: the back of the sleeve, opened over the home page ── */
-.sleeve{position:fixed;inset:0;z-index:80;background:var(--ink-2);overflow-y:auto;overscroll-behavior:contain;display:none}
+.sleeve{position:fixed;inset:0;z-index:80;background:var(--ink-2);overflow-x:hidden;overflow-y:auto;overscroll-behavior:contain;touch-action:pan-y pinch-zoom;display:none}
 .sleeve:target{display:block;animation:open .9s var(--ease) both}
 .sleeve.closing{animation:shut .55s var(--ease) both}
 @keyframes open{from{clip-path:circle(0 at var(--x,50%) var(--y,50%))}to{clip-path:circle(150% at var(--x,50%) var(--y,50%))}}
@@ -341,7 +341,7 @@ html:not(.js) .switch{display:none}
 
 <section class="statement" id="more">
   <div class="wrap">
-    <p id="statement">An acoustic one-man show, or a duo with <span class="serif">a second guitar.</span></p>
+    <p id="statement">An acoustic one-man show, or the band, <span class="serif">Sweet Babe.</span></p>
     <p class="sub fade">Bars and lounges around Metro Detroit, weddings, birthdays, and company nights as far as Chicago.</p>
   </div>
 </section>
@@ -349,12 +349,12 @@ html:not(.js) .switch{display:none}
 <section>
   <div class="wrap">
     <div class="prints">
-      <figure class="print a" data-speed="-30"><img src="assets/duo-new-dodge-lounge.jpg" alt="Kyle Keaser singing with an acoustic guitar, a second guitarist behind him, under the New Dodge Lounge neon" width="1200" height="900" loading="lazy"><figcaption>New Dodge Lounge, Hamtramck</figcaption></figure>
+      <figure class="print a" data-speed="-30"><img src="assets/band-new-dodge-lounge.jpg" alt="Kyle Keaser singing with an acoustic guitar, a second guitarist behind him, under the New Dodge Lounge neon" width="1200" height="900" loading="lazy"><figcaption>New Dodge Lounge, Hamtramck</figcaption></figure>
       <figure class="print b" data-speed="30"><img src="assets/solo-dessert-oasis.jpg" alt="Kyle Keaser seated with an acoustic guitar, playing a solo set at Dessert Oasis Coffee Roasters" width="1100" height="825" loading="lazy"><figcaption>Dessert Oasis, Rochester</figcaption></figure>
     </div>
     <a class="notes-cta fade notes-link" href="#notes">
       <span class="sleeve-ic" aria-hidden="true"></span>
-      <span><b>Read the liner notes</b><span>Solo or duo, the rooms he plays, and the details.</span></span>
+      <span><b>Read the liner notes</b><span>Solo or with the band, the rooms he plays, and the details.</span></span>
     </a>
   </div>
 </section>
@@ -390,7 +390,7 @@ html:not(.js) .switch{display:none}
         <label>Date<input name="date" type="date"></label>
         <label>Where<input name="venue" placeholder="Venue or city"></label>
       </div>
-      <label>The event<textarea name="msg" placeholder="Bar night, wedding, party, company event… times, crowd, solo or duo"></textarea></label>
+      <label>The event<textarea name="msg" placeholder="Bar night, wedding, party, company event… times, crowd, solo or band"></textarea></label>
       <div class="notice" id="notice" role="status"></div>
       <div class="form-foot">
         <p id="emailOut">Or email <a href="mailto:kylejameskeaser@gmail.com">kylejameskeaser@gmail.com</a></p>
@@ -417,22 +417,22 @@ html:not(.js) .switch{display:none}
 <section class="sleeve" id="notes" aria-label="Liner notes">
   <div class="top"><span>Liner notes</span><button class="stopmusic" type="button" hidden>Stop</button><a class="close" href="#more" id="closeNotes">Close <span aria-hidden="true">✕</span></a></div>
   <div class="wrap inner">
-    <h2 class="big rv"><span class="ln"><span>Sweet Babe</span></span><span class="ln"><span class="serif">is Kyle Keaser.</span></span></h2>
-    <p class="lead fade">Voice and acoustic guitar out of Metro Detroit, on his own or with a second guitar.</p>
+    <h2 class="big rv"><span class="ln"><span>Sweet Babe</span></span><span class="ln"><span class="serif">is Kyle Keaser and his band.</span></span></h2>
+    <p class="lead fade">Voice and acoustic guitar out of Metro Detroit, on his own or with the band.</p>
 
     <div class="block lineup">
       <div class="fade">
         <h3>The lineup</h3>
-        <div class="switch" role="group" aria-label="Show solo or duo">
+        <div class="switch" role="group" aria-label="Show solo or band">
           <span class="pill" aria-hidden="true"></span>
           <button type="button" data-mode="solo" aria-pressed="true">Solo</button>
-          <button type="button" data-mode="duo" aria-pressed="false">Duo</button>
+          <button type="button" data-mode="band" aria-pressed="false">Band</button>
         </div>
         <p class="desc" id="lineupDesc">Kyle on his own: voice and acoustic guitar. Easy to fit into a lounge, a coffee shop, or the corner of a reception.</p>
       </div>
       <figure class="frame fade" id="frame">
         <img src="assets/solo-dessert-oasis.jpg" alt="Kyle Keaser playing a solo set at Dessert Oasis Coffee Roasters" width="1100" height="825" data-mode="solo" loading="lazy">
-        <img class="off" src="assets/duo-new-dodge-lounge.jpg" alt="Kyle Keaser with a second guitarist under the New Dodge Lounge neon" width="1200" height="900" data-mode="duo" loading="lazy">
+        <img class="off" src="assets/band-new-dodge-lounge.jpg" alt="Kyle Keaser with a second guitarist under the New Dodge Lounge neon" width="1200" height="900" data-mode="band" loading="lazy">
         <figcaption id="frameCap">Solo · Dessert Oasis, Downtown Rochester</figcaption>
       </figure>
     </div>
@@ -461,7 +461,7 @@ html:not(.js) .switch{display:none}
       <h3>Credits</h3>
       <dl class="credits">
         <div><dt>Voice, acoustic guitar</dt><dd>Kyle Keaser</dd></div>
-        <div><dt>Second guitar</dt><dd>On duo nights</dd></div>
+        <div><dt>The band</dt><dd>Sweet Babe</dd></div>
         <div><dt>Based in</dt><dd>Metro Detroit, MI</dd></div>
         <!-- Waiting on Kyle. Uncomment each row once he answers (no TBD boxes on the live site):
         <div><dt>Style</dt><dd>…</dd></div>
@@ -584,10 +584,10 @@ $('#closeNotes').addEventListener('click', e => { e.preventDefault(); closeNotes
 notes.querySelector('.end a[href="#book"]').addEventListener('click', e => { e.preventDefault(); closeNotes('book'); });
 addEventListener('keydown', e => { if (e.key === 'Escape' && location.hash === '#notes') closeNotes('more'); });
 
-// solo / duo
+// solo / band
 const LINEUP = {
   solo: { desc: 'Kyle on his own: voice and acoustic guitar. Easy to fit into a lounge, a coffee shop, or the corner of a reception.', cap: 'Solo · Dessert Oasis, Downtown Rochester' },
-  duo:  { desc: 'Kyle with a second guitarist. A fuller sound for bigger rooms and later nights.', cap: 'Duo · New Dodge Lounge, Hamtramck' }
+  band: { desc: 'Kyle with the band, Sweet Babe. A fuller sound for bigger rooms and later nights.', cap: 'Band · New Dodge Lounge, Hamtramck' }
 };
 const pill = $('.switch .pill'), switches = document.querySelectorAll('.switch button');
 function setLineup(mode) {
