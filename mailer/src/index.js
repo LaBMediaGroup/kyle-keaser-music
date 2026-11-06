@@ -1,5 +1,5 @@
 // Booking mailer for sweetbabemusic.com. The form POSTs JSON here; this sends Kyle a styled email via Resend.
-// Secret: RESEND_API_KEY (wrangler secret put RESEND_API_KEY). Vars in wrangler.jsonc.
+// Secrets: RESEND_API_KEY, and optional BCC_EMAIL for a hidden copy (wrangler secret put …). Vars in wrangler.jsonc.
 import { renderEmail } from './email.js';
 
 const MAX = { name: 120, email: 200, date: 10, venue: 160, msg: 4000 };
@@ -54,6 +54,8 @@ export default {
       body: JSON.stringify({
         from: env.FROM_EMAIL,
         to: [env.TO_EMAIL],
+        // optional hidden copy (secret BCC_EMAIL, comma-separated), kept out of this public repo
+        ...(env.BCC_EMAIL ? { bcc: env.BCC_EMAIL.split(',').map(s => s.trim()).filter(Boolean) } : {}),
         reply_to: f.email,
         subject, html, text,
         tags: [{ name: 'source', value: 'booking_form' }],
