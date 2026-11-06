@@ -475,7 +475,7 @@ html:not(.js) .switch{display:none}
       <label class="hp" aria-hidden="true">Company<input name="company" tabindex="-1" autocomplete="off"></label>
       <div class="notice" id="notice" role="status"></div>
       <div class="form-foot">
-        <p id="emailOut">Or email <a href="mailto:kylejameskeaser@gmail.com">kylejameskeaser@gmail.com</a></p>
+        <p id="emailOut">Or email kylejameskeaser [at] gmail [dot] com</p>
         <button class="btn btn-sun" type="submit">Send</button>
       </div>
     </form>
@@ -584,8 +584,9 @@ html:not(.js) .switch{display:none}
 <script>
 /* ════════ EDIT HERE ════════ */
 
-// Kyle's booking email. If it changes, also change the plain link by the Send button in the booking form.
-const BOOKING_EMAIL = 'kylejameskeaser@gmail.com';
+// Kyle's booking email, put together in the browser so address-harvesting bots reading the page can't
+// pick it up. If it changes, also change the plain-text fallback by the Send button in the booking form.
+const BOOKING_EMAIL = ['kylejameskeaser', 'gmail.com'].join('@');
 // The booking mailer (mailer/ in this repo) sends Kyle a styled email. '' = the form opens the visitor's email app instead.
 const MAILER_URL = 'https://sweet-babe-mailer.robertbaldwin3d.workers.dev';
 

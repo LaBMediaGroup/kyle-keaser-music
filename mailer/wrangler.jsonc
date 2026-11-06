@@ -1,12 +1,11 @@
 // Booking mailer for sweetbabemusic.com: the site's form POSTs here, and Kyle gets a styled email through Resend.
-// Deploy: npx wrangler deploy   ·   API key: npx wrangler secret put RESEND_API_KEY
+// Deploy: npx wrangler deploy   ·   Secrets: RESEND_API_KEY, BOOKING_TO (Kyle's address, kept out of this public repo)
 {
   "name": "sweet-babe-mailer",
   "main": "src/index.js",
   "compatibility_date": "2026-09-01",
   "workers_dev": true,
   "vars": {
-    "TO_EMAIL": "kylejameskeaser@gmail.com",
     "FROM_EMAIL": "Sweet Babe Bookings <bookings@sweetbabemusic.com>",
     "SITE_URL": "https://sweetbabemusic.com",
     "ALLOWED_ORIGINS": "https://sweetbabemusic.com,https://www.sweetbabemusic.com,http://localhost:8799"
