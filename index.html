@@ -158,7 +158,7 @@ section{position:relative}
 .js .prints.in .print.b{transition-delay:.25s}
 .notes-cta{display:flex;align-items:center;gap:18px;margin-top:clamp(36px,6vw,60px);margin-bottom:clamp(70px,11vw,120px);text-decoration:none;max-width:520px}
 .notes-cta .sleeve-ic{flex:none;width:58px;height:58px;position:relative;isolation:isolate;margin-right:14px}
-.notes-cta .sleeve-ic::before{content:"";position:absolute;inset:0;background:var(--ink-3) url(assets/logo.jpg) center/84% no-repeat;border:1px solid var(--line);border-radius:4px;box-shadow:0 8px 20px rgba(0,0,0,.45)}
+.notes-cta .sleeve-ic::before{content:"";position:absolute;inset:0;background:radial-gradient(circle closest-side,transparent 82.5%,var(--ink-3) 84%) center/100% no-repeat,url(assets/logo.jpg) center/84% no-repeat,var(--ink-3);border:1px solid var(--line);border-radius:4px;box-shadow:0 8px 20px rgba(0,0,0,.45)}
 .notes-cta .sleeve-ic::after{content:"";position:absolute;inset:6px -14px 6px 18px;border-radius:50%;background:repeating-radial-gradient(circle,#0d0c0a 0 1.4px,#1a1712 1.4px 2.8px);box-shadow:0 0 0 1px rgba(242,238,223,.08);z-index:-1;transition:transform .5s var(--ease)}
 .notes-cta:hover .sleeve-ic::after{transform:translateX(10px) rotate(40deg)}
 .notes-cta b{display:block;font:800 22px/1.15 var(--sans);letter-spacing:-.02em}
@@ -185,6 +185,43 @@ section{position:relative}
 .book{padding:clamp(80px,12vw,130px) 0;background:linear-gradient(180deg,var(--ink),var(--ink-2))}
 .book .intro{color:var(--muted);margin-top:16px;font-size:18px;max-width:30em}
 .form{margin-top:36px;display:grid;gap:14px;max-width:760px}
+.form[hidden],.thanks[hidden]{display:none}
+.form.leaving{animation:formOut .45s var(--ease) forwards;pointer-events:none}
+@keyframes formOut{to{opacity:0;transform:translateY(-14px) scale(.98);filter:blur(3px)}}
+
+/* ── the thank-you, after a booking request goes out ── */
+.thanks{margin-top:36px;max-width:760px;display:grid;gap:30px;align-items:center;padding:clamp(26px,5vw,44px);border:1px solid var(--line);border-radius:22px;
+  background:radial-gradient(80% 120% at 0% 0%,rgba(222,214,61,.12),transparent 60%),var(--ink-3);animation:thanksIn .7s var(--ease) both}
+@media (min-width:640px){.thanks{grid-template-columns:200px 1fr;gap:40px}}
+@keyframes thanksIn{from{opacity:0;transform:translateY(18px) scale(.98)}}
+.thanks-art{position:relative;width:190px;height:150px;margin:0 auto}
+.t-sleeve{position:absolute;left:0;top:10px;width:130px;height:130px;border-radius:6px;z-index:2;
+  background:radial-gradient(circle closest-side,transparent 78.5%,var(--ink) 80%) center/100% no-repeat,url(assets/logo.jpg) center/80% no-repeat,var(--ink);border:1px solid var(--line);box-shadow:0 18px 40px rgba(0,0,0,.55);
+  animation:sleeveIn .6s var(--ease) .1s both}
+@keyframes sleeveIn{from{opacity:0;transform:translateY(16px) rotate(-6deg)}}
+.t-disc{position:absolute;left:6px;top:16px;width:118px;height:118px;border-radius:50%;z-index:1;display:grid;place-items:center;
+  background:repeating-radial-gradient(circle,#0d0c0a 0 1.5px,#1b1913 1.5px 3px);box-shadow:0 0 0 1px rgba(242,238,223,.08),0 14px 30px rgba(0,0,0,.5);
+  animation:discOut 1s var(--ease) .55s both,spin 4s linear 1.5s infinite}
+.t-disc img{width:40%;height:40%;border-radius:50%;box-shadow:0 0 0 3px #0a0907}
+@keyframes discOut{from{translate:0 0;rotate:-120deg}to{translate:62px 0;rotate:0deg}}
+.t-check{position:absolute;left:104px;top:-2px;z-index:3;width:44px;height:44px;border-radius:50%;background:var(--sun);display:grid;place-items:center;
+  box-shadow:0 8px 22px rgba(0,0,0,.5);animation:pop .5s cubic-bezier(.3,1.6,.5,1) 1.25s both}
+.t-check svg{width:24px;height:24px;fill:none;stroke:var(--ink);stroke-width:3;stroke-linecap:round;stroke-linejoin:round;stroke-dasharray:24;stroke-dashoffset:24;animation:draw .4s ease-out 1.55s forwards}
+@keyframes pop{from{opacity:0;transform:scale(.3)}}
+@keyframes draw{to{stroke-dashoffset:0}}
+.t-note{position:absolute;left:150px;top:70px;color:var(--sun);font:400 20px/1 Georgia,serif;opacity:0;animation:note 2.6s ease-out infinite}
+.t-note.n1{animation-delay:1.6s}.t-note.n2{animation-delay:2.2s;left:166px;font-size:16px}.t-note.n3{animation-delay:2.9s;left:140px;font-size:15px}.t-note.n4{animation-delay:3.5s;left:172px}
+@keyframes note{0%{opacity:0;transform:translate(0,0) rotate(0)}15%{opacity:.95}100%{opacity:0;transform:translate(18px,-80px) rotate(18deg)}}
+.thanks-copy>*{animation:rise .8s var(--ease) both}
+.t-kicker{font:600 12px/1 var(--sans);letter-spacing:.2em;text-transform:uppercase;color:var(--sun);animation-delay:.5s!important}
+.t-title{font:italic 400 clamp(34px,5.4vw,50px)/1.05 var(--serif);margin-top:12px;animation-delay:.65s!important}
+.t-title span{color:var(--sun)}
+.t-body{color:var(--paper);font-size:17px;margin-top:14px;max-width:34ch;animation-delay:.8s!important}
+.t-body b{font-weight:600;color:var(--sun);overflow-wrap:anywhere}
+.t-sign{color:var(--muted);font-size:15px;margin-top:18px;animation-delay:.95s!important}
+.t-sign span{font:italic 400 22px/1.3 var(--serif);color:var(--paper)}
+.t-again{appearance:none;background:none;border:0;padding:0;margin-top:22px;color:var(--muted);font:600 14px/1 var(--sans);text-decoration:underline;text-underline-offset:4px;cursor:pointer;animation-delay:1.1s!important}
+.t-again:hover{color:var(--sun)}
 .form .row{display:grid;gap:14px}
 @media (min-width:640px){.form .row{grid-template-columns:1fr 1fr}}
 label{display:grid;gap:7px;font:600 12px/1 var(--sans);letter-spacing:.06em;color:var(--muted)}
@@ -442,6 +479,21 @@ html:not(.js) .switch{display:none}
         <button class="btn btn-sun" type="submit">Send</button>
       </div>
     </form>
+    <div class="thanks" id="thanks" role="status" aria-live="polite" hidden>
+      <div class="thanks-art" aria-hidden="true">
+        <span class="t-sleeve"></span>
+        <span class="t-disc"><img src="assets/logo.jpg" alt="" width="120" height="120"></span>
+        <span class="t-check"><svg viewBox="0 0 24 24"><path d="M5 12.5l4.2 4.2L19 7"/></svg></span>
+        <span class="t-note n1">♪</span><span class="t-note n2">♫</span><span class="t-note n3">♪</span><span class="t-note n4">♬</span>
+      </div>
+      <div class="thanks-copy">
+        <p class="t-kicker">Request sent</p>
+        <h3 class="t-title">Thank you, <span id="thanksName">friend</span>.</h3>
+        <p class="t-body">Really appreciate you taking the time to stop by and reach out. Kyle has your request and will write back to <b id="thanksEmail"></b> soon.</p>
+        <p class="t-sign">Talk soon,<br><span>Kyle &amp; Sweet Babe</span></p>
+        <button class="t-again" type="button" id="thanksAgain">Send another request</button>
+      </div>
+    </div>
   </div>
 </section>
 
@@ -748,6 +800,25 @@ if (VIDEOS.length) {
 $('#emailOut').innerHTML = BOOKING_EMAIL
   ? `Or email <a href="mailto:${esc(BOOKING_EMAIL)}">${esc(BOOKING_EMAIL)}</a>`
   : '<span class="tbd">TBD: Kyle\'s booking email</span>';
+// the thank-you: the form folds away, a record slides out of its sleeve and spins
+function showThanks(first, email) {
+  const form = $('#form'), t = $('#thanks'), btn = form.querySelector('button[type=submit]');
+  $('#thanksName').textContent = first || 'friend';
+  $('#thanksEmail').textContent = email;
+  const swap = () => {
+    form.hidden = true; form.classList.remove('leaving'); form.reset(); $('#notice').className = 'notice';
+    btn.disabled = false; btn.classList.remove('sending'); btn.textContent = 'Send';
+    t.hidden = false;
+    t.scrollIntoView({ behavior: reduce ? 'auto' : 'smooth', block: 'center' });
+  };
+  if (reduce) return swap();
+  form.classList.add('leaving');
+  setTimeout(swap, 430);
+}
+$('#thanksAgain').addEventListener('click', () => {
+  $('#thanks').hidden = true; $('#form').hidden = false;
+  $('#form').querySelector('input[name=name]').focus();
+});
 $('#form').addEventListener('submit', async e => {
   e.preventDefault();
   const form = e.target, f = new FormData(form), notice = $('#notice'), btn = form.querySelector('button[type=submit]');
@@ -771,11 +842,7 @@ $('#form').addEventListener('submit', async e => {
       body: JSON.stringify(Object.fromEntries(f)) });
     const out = await r.json().catch(() => ({}));
     if (r.ok && out.ok) {
-      const first = String(f.get('name')).trim().split(/\s+/)[0];
-      say('sent', `<b>Sent. Thanks, ${esc(first)}!</b> Kyle has it and will write back to ${esc(f.get('email'))}.`);
-      form.reset();
-      btn.textContent = 'Sent ✓';
-      setTimeout(() => { btn.disabled = false; btn.classList.remove('sending'); btn.textContent = 'Send'; }, 4000);
+      showThanks(String(f.get('name')).trim().split(/\s+/)[0], String(f.get('email')).trim());
       return;
     }
     if (r.status === 422 || r.status === 429) { say('', esc(out.error || 'Something\'s off. Check the form and try again.')); throw 0; }
