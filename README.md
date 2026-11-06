@@ -7,4 +7,4 @@ Booking site for Sweet Babe, Kyle Keaser's live acoustic act (Metro Detroit). On
 - **Credits:** style, set length and PA rows are commented out in the liner notes until Kyle answers.
 - **Shows / clips:** `SHOWS` and `VIDEOS` in the script. Only clips Kyle has approved.
 
-Hosted with GitHub Pages from `main` / root.
+Hosted with GitHub Pages from `main` / root at https://sweetbabemusic.com (`CNAME`).
