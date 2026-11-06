@@ -179,6 +179,9 @@ textarea{min-height:110px;resize:vertical}
 .form-foot p{color:var(--muted);font-size:14px}
 .notice{display:none;padding:14px 16px;border-radius:12px;border:1px dashed var(--sun);font-size:15px}
 .notice.show{display:block}
+.notice.sent{border-style:solid;background:var(--sun-dim);animation:rise .6s var(--ease) both}
+.btn.sending{opacity:.75;cursor:progress}
+.hp{position:absolute;width:1px;height:1px;overflow:hidden;clip-path:inset(50%);white-space:nowrap}
 .notice pre{white-space:pre-wrap;font:13px/1.5 ui-monospace,Menlo,monospace;color:var(--muted);margin-top:8px;max-height:180px;overflow:auto}
 
 footer{padding:70px 0 80px;text-align:center;border-top:1px solid var(--line);overflow:hidden}
@@ -391,6 +394,7 @@ html:not(.js) .switch{display:none}
         <label>Where<input name="venue" placeholder="Venue or city"></label>
       </div>
       <label>The event<textarea name="msg" placeholder="Bar night, wedding, party, company event… times, crowd, solo or band"></textarea></label>
+      <label class="hp" aria-hidden="true">Company<input name="company" tabindex="-1" autocomplete="off"></label>
       <div class="notice" id="notice" role="status"></div>
       <div class="form-foot">
         <p id="emailOut">Or email <a href="mailto:kylejameskeaser@gmail.com">kylejameskeaser@gmail.com</a></p>
@@ -494,6 +498,8 @@ html:not(.js) .switch{display:none}
 
 // Kyle's booking email. If it changes, also change the plain link by the Send button in the booking form.
 const BOOKING_EMAIL = 'kylejameskeaser@gmail.com';
+// The booking mailer (mailer/ in this repo) sends Kyle a styled email. '' = the form opens the visitor's email app instead.
+const MAILER_URL = '';
 
 // The record player. song: a file Kyle has said yes to, in assets/audio/. Leave '' and the play button
 // isn't shown at all. Only a file Kyle has sent and approved for the site.
@@ -674,21 +680,44 @@ if (VIDEOS.length) {
 $('#emailOut').innerHTML = BOOKING_EMAIL
   ? `Or email <a href="mailto:${esc(BOOKING_EMAIL)}">${esc(BOOKING_EMAIL)}</a>`
   : '<span class="tbd">TBD: Kyle\'s booking email</span>';
-$('#form').addEventListener('submit', e => {
+$('#form').addEventListener('submit', async e => {
   e.preventDefault();
-  const f = new FormData(e.target), notice = $('#notice');
-  if (!f.get('name') || !f.get('email')) {
-    notice.className = 'notice show'; notice.textContent = 'Add your name and email so Kyle can write back.'; return;
-  }
+  const form = e.target, f = new FormData(form), notice = $('#notice'), btn = form.querySelector('button[type=submit]');
+  const say = (cls, html) => { notice.className = 'notice show ' + cls; notice.innerHTML = html; };
+  if (!f.get('name') || !f.get('email')) { say('', 'Add your name and email so Kyle can write back.'); return; }
+  if (!/^[^\s@]+@[^\s@]+\.[^\s@]{2,}$/.test(f.get('email'))) { say('', 'That email doesn\'t look right. Kyle needs it to write back.'); return; }
   const subject = `Booking: ${f.get('date') || 'date TBD'}${f.get('venue') ? ', ' + f.get('venue') : ''}`;
   const body = [`Name: ${f.get('name')}`, `Email: ${f.get('email')}`, `Date: ${f.get('date') || '-'}`,
     `Where: ${f.get('venue') || '-'}`, '', f.get('msg') || ''].join('\n');
   if (!BOOKING_EMAIL) {
-    notice.className = 'notice show';
-    notice.innerHTML = `<b>Booking email isn't set yet.</b> This is what will be sent:<pre>${esc(subject)}\n\n${esc(body)}</pre>`;
+    say('', `<b>Booking email isn't set yet.</b> This is what will be sent:<pre>${esc(subject)}\n\n${esc(body)}</pre>`);
     return;
   }
-  location.href = `mailto:${BOOKING_EMAIL}?subject=${encodeURIComponent(subject)}&body=${encodeURIComponent(body)}`;
+  const mailto = `mailto:${BOOKING_EMAIL}?subject=${encodeURIComponent(subject)}&body=${encodeURIComponent(body)}`;
+  if (!MAILER_URL) { location.href = mailto; return; }
+
+  // send straight to Kyle; if the mailer can't be reached, fall back to the visitor's email app
+  btn.disabled = true; btn.classList.add('sending'); btn.textContent = 'Sending…';
+  try {
+    const r = await fetch(MAILER_URL, { method: 'POST', headers: { 'Content-Type': 'application/json' },
+      body: JSON.stringify(Object.fromEntries(f)) });
+    const out = await r.json().catch(() => ({}));
+    if (r.ok && out.ok) {
+      const first = String(f.get('name')).trim().split(/\s+/)[0];
+      say('sent', `<b>Sent. Thanks, ${esc(first)}!</b> Kyle has it and will write back to ${esc(f.get('email'))}.`);
+      form.reset();
+      btn.textContent = 'Sent ✓';
+      setTimeout(() => { btn.disabled = false; btn.classList.remove('sending'); btn.textContent = 'Send'; }, 4000);
+      return;
+    }
+    if (r.status === 422 || r.status === 429) { say('', esc(out.error || 'Something\'s off. Check the form and try again.')); throw 0; }
+    throw new Error('mailer');
+  } catch (err) {
+    btn.disabled = false; btn.classList.remove('sending'); btn.textContent = 'Send';
+    if (err === 0) return;
+    say('', `Couldn't send from here, so your email app is opening with it all filled in. Or write to <a href="${mailto}">${esc(BOOKING_EMAIL)}</a>.`);
+    location.href = mailto;
+  }
 });
 </script>
 </body>
