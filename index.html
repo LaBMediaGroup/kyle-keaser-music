@@ -35,6 +35,8 @@
 <link rel="preconnect" href="https://fonts.googleapis.com">
 <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
 <link href="https://fonts.googleapis.com/css2?family=Bricolage+Grotesque:opsz,wght@12..96,400;12..96,600;12..96,800&family=Instrument+Serif:ital@0;1&display=swap" rel="stylesheet">
+<!-- the rooms banner: each venue gets a nod to its own sign (just these letters, so it stays tiny) -->
+<link href="https://fonts.googleapis.com/css2?family=Alfa+Slab+One&family=UnifrakturMaguntia&family=Yellowtail&family=Tilt+Neon&family=Fraunces:ital,wght@1,600&display=swap&text=ABCDEGILNORSTUWYabcdegilnorstuwy" rel="stylesheet">
 <style>
 :root{
   --ink:#0b0a08; --ink-2:#15130f; --ink-3:#1c1914;
@@ -116,10 +118,20 @@ section{position:relative}
 @keyframes rise{from{opacity:0;transform:translateY(22px)}}
 
 /* rooms drifting by, quiet */
-.marquee{border-block:1px solid var(--line);overflow:hidden;padding:15px 0}
-.marquee .track{display:flex;width:max-content;animation:roll 46s linear infinite}
-.marquee span{font:italic 400 19px/1 var(--serif);color:var(--muted);white-space:nowrap;padding-right:26px;display:inline-flex;align-items:center;gap:26px}
-.marquee span::after{content:"";width:5px;height:5px;border-radius:50%;background:var(--sun);opacity:.8}
+.marquee{border-block:1px solid var(--line);overflow:hidden;padding:20px 0;background:linear-gradient(90deg,var(--ink),transparent 12%,transparent 88%,var(--ink)),var(--ink-2)}
+.marquee .track{display:flex;align-items:center;width:max-content;animation:roll 64s linear infinite}
+.marquee .v{display:inline-flex;align-items:center;gap:34px;padding-right:34px;white-space:nowrap}
+.marquee .v::after{content:"";width:5px;height:5px;border-radius:50%;background:var(--sun);opacity:.7}
+.marquee b{font-weight:400}
+/* a nod to each room's own sign */
+.v-eagles b{font:400 14px/1 "Alfa Slab One",Georgia,serif;letter-spacing:.14em;text-transform:uppercase;color:var(--paper);border:3px double rgba(242,238,223,.7);border-radius:4px;padding:7px 11px 6px}
+.v-eagles b::before{content:"★ ";color:var(--sun)}
+.v-olddetroit b{font:400 27px/1 "UnifrakturMaguntia","Old English Text MT",serif;color:#efe7cf}
+.v-straycat b{font:400 30px/1 Yellowtail,cursive;color:#ffe3f1;text-shadow:0 0 4px #ff5cab,0 0 12px #ff2d95,0 0 26px rgba(255,45,149,.55);animation:flicker 7s infinite}
+.v-dodge b{font:400 21px/1 "Tilt Neon",system-ui,sans-serif;letter-spacing:.08em;text-transform:uppercase;color:#e6f7ff;text-shadow:0 0 4px #5cc8ff,0 0 12px #1fa4ff,0 0 24px rgba(31,164,255,.5)}
+.v-oasis b{font:italic 600 23px/1 Fraunces,Georgia,serif;color:#e7c79b}
+.v-gig b{font:italic 400 20px/1 var(--serif);color:var(--muted)}
+@keyframes flicker{0%,92%,100%{opacity:1}93%{opacity:.55}94%{opacity:1}96%{opacity:.7}97%{opacity:1}}
 @keyframes roll{to{transform:translateX(-50%)}}
 
 /* the one statement: words light up as you scroll */
@@ -141,7 +153,7 @@ section{position:relative}
 .js .print{clip-path:inset(0 0 100% 0);transition:clip-path 1.2s var(--ease)}
 .js .prints.in .print{clip-path:inset(0 0 0 0)}
 .js .prints.in .print.b{transition-delay:.25s}
-.notes-cta{display:flex;align-items:center;gap:18px;margin-top:clamp(36px,6vw,60px);text-decoration:none;max-width:520px}
+.notes-cta{display:flex;align-items:center;gap:18px;margin-top:clamp(36px,6vw,60px);margin-bottom:clamp(70px,11vw,120px);text-decoration:none;max-width:520px}
 .notes-cta .sleeve-ic{flex:none;width:58px;height:58px;position:relative;isolation:isolate;margin-right:14px}
 .notes-cta .sleeve-ic::before{content:"";position:absolute;inset:0;background:var(--ink-3);border:1px solid var(--line);border-radius:4px}
 .notes-cta .sleeve-ic::after{content:"";position:absolute;inset:6px -14px 6px 18px;border-radius:50%;background:repeating-radial-gradient(circle,#0d0c0a 0 1.4px,#1a1712 1.4px 2.8px);box-shadow:0 0 0 1px rgba(242,238,223,.08);z-index:-1;transition:transform .5s var(--ease)}
@@ -352,8 +364,8 @@ html:not(.js) .switch{display:none}
 
 <div class="marquee" aria-label="Rooms Sweet Babe has played">
   <div class="track">
-    <span>Eagles Club</span><span>Old Detroit Bar and Grille</span><span>Stray Cat Lounge</span><span>New Dodge Lounge</span><span>Dessert Oasis</span><span>weddings</span><span>parties</span><span>corporate events</span>
-    <span aria-hidden="true">Eagles Club</span><span aria-hidden="true">Old Detroit Bar and Grille</span><span aria-hidden="true">Stray Cat Lounge</span><span aria-hidden="true">New Dodge Lounge</span><span aria-hidden="true">Dessert Oasis</span><span aria-hidden="true">weddings</span><span aria-hidden="true">parties</span><span aria-hidden="true">corporate events</span>
+    <span class="v v-eagles"><b>Eagles Club</b></span><span class="v v-olddetroit"><b>Old Detroit Bar and Grille</b></span><span class="v v-straycat"><b>Stray Cat Lounge</b></span><span class="v v-dodge"><b>New Dodge Lounge</b></span><span class="v v-oasis"><b>Dessert Oasis</b></span><span class="v v-gig"><b>weddings</b></span><span class="v v-gig"><b>parties</b></span><span class="v v-gig"><b>corporate events</b></span>
+    <span class="v v-eagles" aria-hidden="true"><b>Eagles Club</b></span><span class="v v-olddetroit" aria-hidden="true"><b>Old Detroit Bar and Grille</b></span><span class="v v-straycat" aria-hidden="true"><b>Stray Cat Lounge</b></span><span class="v v-dodge" aria-hidden="true"><b>New Dodge Lounge</b></span><span class="v v-oasis" aria-hidden="true"><b>Dessert Oasis</b></span><span class="v v-gig" aria-hidden="true"><b>weddings</b></span><span class="v v-gig" aria-hidden="true"><b>parties</b></span><span class="v v-gig" aria-hidden="true"><b>corporate events</b></span>
   </div>
 </div>
 
@@ -674,7 +686,10 @@ if (AUDIO.song) {
   playBtn.hidden = false; heroPlay.hidden = false;
   heroPlay.querySelector('.lbl').textContent = `Play “${AUDIO.title || 'a song'}”`;
   heroPlay.addEventListener('click', () => playBtn.click());
-  requestAnimationFrame(() => { heroPlay.style.minWidth = heroPlay.offsetWidth + 'px'; }); // keep its size when it says Stop
+  // keep its size when it says Stop (measured once fonts are in, and again on resize)
+  const lockPlayWidth = () => { if (playing) return; heroPlay.style.minWidth = ''; heroPlay.style.minWidth = heroPlay.offsetWidth + 'px'; };
+  document.fonts.ready.then(lockPlayWidth);
+  addEventListener('resize', lockPlayWidth);
   playBtn.addEventListener('click', () => playing ? stopRecord() : startRecord());
   deck.addEventListener('click', () => playBtn.click());
   stopBtns.forEach(b => b.addEventListener('click', stopRecord));
