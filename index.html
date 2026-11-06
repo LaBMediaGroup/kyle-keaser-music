@@ -129,7 +129,10 @@ section{position:relative}
 .v-olddetroit b{font:400 27px/1 "UnifrakturMaguntia","Old English Text MT",serif;color:#efe7cf}
 .v-straycat b{font:400 30px/1 Yellowtail,cursive;color:#ffe3f1;text-shadow:0 0 4px #ff5cab,0 0 12px #ff2d95,0 0 26px rgba(255,45,149,.55);animation:flicker 7s infinite}
 .v-dodge b{font:400 21px/1 "Tilt Neon",system-ui,sans-serif;letter-spacing:.08em;text-transform:uppercase;color:#e6f7ff;text-shadow:0 0 4px #5cc8ff,0 0 12px #1fa4ff,0 0 24px rgba(31,164,255,.5)}
-.v-oasis b{font:italic 600 23px/1 Fraunces,Georgia,serif;color:#e7c79b}
+.v-oasis b{font:italic 600 23px/1 Fraunces,Georgia,serif;color:#e7c79b;display:inline-flex;align-items:center;gap:9px}
+.mug{width:26px;height:26px;fill:none;stroke:#e7c79b;stroke-width:2.2;stroke-linecap:round;stroke-linejoin:round;margin-top:-4px}
+.mug .steam{stroke-width:1.6;opacity:.75;animation:steam 2.6s ease-in-out infinite}
+@keyframes steam{0%,100%{opacity:.25;transform:translateY(1px)}50%{opacity:.8;transform:translateY(-1px)}}
 .v-gig b{font:italic 400 20px/1 var(--serif);color:var(--muted)}
 @keyframes flicker{0%,92%,100%{opacity:1}93%{opacity:.55}94%{opacity:1}96%{opacity:.7}97%{opacity:1}}
 @keyframes roll{to{transform:translateX(-50%)}}
@@ -364,8 +367,8 @@ html:not(.js) .switch{display:none}
 
 <div class="marquee" aria-label="Rooms Sweet Babe has played">
   <div class="track">
-    <span class="v v-eagles"><b>Eagles Club</b></span><span class="v v-olddetroit"><b>Old Detroit Bar and Grille</b></span><span class="v v-straycat"><b>Stray Cat Lounge</b></span><span class="v v-dodge"><b>New Dodge Lounge</b></span><span class="v v-oasis"><b>Dessert Oasis</b></span><span class="v v-gig"><b>weddings</b></span><span class="v v-gig"><b>parties</b></span><span class="v v-gig"><b>corporate events</b></span>
-    <span class="v v-eagles" aria-hidden="true"><b>Eagles Club</b></span><span class="v v-olddetroit" aria-hidden="true"><b>Old Detroit Bar and Grille</b></span><span class="v v-straycat" aria-hidden="true"><b>Stray Cat Lounge</b></span><span class="v v-dodge" aria-hidden="true"><b>New Dodge Lounge</b></span><span class="v v-oasis" aria-hidden="true"><b>Dessert Oasis</b></span><span class="v v-gig" aria-hidden="true"><b>weddings</b></span><span class="v v-gig" aria-hidden="true"><b>parties</b></span><span class="v v-gig" aria-hidden="true"><b>corporate events</b></span>
+    <span class="v v-eagles"><b>Eagles Club</b></span><span class="v v-olddetroit"><b>Old Detroit Bar and Grille</b></span><span class="v v-straycat"><b>Stray Cat Lounge</b></span><span class="v v-dodge"><b>New Dodge Lounge</b></span><span class="v v-oasis"><b><svg class="mug" viewBox="0 0 32 32" aria-hidden="true"><path class="steam" d="M11 9c-2-2 2-3 0-6M16 9c-2-2 2-3 0-6M21 9c-2-2 2-3 0-6"/><path d="M6 12h18v8a7 7 0 0 1-7 7h-4a7 7 0 0 1-7-7z"/><path d="M24 14h2.5a3.5 3.5 0 0 1 0 7H23.5"/></svg>Dessert Oasis</b></span><span class="v v-gig"><b>weddings</b></span><span class="v v-gig"><b>parties</b></span><span class="v v-gig"><b>corporate events</b></span>
+    <span class="v v-eagles" aria-hidden="true"><b>Eagles Club</b></span><span class="v v-olddetroit" aria-hidden="true"><b>Old Detroit Bar and Grille</b></span><span class="v v-straycat" aria-hidden="true"><b>Stray Cat Lounge</b></span><span class="v v-dodge" aria-hidden="true"><b>New Dodge Lounge</b></span><span class="v v-oasis" aria-hidden="true"><b><svg class="mug" viewBox="0 0 32 32" aria-hidden="true"><path class="steam" d="M11 9c-2-2 2-3 0-6M16 9c-2-2 2-3 0-6M21 9c-2-2 2-3 0-6"/><path d="M6 12h18v8a7 7 0 0 1-7 7h-4a7 7 0 0 1-7-7z"/><path d="M24 14h2.5a3.5 3.5 0 0 1 0 7H23.5"/></svg>Dessert Oasis</b></span><span class="v v-gig" aria-hidden="true"><b>weddings</b></span><span class="v v-gig" aria-hidden="true"><b>parties</b></span><span class="v v-gig" aria-hidden="true"><b>corporate events</b></span>
   </div>
 </div>
 
