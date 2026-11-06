@@ -651,6 +651,22 @@ addEventListener('hashchange', () => { if (location.hash === '#notes') requestAn
 addEventListener('resize', () => setLineup(current()));
 if (location.hash === '#notes') requestAnimationFrame(() => setLineup('solo'));
 
+// Bandcamp's players live on bandcamp.com, so the page can't pause them directly. Instead:
+// tapping into one stops the record and the clips, and starting the record or a clip reloads
+// any Bandcamp player that was used (which stops it). One thing plays at a time.
+const bcFrames = [...document.querySelectorAll('.bcplayers iframe')];
+const resetFrame = f => { delete f.dataset.used; f.src = f.src; };
+function stopBandcamp(except) { bcFrames.forEach(f => { if (f !== except && f.dataset.used) resetFrame(f); }); }
+addEventListener('blur', () => setTimeout(() => {
+  const f = document.activeElement;
+  if (!bcFrames.includes(f)) return;
+  stopBandcamp(f);          // the other Bandcamp player
+  f.dataset.used = '1';
+  stopRecord();
+  document.querySelectorAll('#clips video').forEach(v => v.pause());
+  setTimeout(() => { f.blur(); window.focus(); }, 0); // so the next tap into a player is noticed too
+}, 0));
+
 // the record player: one button; the record and the Stop buttons all go through it
 const playBtn = $('#playBtn'), heroPlay = $('#heroPlay'), deck = $('.deck'), stopBtns = document.querySelectorAll('.stopmusic');
 let song = null, crackle = null;
@@ -673,6 +689,7 @@ function startRecord() {
     if (AUDIO.crackle) crackle = new Audio(AUDIO.crackle);
   }
   document.querySelectorAll('#clips video').forEach(v => v.pause());
+  stopBandcamp();
   setPlaying(true);
   if (crackle) { crackle.currentTime = 0; crackle.play().catch(() => {}); }
   song.currentTime = 0;
@@ -722,7 +739,7 @@ if (VIDEOS.length) {
       stopRecord();
       c.classList.add('on'); vid.controls = true; vid.play();
     });
-    vid.addEventListener('play', () => { stopRecord(); clipsEl.querySelectorAll('video').forEach(o => o !== vid && o.pause()); });
+    vid.addEventListener('play', () => { stopRecord(); stopBandcamp(); clipsEl.querySelectorAll('video').forEach(o => o !== vid && o.pause()); });
     vid.addEventListener('error', () => c.remove()); // a missing file just disappears
   });
 }
