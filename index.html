@@ -255,7 +255,8 @@ section{position:relative}
 .roomcard::before{content:"";position:absolute;inset:0;border-radius:20px;background:radial-gradient(90% 70% at 50% 0%,rgba(222,214,61,.1),transparent 70%),var(--card);border:1px solid var(--line);box-shadow:0 30px 80px rgba(0,0,0,.6)}
 .roomcard{padding:30px 26px 26px}
 .rc-close{position:absolute;top:12px;right:12px;width:36px;height:36px;border-radius:50%;border:1px solid var(--line);background:var(--ink);color:var(--muted);font-size:14px;cursor:pointer;z-index:2}
-.roomcard{touch-action:pan-y}
+.roomcard{touch-action:pan-y;-webkit-user-select:none;user-select:none;-webkit-touch-callout:none}
+.roomcard img{-webkit-user-drag:none;user-drag:none}
 .roomcard>.confetti{position:absolute;inset:0;pointer-events:none;z-index:4;overflow:visible}
 .confetti i{position:absolute;display:block;will-change:transform,opacity}
 .sc-sign .filling{-webkit-mask-image:linear-gradient(90deg,#000 44%,transparent 56%);mask-image:linear-gradient(90deg,#000 44%,transparent 56%);
@@ -1418,12 +1419,17 @@ const ROOMS = {
   const ORDER = Object.keys(ROOMS);
   let current = null;
   $('#roomDots').innerHTML = ORDER.map(() => '<i></i>').join('');
+  // the tap that opened the card is followed by a 'click' that would land on whatever is now under the
+  // finger (the photo, Book…). Swallow clicks for a moment after opening.
+  let openedAt = 0;
+  card.addEventListener('click', e => { if (performance.now() - openedAt < 450) { e.stopPropagation(); e.preventDefault(); } }, true);
   window.openRoomKey = k => openRoom(k, document.querySelector(`#marquee .v[data-k="${k}"]`));
   function openRoom(k, from) {
     if (!ROOMS[k] || !card.showModal) return;
     opener = from;
     fillRoom(k);
     card.showModal();
+    openedAt = performance.now();
     landed(k);
   }
   // a little moment when certain cards land
