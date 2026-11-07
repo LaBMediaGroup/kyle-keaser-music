@@ -232,6 +232,14 @@ section{position:relative}
 .rc-kicker{font:600 11px/1 var(--sans);letter-spacing:.2em;text-transform:uppercase;color:var(--sun)}
 .rc-sign{margin:20px 0 4px;min-height:44px;display:flex;align-items:center}
 .rc-sign .v{cursor:default}
+/* Stray Cat Lounge, after their sign: white retro script, dark shadow, red glow, martini, navy tagline bar */
+.sc-sign{position:relative;display:grid;justify-items:start;padding:6px 4px 0;font-family:Yellowtail,cursive;color:#fbf8f2;
+  text-shadow:3px 3px 0 #1c2238,0 0 14px rgba(255,40,30,.8),0 0 34px rgba(255,30,20,.5)}
+.sc-sign .l1{font-size:46px;line-height:.95;transform:rotate(-6deg);transform-origin:left bottom}
+.sc-sign .l2{font-size:46px;line-height:.95;margin:-2px 0 0 34px;transform:rotate(-6deg);transform-origin:left bottom}
+.sc-sign .ic-martini.big{position:absolute;left:182px;top:48px;width:40px;height:44px}
+.sc-sign .tag{margin:10px 0 0 30px;font:600 13px/1 var(--sans);letter-spacing:.04em;color:#e9edf6;text-shadow:none;background:#1f2a4a;padding:6px 10px;border-radius:2px;
+  box-shadow:0 0 18px rgba(255,40,30,.45)}
 .rc-title{position:absolute!important;width:1px;height:1px;overflow:hidden;clip:rect(0 0 0 0)}
 .rc-body{font-size:16.5px;line-height:1.55;margin-top:14px}
 .rc-where{color:var(--muted);font-size:14px;margin-top:12px}
@@ -1184,7 +1192,8 @@ const ROOMS = {
   eagles:     { kicker: 'Side A · a regular', body: "One of the rooms Kyle plays regularly around Metro Detroit." },
   olddetroit: { kicker: 'Side A · a regular', body: "A bar and grille in Lake Orion, and one of Kyle's regular rooms.",
                 where: '741 S Lapeer Rd, Lake Orion', site: 'https://olddetroitbarandgrille.com', map: 'Old Detroit Bar & Grille, 741 S Lapeer Rd, Lake Orion, MI' },
-  straycat:   { kicker: 'Side A · a regular', body: "Martinis, cigars, music: a lounge with a stage for local bands, and one of Kyle's regulars. The live clips on this site were filmed here.",
+  straycat:   { kicker: 'Side A · a regular',
+                sign: '<div class="sc-sign" aria-hidden="true"><span class="l1">Stray Cat</span><span class="l2">Lounge</span><svg class="ic-martini big" viewBox="0 0 26 28" aria-hidden="true"><path class="glass" d="M3 5h18l-9 10z"/><path class="glass" d="M12 15v9M7.5 25h9"/><circle class="olive" cx="13.5" cy="8.4" r="2.3"/><path class="pick" d="M10 11.5L22 2"/></svg><span class="tag">martinis. cigars. music.</span></div>', body: "Martinis, cigars, music: a lounge with a stage for local bands, and one of Kyle's regulars. The live clips on this site were filmed here.",
                 where: '40813 Garfield Rd, Clinton Township', map: 'Stray Cat Lounge, 40813 Garfield Rd, Clinton Township, MI' },
   dodge:      { kicker: 'Side B · also played', body: "A long-running bar and music room in Hamtramck. The band photo on this site was taken under its neon.",
                 where: '8850 Joseph Campau Ave, Hamtramck', map: 'New Dodge Lounge, 8850 Joseph Campau Ave, Hamtramck, MI' },
@@ -1243,9 +1252,12 @@ const ROOMS = {
   function openRoom(k, from) {
     const r = ROOMS[k]; if (!r || !card.showModal) return;
     opener = from;
-    const sign = from.cloneNode(true);
-    sign.removeAttribute('role'); sign.removeAttribute('tabindex'); sign.setAttribute('aria-hidden', 'true');
-    $('#roomSign').replaceChildren(sign);
+    if (r.sign) $('#roomSign').innerHTML = r.sign;          // a bigger, fuller sign for the card
+    else {
+      const sign = from.cloneNode(true);
+      sign.removeAttribute('role'); sign.removeAttribute('tabindex'); sign.setAttribute('aria-hidden', 'true');
+      $('#roomSign').replaceChildren(sign);
+    }
     $('#roomTitle').textContent = from.getAttribute('aria-label')?.replace(/^About /, '') || from.textContent.trim();
     $('#roomKicker').textContent = r.kicker;
     $('#roomBody').textContent = r.body;
