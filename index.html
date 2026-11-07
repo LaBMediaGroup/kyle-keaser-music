@@ -570,14 +570,14 @@ html:not(.js) .switch{display:none}
 .credits .ig-at{color:var(--muted);text-decoration:none;font-size:13px;margin-left:6px}
 .credits .ig-at:hover{color:var(--sun)}
 
-/* ── a phone on its side (wide and short): record on the left, words and buttons on the right ── */
+/* ── a phone on its side (wide and short): words and buttons on the left, record on the right ── */
 @media (orientation:landscape) and (max-height:520px){
   .hero{padding:28px 0}
-  .hero-inner{display:grid;grid-template-columns:auto minmax(0,1fr);align-content:center;align-items:center;column-gap:clamp(28px,6vw,72px);
+  .hero-inner{display:grid;grid-template-columns:minmax(0,1fr) auto;align-content:center;align-items:center;column-gap:clamp(28px,6vw,72px);
     text-align:left;width:100%;max-width:980px;margin:0 auto}
-  .hero-inner .turntable{grid-column:1;grid-row:1 / span 4;margin-bottom:0}
+  .hero-inner .turntable{grid-column:2;grid-row:1 / span 4;margin-bottom:0}
   .hero-inner .deck{width:min(66svh,320px);margin-bottom:0}
-  .hero-inner .who,.hero-inner .tagline,.hero-inner .ctas,.hero-inner .nextshow{grid-column:2}
+  .hero-inner .who,.hero-inner .tagline,.hero-inner .ctas,.hero-inner .nextshow{grid-column:1}
   .hero-inner .tagline{font-size:clamp(22px,3.9vw,36px);max-width:17ch;margin:8px 0 16px}
   .hero-inner .ctas{gap:10px}
   .hero-inner .ctas .btn{padding:12px 17px;font-size:14px}
