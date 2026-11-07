@@ -135,7 +135,8 @@ section{position:relative}
 .v-olddetroit b{display:inline-flex;align-items:center;gap:8px;background:#ebe8de;color:#262420;border-radius:7px;padding:5px 11px;box-shadow:inset 0 0 0 2px #ebe8de,inset 0 0 0 3.5px #2b2925}
 .v-olddetroit small{font:600 10px/1 Oswald,sans-serif;letter-spacing:.18em;text-transform:uppercase}
 .v-olddetroit .od{font:700 22px/1 Oswald,sans-serif;letter-spacing:.06em;text-transform:uppercase}
-.v-olddetroit .od i{font:400 28px/1 "UnifrakturMaguntia","Old English Text MT",serif;font-style:normal;letter-spacing:0;margin-right:1px}
+.v-olddetroit .od{display:inline-flex;align-items:flex-end}
+.v-olddetroit .od i{font:400 40px/.7 "UnifrakturMaguntia","Old English Text MT",serif;-webkit-text-stroke:.6px currentColor;font-style:normal;letter-spacing:0;margin:0 1px 0 -1px;position:relative;top:5px}
 .v-straycat b{display:inline-flex;align-items:center;gap:8px;font:400 30px/1 Yellowtail,cursive;color:#fbf8f2;
   text-shadow:2px 2px 0 #1c2238,0 0 10px rgba(255,40,30,.75),0 0 24px rgba(255,30,20,.5)}
 .ic-martini{width:24px;height:26px;fill:none;stroke-linecap:round;stroke-linejoin:round;filter:drop-shadow(0 0 6px rgba(255,40,30,.6))}
@@ -622,7 +623,7 @@ html:not(.js) .switch{display:none}
         <h3>Side A · the regulars</h3>
         <ol class="tracks">
           <li><b>Eagles Club</b><small>Metro Detroit</small></li>
-          <li><b>Old Detroit Bar and Grille</b><small>Metro Detroit</small></li>
+          <li><b>Old Detroit Bar and Grille</b><small>Rochester Hills</small></li>
           <li><b>Stray Cat Lounge</b><small>Clinton Township</small></li>
         </ol>
       </div>
@@ -1190,9 +1191,8 @@ $('#form').addEventListener('submit', async e => {
 // ── the rooms banner: drifts on its own, can be dragged and flung, and each sign opens a little card ──
 const ROOMS = {
   eagles:     { kicker: 'Side A · a regular', body: "One of the rooms Kyle plays regularly around Metro Detroit." },
-  olddetroit: { kicker: 'Side A · a regular', body: "Classic American comfort food and Detroit craft beer, and one of Kyle's regular rooms. Two locations:",
-                where: 'Rochester Hills · 6870 N Rochester Rd\nLake Orion · 741 S Lapeer Rd',
-                links: [['Rochester Hills ↗', 'https://olddetroitrochesterhills.com'], ['Lake Orion ↗', 'https://olddetroitbarandgrille.com']] },
+  olddetroit: { kicker: 'Side A · a regular', body: "Classic American comfort food and Detroit craft beer, and one of Kyle's regular rooms.",
+                where: '6870 N Rochester Rd, Rochester Hills', site: 'https://olddetroitrochesterhills.com', map: 'Old Detroit Bar and Grille, 6870 N Rochester Rd, Rochester, MI' },
   straycat:   { kicker: 'Side A · a regular',
                 sign: '<div class="sc-sign" aria-hidden="true"><span class="l1">Stray Cat</span><span class="l2">Lounge</span><svg class="ic-martini big" viewBox="0 0 26 28" aria-hidden="true"><path class="glass" d="M3 5h18l-9 10z"/><path class="glass" d="M12 15v9M7.5 25h9"/><circle class="olive" cx="13.5" cy="8.4" r="2.3"/><path class="pick" d="M10 11.5L22 2"/></svg><span class="tag">martinis. cigars. music.</span></div>', body: "Martinis, cigars, music: a lounge with a stage for local bands, and one of Kyle's regulars. The live clips on this site were filmed here.",
                 where: '40813 Garfield Rd, Clinton Township', map: 'Stray Cat Lounge, 40813 Garfield Rd, Clinton Township, MI' },
