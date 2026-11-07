@@ -483,13 +483,13 @@ html:not(.js) .switch{display:none}
 
 /* ── now playing: once anything starts, a small bar stays at the bottom to pause or stop it ── */
 .np{position:fixed;left:50%;bottom:max(14px,env(safe-area-inset-bottom));z-index:55;display:flex;align-items:center;gap:10px;
-  padding:7px 7px 7px 16px;border-radius:999px;width:min(360px,calc(100vw - 32px));
+  padding:7px 7px 7px 16px;border-radius:999px;width:min(420px,calc(100vw - 24px));gap:6px;
   background:rgba(21,19,15,.86);backdrop-filter:blur(16px);-webkit-backdrop-filter:blur(16px);
   border:1px solid var(--line);box-shadow:0 14px 40px rgba(0,0,0,.5),0 0 0 1px rgba(222,214,61,.08);
   transform:translate(-50%,140%);opacity:0;transition:transform .5s var(--ease),opacity .3s ease}
 .np.on{transform:translate(-50%,0);opacity:1}
 .np[hidden]{display:none}
-.np-eq{display:flex;align-items:flex-end;gap:2px;width:16px;height:14px;flex:none}
+.np-eq{display:flex;align-items:flex-end;gap:2px;width:16px;height:14px;flex:none;margin-right:4px}
 .np-eq i{flex:1;background:var(--sun);border-radius:1px;height:30%;animation:npeq .9s ease-in-out infinite}
 .np-eq i:nth-child(2){animation-delay:-.3s}.np-eq i:nth-child(3){animation-delay:-.6s}
 .np.paused .np-eq i{animation-play-state:paused;height:30%}
@@ -501,7 +501,14 @@ html:not(.js) .switch{display:none}
 .np button svg{width:16px;height:16px}
 .np button:active{transform:scale(.9)}
 .np-pp{background:var(--sun);color:var(--ink)}
-.np-x{background:rgba(242,238,223,.1);color:var(--paper)}
+.np-x{background:rgba(242,238,223,.1);color:var(--paper);margin-left:2px}
+.np .np-sk{width:34px;height:34px;background:none;color:var(--paper)}
+.np .np-sk svg{width:15px;height:15px}
+.np .np-sk:hover{color:var(--sun)}
+.np.solo .np-sk{display:none}
+.np-t b.flip{animation:npflip .4s var(--ease)}
+@keyframes npflip{from{opacity:0;transform:translateY(8px)}}
+@media (max-width:370px){.np-eq{display:none}}
 .np-x:hover{background:rgba(242,238,223,.18)}
 .np .np-i-play,.np.paused .np-i-pause{display:none}
 .np.paused .np-i-play{display:block;margin-left:2px}
@@ -652,7 +659,9 @@ html:not(.js) .switch{display:none}
 <div class="np" id="np" role="region" aria-label="Now playing" hidden>
   <span class="np-eq" aria-hidden="true"><i></i><i></i><i></i></span>
   <span class="np-t"><small>Now playing</small><b id="npTitle"></b></span>
+  <button class="np-sk" id="npPrev" type="button" aria-label="Previous song"><svg viewBox="0 0 24 24" fill="currentColor" aria-hidden="true"><path d="M6 5h2.5v14H6zM20 5v14L9 12z"/></svg></button>
   <button class="np-pp" id="npPP" type="button" aria-label="Pause"><svg class="np-i-pause" viewBox="0 0 24 24" fill="currentColor" aria-hidden="true"><path d="M6 4h4.5v16H6zM13.5 4H18v16h-4.5z"/></svg><svg class="np-i-play" viewBox="0 0 24 24" fill="currentColor" aria-hidden="true"><path d="M7 4.5v15l13-7.5z"/></svg></button>
+  <button class="np-sk" id="npNext" type="button" aria-label="Next song"><svg viewBox="0 0 24 24" fill="currentColor" aria-hidden="true"><path d="M15.5 5H18v14h-2.5zM4 5v14l11-7z"/></svg></button>
   <button class="np-x" id="npX" type="button" aria-label="Stop"><svg viewBox="0 0 24 24" fill="currentColor" aria-hidden="true"><rect x="6" y="6" width="12" height="12" rx="1.5"/></svg></button>
 </div>
 
@@ -950,7 +959,10 @@ function npPaint() {
   clearTimeout(npHideT);
   if (!npSrc) { np.classList.remove('on'); npHideT = setTimeout(() => { np.hidden = true; }, 500); return; }
   const on = npSrc.isPlaying();
-  document.getElementById('npTitle').textContent = npSrc.title;
+  const t = document.getElementById('npTitle');
+  if (t.textContent !== npSrc.title) { t.textContent = npSrc.title; t.classList.remove('flip'); void t.offsetWidth; t.classList.add('flip'); }
+  const list = npList();
+  np.classList.toggle('solo', list.length < 2 || !list.some(x => x.src() === npSrc));
   document.querySelector('#np .np-t small').textContent = on ? 'Now playing' : 'Paused';
   np.classList.toggle('paused', !on);
   document.getElementById('npPP').setAttribute('aria-label', (on ? 'Pause ' : 'Play ') + npSrc.title);
@@ -958,8 +970,24 @@ function npPaint() {
   if (np.hidden) { np.hidden = false; requestAnimationFrame(() => requestAnimationFrame(() => np.classList.add('on'))); }
   else np.classList.add('on');
 }
+// The songs in page order: the record, then each demo. A new demo added to the page joins the list on its own.
+// Clips are videos, so they get pause and stop but aren't flipped through.
+function npList() {
+  const list = [];
+  if (typeof AUDIO !== 'undefined' && AUDIO.song) list.push({ src: () => recordSrc, start: () => startRecord(0) });
+  document.querySelectorAll('.bcplayers div.tk').forEach(k => list.push({ src: () => k._np, start: () => k._start() }));
+  return list;
+}
+function npStep(d) {
+  const list = npList(), i = list.findIndex(x => x.src() === npSrc);
+  if (i < 0 || list.length < 2) return;
+  npSrc.stop();
+  list[(i + d + list.length) % list.length].start();
+}
 document.addEventListener('click', e => {
   if (!npSrc) return;
+  if (e.target.closest('#npPrev')) return npStep(-1);
+  if (e.target.closest('#npNext')) return npStep(1);
   if (e.target.closest('#npPP')) npSrc.isPlaying() ? npSrc.pause() : npSrc.play();
   else if (e.target.closest('#npX')) { const s = npSrc; npSrc = null; s.stop(); npPaint(); }
 });
@@ -1161,6 +1189,7 @@ tracks.forEach(k => {
     return a;
   };
   btn.addEventListener('click', () => { const a = audio(); a.paused ? a.play().catch(() => {}) : a.pause(); });
+  k._start = () => { const a = audio(); a.currentTime = 0; a.play().catch(() => {}); };
   let drag = false;
   const to = e => {
     const a = audio(), r = seek.getBoundingClientRect(), p = Math.min(1, Math.max(0, (e.clientX - r.left) / r.width));
