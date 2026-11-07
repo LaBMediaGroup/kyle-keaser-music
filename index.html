@@ -243,9 +243,8 @@ section{position:relative}
   box-shadow:0 0 18px rgba(255,40,30,.45)}
 .rc-title{position:absolute!important;width:1px;height:1px;overflow:hidden;clip:rect(0 0 0 0)}
 .rc-body{font-size:16.5px;line-height:1.55;margin-top:14px}
-.rc-photo{float:right;width:132px;margin:14px 0 6px 16px;background:#e9e3d0;padding:6px 6px 22px;border-radius:2px;rotate:2.5deg;box-shadow:0 12px 26px rgba(0,0,0,.5);position:relative}
+.rc-photo{float:right;width:min(190px,56%);margin:12px 0 8px 16px;background:#e9e3d0;padding:6px 6px 16px;border-radius:2px;rotate:2.5deg;box-shadow:0 12px 26px rgba(0,0,0,.5);position:relative}
 .rc-photo img{display:block;width:100%;height:auto;aspect-ratio:4/3;object-fit:cover}
-.rc-photo figcaption{position:absolute;left:7px;right:6px;bottom:5px;font:italic 400 12.5px/1 var(--serif);color:#2a261d;white-space:nowrap;overflow:hidden;text-overflow:ellipsis}
 .rc-links{clear:both}
 .rc-where{color:var(--muted);font-size:14px;line-height:1.6;margin-top:12px;white-space:pre-line}
 .rc-where:empty{display:none}
@@ -594,7 +593,7 @@ html:not(.js) .switch{display:none}
   <div class="rc-sign" id="roomSign"></div>
   <h3 class="rc-title" id="roomTitle"></h3>
   <p class="rc-body" id="roomBody"></p>
-  <figure class="rc-photo" id="roomPhoto" hidden><img alt="" width="160" height="120"><figcaption></figcaption></figure>
+  <figure class="rc-photo" id="roomPhoto" hidden><img alt="" width="176" height="132"></figure>
   <p class="rc-where" id="roomWhere"></p>
   <div class="rc-links" id="roomLinks"></div>
 </dialog>
@@ -1199,11 +1198,11 @@ const ROOMS = {
   olddetroit: { kicker: 'Side A · a regular', body: "Classic American comfort food and Detroit craft beer, and one of Kyle's regular rooms.",
                 where: '6870 N Rochester Rd, Rochester Hills', site: 'https://olddetroitrochesterhills.com', map: 'Old Detroit Bar and Grille, 6870 N Rochester Rd, Rochester, MI' },
   straycat:   { kicker: 'Side A · a regular',
-                sign: '<div class="sc-sign" aria-hidden="true"><span class="l1">Stray Cat</span><span class="l2">Lounge</span><svg class="ic-martini big" viewBox="0 0 26 28" aria-hidden="true"><path class="glass" d="M3 5h18l-9 10z"/><path class="glass" d="M12 15v9M7.5 25h9"/><circle class="olive" cx="13.5" cy="8.4" r="2.3"/><path class="pick" d="M10 11.5L22 2"/></svg><span class="tag">martinis. cigars. music.</span></div>', body: "Martinis, cigars, music: a lounge with a stage for local bands, and one of Kyle's regulars.", photo: ['assets/videos/beautiful-girl-showcase.jpg', 'Live here'],
+                sign: '<div class="sc-sign" aria-hidden="true"><span class="l1">Stray Cat</span><span class="l2">Lounge</span><svg class="ic-martini big" viewBox="0 0 26 28" aria-hidden="true"><path class="glass" d="M3 5h18l-9 10z"/><path class="glass" d="M12 15v9M7.5 25h9"/><circle class="olive" cx="13.5" cy="8.4" r="2.3"/><path class="pick" d="M10 11.5L22 2"/></svg><span class="tag">martinis. cigars. music.</span></div>', body: "Martinis, cigars, music: a lounge with a stage for local bands, and one of Kyle's regulars.", photo: ['assets/videos/beautiful-girl-showcase.jpg'],
                 where: '40813 Garfield Rd, Clinton Township', map: 'Stray Cat Lounge, 40813 Garfield Rd, Clinton Township, MI' },
-  dodge:      { kicker: 'Side B · also played', body: "A long-running bar and music room in Hamtramck.", photo: ['assets/band-new-dodge-lounge.jpg', 'With the band, under the neon'],
+  dodge:      { kicker: 'Side B · also played', body: "A long-running bar and music room in Hamtramck.", photo: ['assets/band-new-dodge-lounge.jpg'],
                 where: '8850 Joseph Campau Ave, Hamtramck', map: 'New Dodge Lounge, 8850 Joseph Campau Ave, Hamtramck, MI' },
-  oasis:      { kicker: 'Side B · also played', body: "A family-run coffee roaster in downtown Rochester.", photo: ['assets/solo-dessert-oasis.jpg', 'Solo, right here'],
+  oasis:      { kicker: 'Side B · also played', body: "A family-run coffee roaster in downtown Rochester.", photo: ['assets/solo-dessert-oasis.jpg'],
                 where: '336 S Main St, Rochester', site: 'https://docr.coffee', map: 'Dessert Oasis Coffee Roasters, 336 S Main St, Rochester, MI' },
   wed:        { kicker: 'Private dates', body: 'Ceremony, cocktail hour or reception: solo for the quiet moments, the band when it\'s time to dance.', book: true },
   party:      { kicker: 'Private dates', body: 'Birthdays, anniversaries, backyards and back rooms. Songs that fit the room.', book: true },
@@ -1270,7 +1269,7 @@ const ROOMS = {
     $('#roomWhere').textContent = r.where || '';
     const ph = $('#roomPhoto');
     ph.hidden = !r.photo;
-    if (r.photo) { ph.querySelector('img').src = r.photo[0]; ph.querySelector('img').alt = `Kyle Keaser at ${$('#roomTitle').textContent}`; ph.querySelector('figcaption').textContent = r.photo[1]; }
+    if (r.photo) { ph.querySelector('img').src = r.photo[0]; ph.querySelector('img').alt = `Kyle Keaser at ${$('#roomTitle').textContent}`; }
     const links = [];
     (r.links || []).forEach(([label, href]) => links.push(`<a href="${href}" target="_blank" rel="noopener">${label}</a>`));
     if (r.site) links.push(`<a href="${r.site}" target="_blank" rel="noopener">Website ↗</a>`);
