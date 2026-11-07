@@ -190,9 +190,24 @@ section{position:relative}
 .print.a{grid-column:1/11;rotate:-1.6deg;z-index:2}
 .print.b{grid-column:4/13;margin-top:-4%;rotate:2.2deg;z-index:1}
 @media (min-width:760px){.print.a{grid-column:1/8}.print.b{grid-column:6/13;margin-top:14%}}
-.js .print{clip-path:inset(0 0 100% 0);transition:clip-path 1.2s var(--ease)}
-.js .prints.in .print{clip-path:inset(0 0 0 0)}
-.js .prints.in .print.b{transition-delay:.25s}
+.js .print{opacity:0}
+/* the two snapshots get tossed onto the table: one from the left, one from the right, and settle */
+.js .prints.in .print.a{animation:tossL 1.15s cubic-bezier(.22,.9,.3,1) both}
+.js .prints.in .print.b{animation:tossR 1.15s cubic-bezier(.22,.9,.3,1) .32s both}
+@keyframes tossL{
+  0%{opacity:0;transform:translate(-80vw,-70px) rotate(-26deg) scale(1.1)}
+  12%{opacity:1}
+  58%{transform:translate(12px,6px) rotate(3.5deg) scale(.985)}
+  76%{transform:translate(-4px,-1px) rotate(-1.2deg) scale(1)}
+  90%{transform:translate(1px,0) rotate(.4deg)}
+  100%{opacity:1;transform:none}}
+@keyframes tossR{
+  0%{opacity:0;transform:translate(80vw,-90px) rotate(30deg) scale(1.1)}
+  12%{opacity:1}
+  58%{transform:translate(-14px,8px) rotate(-4deg) scale(.985)}
+  76%{transform:translate(5px,-1px) rotate(1.4deg) scale(1)}
+  90%{transform:translate(-1px,0) rotate(-.4deg)}
+  100%{opacity:1;transform:none}}
 .notes-cta{display:flex;align-items:center;gap:18px;margin-top:clamp(36px,6vw,60px);margin-bottom:clamp(70px,11vw,120px);text-decoration:none;max-width:520px}
 .notes-cta .sleeve-ic{flex:none;width:58px;height:58px;position:relative;isolation:isolate;margin-right:14px}
 .notes-cta .sleeve-ic::before{content:"";position:absolute;inset:0;background:radial-gradient(circle closest-side,transparent 82.5%,var(--ink-3) 84%) center/100% no-repeat,url(assets/logo.jpg) center/84% no-repeat,var(--ink-3);border:1px solid var(--line);border-radius:4px;box-shadow:0 8px 20px rgba(0,0,0,.45)}
@@ -487,7 +502,7 @@ html:not(.js) .switch{display:none}
 @media (prefers-reduced-motion:reduce){
   *,*::before,*::after{animation:none!important;transition:none!important}
   .js .rv .ln>span,.js .fade{transform:none;opacity:1}
-  .js .print{clip-path:none}
+  .js .print{opacity:1}
   .js .statement .w{opacity:1}
   html{scroll-behavior:auto}
 }
