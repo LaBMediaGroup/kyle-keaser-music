@@ -481,6 +481,28 @@ html:not(.js) .switch{display:none}
 .sleeve .end{margin-top:clamp(60px,10vw,100px);display:flex;flex-wrap:wrap;align-items:center;gap:20px}
 .sleeve .end img{width:64px;height:64px;border-radius:50%;clip-path:circle(47%);animation:spin 16s linear infinite}
 
+/* ── photo gallery: the prints lift off the page into a big view ── */
+.gal{position:fixed;inset:0;z-index:70;overflow:hidden;touch-action:none;background:rgba(6,5,4,0);transition:background .4s ease;cursor:zoom-out}
+.gal.on{background:rgba(6,5,4,calc(.92 * var(--dim,1)));backdrop-filter:blur(10px);-webkit-backdrop-filter:blur(10px)}
+.gal[hidden]{display:none}
+.gal-track{display:flex;height:100%;will-change:transform}
+.gal-slide{flex:0 0 100%;display:grid;place-items:center;padding:max(64px,env(safe-area-inset-top)) 18px max(70px,env(safe-area-inset-bottom));margin:0}
+.gal-print{width:min(100%,960px,calc((100vh - 170px) * 1.25));background:#e9e3d0;padding:12px 12px 44px;border-radius:3px;position:relative;cursor:default;
+  box-shadow:0 50px 120px rgba(0,0,0,.75);transform-origin:center}
+.gal-print img{display:block;width:100%;height:auto;aspect-ratio:4/3;object-fit:cover;user-select:none;-webkit-user-drag:none;pointer-events:none}
+.gal-print figcaption{position:absolute;left:14px;right:14px;bottom:12px;font:italic 400 clamp(17px,2.2vw,22px)/1 var(--serif);color:#2a261d}
+.gal-x{position:fixed;top:max(14px,env(safe-area-inset-top));right:14px;width:44px;height:44px;border-radius:50%;border:1px solid var(--line);
+  background:rgba(11,10,8,.7);color:var(--paper);font-size:17px;cursor:pointer;opacity:0;transform:scale(.6);transition:opacity .3s ease .15s,transform .4s var(--ease) .15s}
+.gal-nav{position:fixed;top:50%;width:48px;height:48px;margin-top:-24px;border-radius:50%;border:1px solid var(--line);background:rgba(11,10,8,.6);color:var(--paper);
+  font:400 30px/1 var(--serif);cursor:pointer;opacity:0;transition:opacity .3s ease .2s,background .2s}
+.gal-nav:hover{background:rgba(222,214,61,.18)}
+.gal-nav.prev{left:14px}.gal-nav.next{right:14px}
+@media (hover:none),(max-width:700px){.gal-nav{display:none}}
+.gal-dots{position:fixed;left:0;right:0;bottom:max(24px,env(safe-area-inset-bottom));display:flex;justify-content:center;gap:9px;opacity:0;transition:opacity .3s ease .2s}
+.gal-dots i{width:8px;height:8px;border-radius:50%;background:rgba(242,238,223,.3);cursor:pointer;transition:background .25s,transform .25s var(--ease)}
+.gal-dots i.on{background:var(--sun);transform:scale(1.25)}
+.gal.on .gal-x,.gal.on .gal-nav,.gal.on .gal-dots{opacity:1;transform:none}
+
 /* ── now playing: once anything starts, a small bar stays at the bottom to pause or stop it ── */
 .np{position:fixed;left:50%;bottom:max(14px,env(safe-area-inset-bottom));z-index:55;display:flex;align-items:center;gap:10px;
   padding:7px 7px 7px 16px;border-radius:999px;width:min(420px,calc(100vw - 24px));gap:6px;
@@ -2043,6 +2065,114 @@ const ROOMS = {
   photo.addEventListener('click', e => { e.stopPropagation(); zoomPhoto(); });
   card.addEventListener('close', () => { if (zoomEl) { zoomEl.remove(); zoomEl = null; } photo.style.visibility = ''; });
   card.addEventListener('close', () => opener && opener.focus && opener.focus({ preventScroll: true }));
+})();
+
+// The two prints: tap one and it lifts off the page into a big gallery view. Swipe (or the arrows) for the
+// other one; ✕, a tap on the dark, a swipe down or Escape puts it back where it came from.
+(() => {
+  const prints = [...document.querySelectorAll('.prints .print')];
+  if (!prints.length) return;
+  const g = document.createElement('div');
+  g.className = 'gal'; g.hidden = true;
+  g.setAttribute('role', 'dialog'); g.setAttribute('aria-modal', 'true'); g.setAttribute('aria-label', 'Photos');
+  g.innerHTML = `<div class="gal-track">${prints.map(p => { const img = p.querySelector('img');
+      return `<figure class="gal-slide"><div class="gal-print"><img src="${img.getAttribute('src')}" alt="${img.alt.replace(/"/g, '&quot;')}"><figcaption>${p.querySelector('figcaption').textContent}</figcaption></div></figure>`; }).join('')}</div>
+    <button class="gal-x" type="button" aria-label="Close the photos">✕</button>
+    ${prints.length > 1 ? `<button class="gal-nav prev" type="button" aria-label="Previous photo">‹</button><button class="gal-nav next" type="button" aria-label="Next photo">›</button>
+    <div class="gal-dots">${prints.map((_, i) => `<i data-i="${i}"></i>`).join('')}</div>` : ''}`;
+  document.body.appendChild(g);
+  const track = g.querySelector('.gal-track'), slides = [...g.querySelectorAll('.gal-print')];
+  let at = 0, open = false, lastFocus = null, pinY = 0;
+  const pin = on => {
+    const b = document.body.style;
+    if (on) { pinY = scrollY; Object.assign(b, { position: 'fixed', top: `-${pinY}px`, left: '0', right: '0' }); }
+    else { Object.assign(b, { position: '', top: '', left: '', right: '' }); scrollTo({ top: pinY, behavior: 'instant' }); }
+  };
+  const show = (i, slide = true) => {
+    at = (i + prints.length) % prints.length;
+    track.style.transition = slide && !reduce ? 'transform .45s cubic-bezier(.2,.8,.2,1)' : 'none';
+    track.style.transform = `translateX(${-at * 100}%)`;
+    g.querySelectorAll('.gal-dots i').forEach((d, j) => d.classList.toggle('on', j === at));
+  };
+  // a print and its big copy: fly from one to the other, turning to its tilt on the page
+  const fly = (from, to, back, done) => {
+    const a = from.getBoundingClientRect(), b = to.getBoundingClientRect();
+    const tilt = getComputedStyle(back ? to : from).rotate;
+    const deg = tilt && tilt !== 'none' ? tilt : '0deg';
+    const there = `translate(${a.left - b.left}px, ${a.top - b.top}px) scale(${a.width / b.width}) rotate(${deg})`;
+    if (reduce) return done && done();
+    const anim = (back ? from : to).animate(back
+      ? [{ transform: 'none' }, { transform: `translate(${b.left - a.left}px, ${b.top - a.top}px) scale(${b.width / a.width}) rotate(${deg})` }]
+      : [{ transform: there }, { transform: 'none' }],
+      { duration: back ? 380 : 520, easing: back ? 'cubic-bezier(.4,0,.2,1)' : 'cubic-bezier(.2,.9,.25,1.04)', fill: 'forwards' });
+    let fin = false;
+    const finish = () => { if (fin) return; fin = true; anim.cancel(); done && done(); };
+    anim.onfinish = finish;
+    setTimeout(finish, (back ? 380 : 520) + 150);   // never leave a print hidden if the animation stalls
+  };
+  function openGal(i) {
+    if (open) return;
+    open = true; lastFocus = document.activeElement;
+    g.hidden = false; show(i, false); pin(true);
+    requestAnimationFrame(() => g.classList.add('on'));
+    prints[at].style.visibility = 'hidden';
+    fly(prints[at], slides[at], false);
+    g.querySelector('.gal-x').focus({ preventScroll: true });
+  }
+  function closeGal() {
+    if (!open) return;
+    open = false;
+    pin(false);
+    g.classList.remove('on');
+    const p = prints[at], s = slides[at];
+    prints.forEach(x => x.style.visibility = x === p ? 'hidden' : '');
+    s.style.transform = '';
+    fly(s, p, true, () => { g.hidden = true; p.style.visibility = ''; lastFocus && lastFocus.focus && lastFocus.focus({ preventScroll: true }); });
+    if (reduce) { g.hidden = true; p.style.visibility = ''; }
+  }
+  prints.forEach((p, i) => { p.style.cursor = 'zoom-in'; p.addEventListener('click', () => openGal(i)); });
+  g.querySelector('.gal-x').addEventListener('click', closeGal);
+  g.querySelector('.prev')?.addEventListener('click', e => { e.stopPropagation(); show(at - 1); });
+  g.querySelector('.next')?.addEventListener('click', e => { e.stopPropagation(); show(at + 1); });
+  g.querySelectorAll('.gal-dots i').forEach(d => d.addEventListener('click', e => { e.stopPropagation(); show(+d.dataset.i); }));
+  g.addEventListener('click', e => { if (!e.target.closest('.gal-print, button, .gal-dots') && !moved) closeGal(); });
+  addEventListener('keydown', e => {
+    if (!open) return;
+    if (e.key === 'Escape') closeGal();
+    else if (e.key === 'ArrowRight') show(at + 1);
+    else if (e.key === 'ArrowLeft') show(at - 1);
+  });
+  // swipe sideways for the other photo, or pull down to put it back
+  let x0 = null, y0 = 0, dx = 0, dy = 0, mode = null, moved = false;
+  g.addEventListener('pointerdown', e => { if (e.target.closest('button')) return; x0 = e.clientX; y0 = e.clientY; dx = dy = 0; mode = null; moved = false; });
+  g.addEventListener('pointermove', e => {
+    if (x0 === null) return;
+    dx = e.clientX - x0; dy = e.clientY - y0;
+    if (!mode && Math.hypot(dx, dy) > 8) mode = Math.abs(dx) > Math.abs(dy) ? 'x' : dy > 0 ? 'y' : 'none';
+    if (mode) moved = true;
+    if (mode === 'x' && prints.length > 1) {
+      track.style.transition = 'none';
+      const edge = (at === 0 && dx > 0) || (at === prints.length - 1 && dx < 0);
+      track.style.transform = `translateX(calc(${-at * 100}% + ${edge ? dx * .3 : dx}px))`;
+    } else if (mode === 'y') {
+      const d = Math.max(0, dy);
+      slides[at].style.transform = `translateY(${d}px) scale(${1 - Math.min(.2, d / 1500)})`;
+      g.style.setProperty('--dim', String(Math.max(.25, 1 - d / 400)));
+    }
+  });
+  const end = () => {
+    if (x0 === null) return;
+    x0 = null;
+    if (mode === 'x' && prints.length > 1) show(Math.abs(dx) > 60 ? at + (dx < 0 ? 1 : -1) : at);
+    else if (mode === 'y') {
+      g.style.removeProperty('--dim');
+      if (dy > 110) closeGal();
+      else { slides[at].animate([{ transform: slides[at].style.transform }, { transform: 'none' }], { duration: 300, easing: 'cubic-bezier(.3,1.4,.5,1)' }); slides[at].style.transform = ''; }
+    }
+    setTimeout(() => { moved = false; }, 0);
+  };
+  g.addEventListener('pointerup', end);
+  g.addEventListener('pointercancel', end);
 })();
 </script>
 </body>
