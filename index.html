@@ -662,7 +662,7 @@ const words = st.querySelectorAll('.w');
 // record push, word light-up, print parallax, progress line: one loop
 const disc = $('#disc'), prints = document.querySelectorAll('.print'), progress = $('#progress');
 let angle = 0, speed = 0, lastY = scrollY, playing = false, playSpeed = 0, lastT = performance.now();
-let grab = null, handVel = 0, songRate = 1, warped = false, heldPause = false, song = null, crackle = null;
+let grab = null, handVel = 0, songRate = 1, warped = false, song = null, crackle = null;
 const SPIN = 360 / 16 / 60;   // full speed: one turn per 16 s, in degrees per 60 fps frame
 (function tick(now = performance.now()) {
   const y = scrollY, vh = innerHeight, f = Math.min(3, (now - lastT) / (1000 / 60)); lastT = now;
@@ -670,7 +670,7 @@ const SPIN = 360 / 16 / 60;   // full speed: one turn per 16 s, in degrees per 6
   if (!reduce) {
     // scroll nudge + record player spin, one writer; spin-up ~0.6 s, run-down ~1.2 s, keeps its angle
     if (grab) {
-      handVel *= Math.pow(0.8, f);   // a still hand = a stopped record
+      handVel *= Math.pow(0.93, f);  // a resting hand drags it down like friction (~0.6 s to a stop)
     } else {
       playSpeed += ((playing ? SPIN : 0) - playSpeed) * Math.min(1, (playing ? 0.08 : 0.045) * f);
       speed += (y - lastY) * 0.06; speed *= 0.92; angle += speed + playSpeed * f;
@@ -764,9 +764,10 @@ function startRecord() {
     song.preservesPitch = song.webkitPreservesPitch = song.mozPreservesPitch = false; // slower = lower, like vinyl
     song.addEventListener('ended', stopRecord);
     if (AUDIO.crackle) crackle = new Audio(AUDIO.crackle);
-    primeScratch();
+    setupWarpAudio();
   }
-  song.playbackRate = 1; songRate = 1; warped = false; heldPause = false;
+  song.playbackRate = 1; songRate = 1; warped = false;
+  if (actx) { actx.resume().catch(() => {}); songGain.gain.cancelScheduledValues(actx.currentTime); songGain.gain.value = 1; }
   document.querySelectorAll('#clips video').forEach(v => v.pause());
   stopBandcamp();
   setPlaying(true);
@@ -777,7 +778,7 @@ function startRecord() {
 }
 function stopRecord() {
   if (!playing) return;
-  grab = null; deck.classList.remove('grabbed'); heldPause = false;
+  grab = null; deck.classList.remove('grabbed');
   setPlaying(false);
   if (song) song.pause();
   if (crackle) crackle.pause();
@@ -797,64 +798,82 @@ if (AUDIO.song) {
   document.addEventListener('visibilitychange', () => { if (document.hidden) stopRecord(); });
 }
 
-// grab the record while it plays: hold it and the song slows to a stop, push it and it speeds up,
-// wiggle it and it warbles; quick back-and-forth flicks scratch (sounds cut from Kyle's own song)
+// grab the record while it plays: rest a finger on it and it drags to a stop, push it and it speeds up,
+// wiggle it and it warbles, move it fast and it scratches (sounds cut from Kyle's own song).
+// The song runs through Web Audio so it can fade instead of stopping and starting (choppy on iPhones),
+// and the scratches play from memory, so they sound the instant the finger moves.
 const SCRATCH = { back: 'assets/audio/scratch-back.mp3', fwd: 'assets/audio/scratch-fwd.mp3' };
-const scratchPool = { back: [], fwd: [] };
-function primeScratch() {           // made and unlocked inside the first tap, so phones will play them later
-  for (const k of ['back', 'fwd']) for (let i = 0; i < 3; i++) {
-    const a = new Audio(SCRATCH[k]); a.muted = true;
-    a.play().then(() => { a.pause(); a.currentTime = 0; a.muted = false; }).catch(() => { a.muted = false; });
-    scratchPool[k].push(a);
-  }
+const HAND = 1.6;   // a relaxed finger drag (degrees per frame, ~95°/s) = the song at normal speed
+let actx = null, songGain = null, fxGain = null, scratchBuf = {}, lastGrain = 0, lastRateSet = 0;
+function setupWarpAudio() {          // inside the first tap, so phones allow it
+  const AC = window.AudioContext || window.webkitAudioContext;
+  if (!AC || reduce) return;
+  try {
+    actx = new AC();
+    songGain = actx.createGain(); fxGain = actx.createGain(); fxGain.gain.value = 0.9;
+    actx.createMediaElementSource(song).connect(songGain).connect(actx.destination);
+    fxGain.connect(actx.destination);
+    for (const k of ['back', 'fwd']) fetch(SCRATCH[k]).then(r => r.arrayBuffer())
+      .then(b => new Promise((ok, no) => actx.decodeAudioData(b, ok, no))).then(buf => { scratchBuf[k] = buf; }).catch(() => {});
+  } catch { actx = null; }
 }
-function scratchSound(dir) {
-  const pool = scratchPool[dir < 0 ? 'back' : 'fwd'];
-  const a = pool.find(x => x.paused) || pool[0];
-  if (!a) return;
-  a.currentTime = 0; a.play().catch(() => {});
+function scratchGrain(v) {           // v: hand speed in degrees per frame, sign = direction
+  const buf = scratchBuf[v < 0 ? 'back' : 'fwd'];
+  if (!actx || !buf) return;
+  const src = actx.createBufferSource();
+  src.buffer = buf;
+  src.playbackRate.value = Math.min(2.2, Math.max(0.6, Math.abs(v) / (HAND * 1.6)));
+  src.connect(fxGain); src.start();
 }
 function warpSong(f) {
-  if (!song || !playing) return;
-  if (!grab && !warped) return;
-  const target = grab ? Math.max(0, handVel) / SPIN : playSpeed / SPIN;
-  songRate += (target - songRate) * Math.min(1, 0.3 * f);
-  if (songRate < 0.15) {
-    if (!song.paused) { song.pause(); heldPause = true; }
-  } else {
-    if (heldPause) { heldPause = false; song.play().catch(() => {}); }
-    const r = Math.min(2.5, Math.max(0.3, songRate));
-    if (Math.abs(song.playbackRate - r) > 0.01) song.playbackRate = r;
+  if (!song || !playing || (!grab && !warped)) return;
+  const target = grab ? handVel / HAND : playSpeed / SPIN;     // 1 = normal speed
+  songRate += (target - songRate) * Math.min(1, 0.35 * f);
+  const now = performance.now();
+  if (now - lastRateSet > 45) {      // iPhones stumble if the rate changes every frame
+    const r = Math.min(2.5, Math.max(0.35, songRate));
+    if (Math.abs(song.playbackRate - r) > 0.03) song.playbackRate = r;
+    lastRateSet = now;
   }
-  if (!grab && Math.abs(songRate - 1) < 0.02) { song.playbackRate = 1; songRate = 1; warped = false; }
+  if (songGain) {                    // slow or backwards = the song fades out under your finger
+    const g = Math.min(1, Math.max(0, (songRate - 0.12) / 0.5));
+    songGain.gain.setTargetAtTime(g, actx.currentTime, 0.03);
+  }
+  if (!grab && Math.abs(songRate - 1) < 0.02) {
+    song.playbackRate = 1; songRate = 1; warped = false;
+    if (songGain) songGain.gain.setTargetAtTime(1, actx.currentTime, 0.03);
+  }
 }
 let skipClick = false;
 const angleAt = e => { const r = disc.getBoundingClientRect(); return Math.atan2(e.clientY - (r.top + r.height / 2), e.clientX - (r.left + r.width / 2)) * 180 / Math.PI; };
 if (AUDIO.song && !reduce) {
   deck.addEventListener('pointerdown', e => {
     if (!playing) return;
-    grab = { a: angleAt(e), t: performance.now(), down: performance.now(), moved: 0, dir: 0, fx: 0 };
-    handVel = playSpeed; warped = true;
+    grab = { a: angleAt(e), t: performance.now(), down: performance.now(), moved: 0, dir: 0 };
+    handVel = HAND * (playSpeed / SPIN); warped = true;   // it starts at the speed it was spinning
     try { deck.setPointerCapture(e.pointerId); } catch {}
     deck.classList.add('grabbed');
+    if (actx) actx.resume().catch(() => {});
     hideGrabHint();
   });
   deck.addEventListener('pointermove', e => {
     if (!grab) return;
     const a = angleAt(e), now = performance.now();
     let d = a - grab.a; if (d > 180) d -= 360; if (d < -180) d += 360;
-    const v = d / Math.max(0.25, (now - grab.t) / (1000 / 60));   // degrees per 60 fps frame
+    const v = d / Math.max(0.5, (now - grab.t) / (1000 / 60));   // degrees per 60 fps frame
     grab.a = a; grab.t = now; grab.moved += Math.abs(d);
     angle += d;
-    handVel += (v - handVel) * 0.55;
-    const dir = Math.sign(d);
-    if (dir && grab.dir && dir !== grab.dir && Math.abs(v) > SPIN * 2.5 && now - grab.fx > 80) { scratchSound(dir); grab.fx = now; }
-    if (dir && Math.abs(d) > 0.4) grab.dir = dir;
+    handVel += (v - handVel) * 0.6;
+    const dir = Math.sign(d), flip = dir && grab.dir && dir !== grab.dir;
+    // a scratch on every direction change, and a stream of them while the finger moves fast
+    const fast = v < -HAND * 0.3 || v > HAND * 2.2;          // any pull backwards, or a hard push forwards
+    if ((flip && Math.abs(v) > HAND * 0.6) || (fast && now - lastGrain > 75)) { scratchGrain(v); lastGrain = now; }
+    if (dir && Math.abs(d) > 0.3) grab.dir = dir;
   });
   const letGo = () => {
     if (!grab) return;
     skipClick = grab.moved > 6 || performance.now() - grab.down > 280;   // a plain tap still stops the record
-    playSpeed = Math.max(0, Math.min(SPIN * 3, handVel));                // it carries on from the hand's speed
+    playSpeed = SPIN * Math.max(0, Math.min(2.5, handVel / HAND));      // it carries on from the hand's speed
     grab = null; deck.classList.remove('grabbed');
   };
   deck.addEventListener('pointerup', letGo);
