@@ -229,6 +229,10 @@ section{position:relative}
 .roomcard::before{content:"";position:absolute;inset:0;border-radius:20px;background:radial-gradient(90% 70% at 50% 0%,rgba(222,214,61,.1),transparent 70%),var(--card);border:1px solid var(--line);box-shadow:0 30px 80px rgba(0,0,0,.6)}
 .roomcard{padding:30px 26px 26px}
 .rc-close{position:absolute;top:12px;right:12px;width:36px;height:36px;border-radius:50%;border:1px solid var(--line);background:var(--ink);color:var(--muted);font-size:14px;cursor:pointer;z-index:2}
+.roomcard{touch-action:pan-y}
+.rc-dots{display:flex;justify-content:center;gap:7px;margin-top:22px}
+.rc-dots i{width:6px;height:6px;border-radius:50%;background:rgba(242,238,223,.22);transition:background .3s,transform .3s}
+.rc-dots i.on{background:var(--sun);transform:scale(1.3)}
 .rc-close:hover{color:var(--paper);border-color:var(--sun)}
 .rc-kicker{font:600 11px/1 var(--sans);letter-spacing:.2em;text-transform:uppercase;color:var(--sun)}
 .rc-sign{margin:20px 0 4px;min-height:44px;display:flex;align-items:center}
@@ -603,6 +607,7 @@ html:not(.js) .switch{display:none}
 <!-- the little card that opens when a sign in the rooms banner is tapped -->
 <dialog class="roomcard" id="roomCard" aria-labelledby="roomTitle">
   <button class="rc-close" type="button" aria-label="Close" data-close>✕</button>
+  <div class="rc-inner" id="roomInner">
   <p class="rc-kicker" id="roomKicker"></p>
   <div class="rc-sign" id="roomSign"></div>
   <h3 class="rc-title" id="roomTitle"></h3>
@@ -610,6 +615,8 @@ html:not(.js) .switch{display:none}
   <figure class="rc-photo" id="roomPhoto" hidden><img alt="" width="176" height="132"></figure>
   <p class="rc-where" id="roomWhere"></p>
   <div class="rc-links" id="roomLinks"></div>
+  </div>
+  <div class="rc-dots" id="roomDots" aria-hidden="true"></div>
 </dialog>
 
 <!-- LINER NOTES: the back of the sleeve -->
@@ -1269,9 +1276,19 @@ const ROOMS = {
   });
 
   let opener = null;
+  const ORDER = Object.keys(ROOMS);
+  let current = null;
+  $('#roomDots').innerHTML = ORDER.map(() => '<i></i>').join('');
   function openRoom(k, from) {
-    const r = ROOMS[k]; if (!r || !card.showModal) return;
+    if (!ROOMS[k] || !card.showModal) return;
     opener = from;
+    fillRoom(k);
+    card.showModal();
+  }
+  function fillRoom(k) {
+    const r = ROOMS[k], from = document.querySelector(`#marquee .v[data-k="${k}"]`);
+    current = k;
+    [...$('#roomDots').children].forEach((d, i) => d.classList.toggle('on', ORDER[i] === k));
     if (r.sign) $('#roomSign').innerHTML = r.sign;          // a bigger, fuller sign for the card
     else {
       const sign = from.cloneNode(true);
@@ -1291,8 +1308,37 @@ const ROOMS = {
     if (r.map) links.push(`<a href="https://www.google.com/maps/search/?api=1&query=${encodeURIComponent(r.map)}" target="_blank" rel="noopener">Map ↗</a>`);
     links.push(`<a class="go" href="#book" data-close>${r.book ? 'Book a date' : 'Book Kyle'}</a>`);
     $('#roomLinks').innerHTML = links.join('');
-    card.showModal();
   }
+  // swipe or flick sideways (or arrow keys) to slide to the next place in the lineup
+  let sliding = false;
+  function stepRoom(dir) {
+    if (!current || zoomEl || sliding) return;
+    const next = ORDER[(ORDER.indexOf(current) + dir + ORDER.length) % ORDER.length], inner = $('#roomInner');
+    if (reduce) return fillRoom(next);
+    sliding = true;
+    const out = inner.animate([{ transform: 'none', opacity: 1 }, { transform: `translateX(${-dir * 60}px)`, opacity: 0 }],
+      { duration: 160, easing: 'cubic-bezier(.4,0,1,1)', fill: 'forwards' });
+    out.onfinish = () => {
+      fillRoom(next);
+      out.cancel();   // drop its held end state, or the card stays invisible once the slide-in ends
+      inner.animate([{ transform: `translateX(${dir * 60}px)`, opacity: 0 }, { transform: 'none', opacity: 1 }],
+        { duration: 300, easing: 'cubic-bezier(.2,.9,.25,1)' }).onfinish = () => { sliding = false; };
+    };
+  }
+  let swipe = null, swiped = false;
+  card.addEventListener('pointerdown', e => { if (!zoomEl) swipe = { x: e.clientX, y: e.clientY, t: performance.now() }; });
+  card.addEventListener('pointerup', e => {
+    if (!swipe) return;
+    const dx = e.clientX - swipe.x, dy = e.clientY - swipe.y, dt = performance.now() - swipe.t; swipe = null;
+    const flick = Math.abs(dx) > 24 && Math.abs(dx) / dt > 0.45;
+    if ((Math.abs(dx) > 55 || flick) && Math.abs(dx) > Math.abs(dy) * 1.4) { swiped = true; stepRoom(dx < 0 ? 1 : -1); }
+  });
+  card.addEventListener('pointercancel', () => { swipe = null; });
+  card.addEventListener('click', e => { if (swiped) { swiped = false; e.stopPropagation(); e.preventDefault(); } }, true);   // a swipe isn't a tap
+  card.addEventListener('keydown', e => {
+    if (e.key === 'ArrowRight') { e.preventDefault(); stepRoom(1); }
+    if (e.key === 'ArrowLeft') { e.preventDefault(); stepRoom(-1); }
+  });
   function closeRoom() {
     if (!card.open) return;
     if (reduce) { card.close(); return; }
