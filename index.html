@@ -703,7 +703,7 @@ html:not(.js) .switch{display:none}
       <div class="thanks-copy">
         <p class="t-kicker">Request sent</p>
         <h3 class="t-title">Thank you, <span id="thanksName">friend</span>.</h3>
-        <p class="t-body">Really appreciate you taking the time to stop by and reach out. Kyle has your request and will write back to <b id="thanksEmail"></b> soon.</p>
+        <p class="t-body">Really appreciate you taking the time to stop by and reach out. Kyle has your request and will get back to you soon<span id="thanksAt"> at <b id="thanksEmail"></b></span>.</p>
         <p class="t-sign">Talk soon,<br><span>Kyle &amp; Sweet Babe</span></p>
         <button class="t-again" type="button" id="thanksAgain">Send another request</button>
       </div>
@@ -1298,6 +1298,7 @@ function showThanks(first, email) {
   const form = $('#form'), t = $('#thanks'), btn = form.querySelector('button[type=submit]');
   $('#thanksName').textContent = first || 'friend';
   $('#thanksEmail').textContent = email;
+  $('#thanksAt').hidden = !email;
   const swap = () => {
     form.hidden = true; form.classList.remove('leaving'); form.reset(); $('#notice').className = 'notice';
     btn.disabled = false; btn.classList.remove('sending'); btn.textContent = 'Send';
