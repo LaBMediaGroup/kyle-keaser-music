@@ -293,6 +293,9 @@ section{position:relative}
 .rc-zoom img{display:block;width:100%;height:auto;aspect-ratio:4/3;object-fit:cover}
 .rc-zoom .x{position:fixed;top:max(14px,env(safe-area-inset-top));right:14px;width:42px;height:42px;border-radius:50%;border:1px solid var(--line);background:var(--ink);color:var(--paper);font-size:16px;cursor:pointer;opacity:0;transition:opacity .3s}
 .rc-zoom.on .x{opacity:1}
+.rc-photo.square img{aspect-ratio:1}
+.rc-zoom figure.square{width:min(100%,520px)}
+.rc-zoom figure.square img{aspect-ratio:1}
 .rc-photo img{display:block;width:100%;height:auto;aspect-ratio:4/3;object-fit:cover}
 .rc-links{clear:both}
 .rc-where{color:var(--muted);font-size:14px;line-height:1.6;margin-top:12px;white-space:pre-line}
@@ -1270,6 +1273,7 @@ $('#form').addEventListener('submit', async e => {
 const ROOMS = {
   eagles:     { kicker: 'Side A · a regular', body: "Rochester's Fraternal Order of Eagles club, with live bands every Friday and Saturday night, and one of Kyle's regular rooms.",
                 where: '650 Woodward Ave, Rochester (parking off Wilcox St)', site: 'https://rochester-eagles-2634.com', map: 'Fraternal Order of Eagles Aerie 2634, 650 Woodward Ave, Rochester, MI',
+                photo: ['assets/eagles-kyle-poster.jpg', 'square', 'The Rochester Eagles poster for Kyle Keaser live, Friday 8:30 pm'],
                 sign: '<div class="re-sign" aria-hidden="true"><span class="r">Rochester</span><span class="e">Eagles</span><span class="n">2634</span><span class="m">People. Pride. Community.</span><span class="st">★</span></div>' },
   olddetroit: { kicker: 'Side A · a regular', body: "Classic American comfort food and Detroit craft beer, and one of Kyle's regular rooms.",
                 where: '6870 N Rochester Rd, Rochester Hills', site: 'https://olddetroitrochesterhills.com', map: 'Old Detroit Bar and Grille, 6870 N Rochester Rd, Rochester, MI' },
@@ -1470,7 +1474,8 @@ const ROOMS = {
     $('#roomWhere').textContent = r.where || '';
     const ph = $('#roomPhoto');
     ph.hidden = !r.photo;
-    if (r.photo) { ph.querySelector('img').src = r.photo[0]; ph.querySelector('img').alt = `Kyle Keaser at ${$('#roomTitle').textContent}`; }
+    ph.classList.toggle('square', !!r.photo && r.photo[1] === 'square');
+    if (r.photo) { ph.querySelector('img').src = r.photo[0]; ph.querySelector('img').alt = r.photo[2] || `Kyle Keaser at ${$('#roomTitle').textContent}`; }
     const GLOBE = '<svg viewBox="0 0 24 24" aria-hidden="true"><circle cx="12" cy="12" r="9"/><path d="M3 12h18M12 3c2.6 2.6 3.9 5.6 3.9 9s-1.3 6.4-3.9 9c-2.6-2.6-3.9-5.6-3.9-9S9.4 5.6 12 3z"/></svg>';
     const PIN = '<svg viewBox="0 0 24 24" aria-hidden="true"><path d="M12 21s-6.5-5.6-6.5-11a6.5 6.5 0 0 1 13 0c0 5.4-6.5 11-6.5 11z"/><circle cx="12" cy="10" r="2.4"/></svg>';
     const ARROW = '<svg viewBox="0 0 24 24" aria-hidden="true"><path d="M5 12h13M13 6l6 6-6 6"/></svg>';
@@ -1580,7 +1585,7 @@ const ROOMS = {
     const img = photo.querySelector('img'), from = photo.getBoundingClientRect();
     zoomEl = document.createElement('div');
     zoomEl.className = 'rc-zoom';
-    zoomEl.innerHTML = `<figure><img src="${img.getAttribute('src')}" alt="${esc(img.alt)}"></figure><button class="x" type="button" aria-label="Shrink the photo">✕</button>`;
+    zoomEl.innerHTML = `<figure class="${photo.classList.contains('square') ? 'square' : ''}"><img src="${img.getAttribute('src')}" alt="${esc(img.alt)}"></figure><button class="x" type="button" aria-label="Shrink the photo">✕</button>`;
     card.appendChild(zoomEl);
     const fig = zoomEl.querySelector('figure'), to = fig.getBoundingClientRect();
     photo.style.visibility = 'hidden';
