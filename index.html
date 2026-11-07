@@ -338,7 +338,10 @@ html:not(.js) .switch{display:none}
 .heroplay[aria-pressed="true"] .ic{width:10px;height:10px;border:0;background:var(--sun);border-radius:2px}
 .player .disc{animation:none}
 .player .arm{animation:none;transform:rotate(-28deg);transition:transform .7s var(--ease)}
-.player .deck.is-playing .arm{transform:none}
+.player .arm{pointer-events:none}
+.player .arm .arm-hit{pointer-events:stroke;cursor:grab;touch-action:none}
+.player .deck.arm-held .arm{filter:drop-shadow(0 16px 22px rgba(0,0,0,.65))}
+.player .deck.arm-held .arm .arm-hit{cursor:grabbing}
 .player .deck{cursor:pointer;-webkit-user-select:none;user-select:none;-webkit-touch-callout:none}
 .player .deck.is-playing{cursor:grab;touch-action:none}
 .player .deck.grabbed{cursor:grabbing}
@@ -402,6 +405,7 @@ html:not(.js) .switch{display:none}
         <circle cx="164" cy="31" r="8" fill="#DED63D"/>
         <path d="M164 31 L150 190 Q148 214 128 226" stroke="#cfcab8" stroke-width="7" stroke-linecap="round"/>
         <rect x="104" y="218" width="34" height="20" rx="4" transform="rotate(-30 121 228)" fill="#2a271f" stroke="#DED63D" stroke-width="2"/>
+        <path class="arm-hit" d="M164 31 L150 190 Q148 214 124 230" stroke="transparent" stroke-width="46" stroke-linecap="round" fill="none"/>
       </svg>
     </div>
     <span class="grabhint" id="grabHint" aria-hidden="true" hidden><i></i>Grab the record</span>
@@ -672,13 +676,15 @@ const SPIN = 360 / 16 / 60;   // full speed: one turn per 16 s, in degrees per 6
     if (grab) {
       handVel *= Math.pow(0.93, f);  // a resting hand drags it down like friction (~0.6 s to a stop)
     } else {
-      const ease = coast ? 0.035 : (playing ? 0.08 : 0.045);  // after a flick it coasts down (~1.2 s)
+      const ease = coast ? 0.055 : (playing ? (warped ? 0.22 : 0.08) : 0.045);  // let go: back up to speed fast (~0.3 s); a flick coasts (~0.8 s)
       playSpeed += ((playing ? SPIN : 0) - playSpeed) * Math.min(1, ease * f);
       if (coast && Math.abs(playSpeed - SPIN) < SPIN * 0.1) coast = false;
       speed += (y - lastY) * 0.06; speed *= 0.92; angle += speed + playSpeed * f;
     }
     disc.style.rotate = `${angle}deg`;
     warpSong(f);
+    // the arm creeps inward as the song plays (after its drop-in swing has finished)
+    if (playing && song && !armDrag && !lifted && now - armDropAt > 750) setArm(armFor(songProgress()), false);
     prints.forEach(p => {
       const r = p.getBoundingClientRect();
       if (r.bottom > 0 && r.top < vh) p.style.translate = `0 ${(r.top + r.height / 2 - vh / 2) / vh * p.dataset.speed}px`;
@@ -753,13 +759,14 @@ function setPlaying(on) {
   deck.classList.toggle('is-playing', on);
   $('#bar').classList.toggle('playing', on);
   playBtn.setAttribute('aria-pressed', on);
+  if (!on && !armDrag) { arm.style.transition = ''; arm.style.transform = ''; armAngle = ARM_REST; }   // back to its rest
   playBtn.setAttribute('aria-label', on ? 'Stop the music' : 'Play a song');
   stopBtns.forEach(b => b.hidden = !on);
   heroPlay.setAttribute('aria-pressed', on);
   heroPlay.querySelector('.lbl').textContent = on ? 'Stop' : `Play “${AUDIO.title || 'a song'}”`;
   $('#who').textContent = on ? `Now playing · ${AUDIO.title || 'Sweet Babe'}, live` : 'Kyle Keaser · Metro Detroit';
 }
-function startRecord() {
+function startRecord(at) {
   // built and played inside the tap, so phones unlock sound; nothing downloads before the first tap.
   // Stopping lifts the needle where it is; playing again carries on from there.
   if (!song) {
@@ -769,11 +776,14 @@ function startRecord() {
     if (AUDIO.crackle) crackle = new Audio(AUDIO.crackle);
     setupWarpAudio();
   }
+  if (at != null) { try { song.currentTime = at; } catch {} }
   song.playbackRate = 1; songRate = 1; warped = false; coast = false; warble = 0;
   if (actx) { actx.resume().catch(() => {}); songGain.gain.cancelScheduledValues(actx.currentTime); songGain.gain.value = 1; }
   document.querySelectorAll('#clips video').forEach(v => v.pause());
   stopBandcamp();
   setPlaying(true);
+  armDropAt = performance.now();
+  setArm(armFor(songProgress()), true);   // the needle swings in to where the song is
   setTimeout(showGrabHint, 1600);
   if (crackle) { crackle.currentTime = 0; crackle.play().catch(() => {}); }
   song.play().catch(err => { if (err.name !== 'AbortError') stopRecord(); });
@@ -877,9 +887,9 @@ function warpSong(f) {
   let target = rr;
   if (!grab && warble > 0.01) {                          // settling back in, like a warped record finding its speed
     target += Math.sin(now / 1000 * Math.PI * 2 * 4.5) * 0.08 * warble;
-    warble *= Math.pow(0.955, f);                        // gone in about a second and a half
+    warble *= Math.pow(coast ? 0.94 : 0.9, f);           // a quick wobble, gone in well under a second
   }
-  songRate += (target - songRate) * Math.min(1, 0.35 * f);
+  songRate += (target - songRate) * Math.min(1, (grab ? 0.35 : 0.5) * f);
 
   if (rr < -0.05) {                                      // backwards: the real audio, reversed
     pos = Math.max(win ? win.from : 0, pos + rr * dt);
@@ -898,9 +908,9 @@ function warpSong(f) {
   }
   if (songGain) {                                        // slow or backwards = the song fades out under your finger
     const g = rr < -0.05 ? 0 : Math.min(1, Math.max(0, (songRate - 0.12) / 0.5));
-    songGain.gain.setTargetAtTime(g, actx.currentTime, grab ? 0.03 : 0.08);   // comes back in smoothly
+    songGain.gain.setTargetAtTime(g, actx.currentTime, grab ? 0.03 : 0.045);  // comes back in smoothly but quickly
   }
-  if (!grab && !coast && warble < 0.02 && Math.abs(songRate - 1) < 0.02) {
+  if (!grab && !coast && warble < 0.03 && Math.abs(songRate - 1) < 0.03) {
     song.playbackRate = 1; songRate = 1; warped = false;
     if (songGain) songGain.gain.setTargetAtTime(1, actx.currentTime, 0.08);
   }
@@ -940,12 +950,74 @@ if (AUDIO.song && !reduce) {
     const rel = Math.max(-3, Math.min(6, (Math.abs(last) > Math.abs(handVel) ? last : handVel) / HAND));
     if (rel > 1.4)       { coast = true; warble = 1;   scratchGrain(HAND * 1.6 * Math.min(2.2, rel * 0.6)); }
     else if (rel < -0.8) { coast = true; warble = 0.8; scratchGrain(-HAND * 1.6 * Math.min(2.2, -rel * 0.6)); }
-    else warble = Math.max(warble, 0.25);
+    else warble = Math.max(warble, 0.15);
     playSpeed = SPIN * rel;
     grab = null; deck.classList.remove('grabbed');
   };
   deck.addEventListener('pointerup', letGo);
   deck.addEventListener('pointercancel', letGo);
+}
+
+// The tonearm: a one-sided record. Drag the arm across it to pick a spot: the outer edge is the start of the
+// song, the middle is the middle, near the label is the end. Holding the arm lifts the needle (the music
+// fades); dropping it plays from there with the needle crackle; putting it back on its rest stops it.
+// While the song plays the arm creeps inward on its own, like the real thing.
+const arm = $('.arm'), ARM_START = -12, ARM_END = 6.5, ARM_REST = -28;   // degrees (worked out from the arm's shape)
+let armDrag = null, armAngle = ARM_REST, armDropAt = 0, lifted = false;
+const songLength = () => (song && isFinite(song.duration) && song.duration) || 301;
+const songProgress = () => song ? song.currentTime / songLength() : 0;
+const armFor = p => ARM_START + (ARM_END - ARM_START) * Math.min(1, Math.max(0, p));
+function setArm(a, smooth) { armAngle = a; arm.style.transition = smooth ? '' : 'none'; arm.style.transform = `rotate(${a}deg)`; }
+function armPivot() { const r = deck.getBoundingClientRect(); return [r.left + 0.977 * r.width, r.top + 0.031 * r.width]; }
+const pointerAngle = e => { const [x, y] = armPivot(); return Math.atan2(e.clientY - y, e.clientX - x) * 180 / Math.PI; };
+function liftNeedle() {
+  if (!playing || !song || lifted) return;
+  lifted = true;
+  if (songGain) { songGain.gain.setTargetAtTime(0, actx.currentTime, 0.02); setTimeout(() => lifted && song.pause(), 90); }
+  else song.pause();
+  if (crackle) crackle.pause();
+}
+function dropNeedle(t) {
+  lifted = false;
+  try { song.currentTime = t; } catch {}
+  if (crackle) { crackle.currentTime = 0; crackle.play().catch(() => {}); }
+  song.play().catch(() => {});
+  if (songGain) songGain.gain.setTargetAtTime(1, actx.currentTime, 0.05);
+}
+if (AUDIO.song) {
+  const hit = arm.querySelector('.arm-hit');
+  hit.addEventListener('pointerdown', e => {
+    e.stopPropagation(); e.preventDefault();
+    armDrag = { start: pointerAngle(e), from: armAngle };
+    try { hit.setPointerCapture(e.pointerId); } catch {}
+    deck.classList.add('arm-held');
+    if (grab) { grab = null; deck.classList.remove('grabbed'); }
+    revEnd(); wasBack = false;
+    liftNeedle();
+    hideGrabHint();
+  });
+  hit.addEventListener('pointermove', e => {
+    if (!armDrag) return;
+    let d = pointerAngle(e) - armDrag.start; if (d > 180) d -= 360; if (d < -180) d += 360;
+    setArm(Math.max(ARM_REST, Math.min(ARM_END + 1.5, armDrag.from + d)), false);
+  });
+  const armUp = e => {
+    if (!armDrag) return;
+    e && e.stopPropagation();
+    armDrag = null; deck.classList.remove('arm-held'); skipClick = true;
+    if (armAngle < ARM_START - 3) {                        // back on its rest: stop
+      lifted = false;
+      if (playing) stopRecord(); else { arm.style.transition = ''; arm.style.transform = ''; armAngle = ARM_REST; }
+      return;
+    }
+    const a = Math.min(ARM_END, Math.max(ARM_START, armAngle));
+    setArm(a, true);
+    const t = (a - ARM_START) / (ARM_END - ARM_START) * songLength();
+    if (playing) dropNeedle(t); else startRecord(t);
+  };
+  hit.addEventListener('pointerup', armUp);
+  hit.addEventListener('pointercancel', armUp);
+  hit.addEventListener('click', e => e.stopPropagation());
 }
 
 // a one-time hint the first time the record plays
