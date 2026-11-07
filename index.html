@@ -141,7 +141,7 @@ section{position:relative}
   text-shadow:2px 2px 0 #1c2238,0 0 10px rgba(255,40,30,.75),0 0 24px rgba(255,30,20,.5)}
 .ic-martini{width:24px;height:26px;fill:none;stroke-linecap:round;stroke-linejoin:round;filter:drop-shadow(0 0 6px rgba(255,40,30,.6))}
 .ic-martini .glass{stroke:#bfe6f2;stroke-width:1.8}.ic-martini .olive{fill:#b6d33c}.ic-martini .pick{stroke:#e8c33a;stroke-width:1.6}
-.v-dodge b{font:400 21px/1 "Tilt Neon",system-ui,sans-serif;letter-spacing:.08em;text-transform:uppercase;color:#ffe6c4;text-shadow:0 0 4px #ff9a3c,0 0 12px #ff6a00,0 0 26px rgba(255,106,0,.55)}
+.v-dodge b{font:400 21px/1 "Tilt Neon",system-ui,sans-serif;letter-spacing:.08em;text-transform:uppercase;color:#ffe6c4;text-shadow:0 0 4px #ff9a3c,0 0 12px #ff6a00,0 0 26px rgba(255,106,0,.55);padding:9px 13px 8px;border:2px solid #ff5a76;border-radius:3px;box-shadow:0 0 6px #ff3b5c,0 0 16px rgba(255,59,92,.5),inset 0 0 8px rgba(255,59,92,.3)}
 .v-oasis b{display:inline-flex;align-items:center;gap:9px;color:#f4f1ea}
 .v-oasis .do{display:inline-grid;line-height:1;text-align:center}
 .v-oasis .do>span{font:700 21px/1 Oswald,sans-serif;letter-spacing:.07em;text-transform:uppercase}
@@ -233,6 +233,13 @@ section{position:relative}
 .rc-kicker{font:600 11px/1 var(--sans);letter-spacing:.2em;text-transform:uppercase;color:var(--sun)}
 .rc-sign{margin:20px 0 4px;min-height:44px;display:flex;align-items:center}
 .rc-sign .v{cursor:default}
+/* New Dodge Lounge: the orange neon letters stacked inside a red neon frame, LIVE on top, like their logo */
+.nd-sign{position:relative;display:grid;justify-items:center;gap:6px;width:min(240px,100%);margin:12px 0 4px;padding:24px 18px 16px;
+  font:400 32px/1 "Tilt Neon",system-ui,sans-serif;letter-spacing:.1em;text-transform:uppercase;color:#ffe6c4;
+  text-shadow:0 0 4px #ff9a3c,0 0 12px #ff6a00,0 0 28px rgba(255,106,0,.55);
+  border:2.5px solid #ff5a76;border-radius:2px;box-shadow:0 0 8px #ff3b5c,0 0 22px rgba(255,59,92,.55),inset 0 0 12px rgba(255,59,92,.3)}
+.nd-sign .live{position:absolute;left:50%;top:-10px;translate:-50% 0;font-size:15px;letter-spacing:.18em;padding:0 10px;background:var(--ink-3);color:#ffd6de;
+  text-shadow:0 0 5px #ff3b5c,0 0 14px #ff2d55}
 /* Stray Cat Lounge, after their sign: white retro script, dark shadow, red glow, martini, navy tagline bar */
 .sc-sign{position:relative;display:grid;justify-items:start;padding:6px 4px 0;font-family:Yellowtail,cursive;color:#fbf8f2;
   text-shadow:3px 3px 0 #1c2238,0 0 14px rgba(255,40,30,.8),0 0 34px rgba(255,30,20,.5)}
@@ -1207,7 +1214,8 @@ const ROOMS = {
   straycat:   { kicker: 'Side A · a regular',
                 sign: '<div class="sc-sign" aria-hidden="true"><span class="l1">Stray Cat</span><span class="l2">Lounge</span><svg class="ic-martini big" viewBox="0 0 26 28" aria-hidden="true"><path class="glass" d="M3 5h18l-9 10z"/><path class="glass" d="M12 15v9M7.5 25h9"/><circle class="olive" cx="13.5" cy="8.4" r="2.3"/><path class="pick" d="M10 11.5L22 2"/></svg><span class="tag">martinis. cigars. music.</span></div>', body: "Martinis, cigars, music: a lounge with a stage for local bands, and one of Kyle's regulars.", photo: ['assets/videos/beautiful-girl-showcase.jpg'],
                 where: '40813 Garfield Rd, Clinton Township', map: 'Stray Cat Lounge, 40813 Garfield Rd, Clinton Township, MI' },
-  dodge:      { kicker: 'Side B · also played', body: "A long-running bar and music room in Hamtramck.", photo: ['assets/band-new-dodge-lounge.jpg'],
+  dodge:      { kicker: 'Side B · also played', body: "A long-running bar and music room in Hamtramck.", site: 'https://www.thenewdodgelounge.com',
+                sign: '<div class="nd-sign" aria-hidden="true"><span class="live">Live</span><span>New</span><span>Dodge</span><span>Lounge</span></div>', photo: ['assets/band-new-dodge-lounge.jpg'],
                 where: '8850 Joseph Campau Ave, Hamtramck', map: 'New Dodge Lounge, 8850 Joseph Campau Ave, Hamtramck, MI' },
   oasis:      { kicker: 'Side B · also played', body: "A family-run coffee roaster in downtown Rochester.", photo: ['assets/solo-dessert-oasis.jpg'],
                 where: '336 S Main St, Rochester', site: 'https://docr.coffee', map: 'Dessert Oasis Coffee Roasters, 336 S Main St, Rochester, MI' },
