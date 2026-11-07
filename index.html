@@ -455,7 +455,28 @@ html:not(.js) .switch{display:none}
 .clip figcaption small{color:var(--muted);font-size:14px;text-align:right}
 .bcplayers{display:grid;gap:12px;margin-top:clamp(28px,4vw,40px)}
 @media (min-width:760px){.bcplayers{grid-template-columns:1fr 1fr;gap:16px}}
-.bcplayers iframe{display:block;border:0;width:100%;height:120px;border-radius:14px;background:var(--ink-2);box-shadow:0 0 0 1px var(--line)}
+.bcplayers .tk{display:grid;grid-template-columns:auto 1fr auto;align-items:center;gap:14px;padding:12px 16px 12px 12px;border-radius:16px;background:var(--ink-2);box-shadow:0 0 0 1px var(--line);transition:box-shadow .3s}
+.bcplayers iframe.tk{display:block;border:0;padding:0;width:100%;height:120px}
+.bcplayers .tk.on{box-shadow:0 0 0 1px rgba(222,214,61,.45),0 10px 30px rgba(0,0,0,.35)}
+.tk .art{position:relative;width:72px;height:72px;border:0;padding:0;border-radius:10px;overflow:hidden;cursor:pointer;background:var(--ink-3)}
+.tk .art img{width:100%;height:100%;object-fit:cover;display:block}
+.tk .art span{position:absolute;inset:0;display:grid;place-items:center;background:rgba(11,10,8,.28)}
+.tk .art span i{width:38px;height:38px;border-radius:50%;background:var(--sun);display:grid;place-items:center;box-shadow:0 4px 14px rgba(0,0,0,.4);transition:transform .2s}
+.tk .art:active span i{transform:scale(.9)}
+.tk .art svg{width:16px;height:16px;color:var(--ink)}
+.tk .art .ic-pause{display:none}
+.tk.on .art .ic-play{display:none}.tk.on .art .ic-pause{display:block}
+.tk .meta{min-width:0}
+.tk b{display:block;font:italic 400 21px/1.1 var(--serif);text-wrap:balance}
+.tk .sub2{display:flex;justify-content:space-between;gap:10px;margin-top:2px;font-size:13px;color:var(--muted);font-variant-numeric:tabular-nums}
+.tk .seek{position:relative;height:22px;margin-top:4px;cursor:pointer;touch-action:none}
+.tk .seek::before,.tk .seek i{content:"";position:absolute;left:0;top:50%;height:4px;margin-top:-2px;border-radius:4px}
+.tk .seek::before{right:0;background:var(--line)}
+.tk .seek i{width:calc(var(--p,0) * 100%);background:var(--sun)}
+.tk .seek i::after{content:"";position:absolute;right:-6px;top:50%;width:12px;height:12px;margin-top:-6px;border-radius:50%;background:var(--sun);transform:scale(0);transition:transform .2s}
+.tk.on .seek i::after,.tk .seek:active i::after{transform:scale(1)}
+.tk .out{align-self:start;color:var(--muted);font-size:12px;letter-spacing:.06em;text-transform:uppercase;text-decoration:none;padding:4px 0}
+.tk .out:hover{color:var(--sun)}
 .listen .ig{margin-top:26px;display:flex;flex-wrap:wrap;gap:8px 22px}
 .sleeve .end{margin-top:clamp(60px,10vw,100px);display:flex;flex-wrap:wrap;align-items:center;gap:20px}
 .sleeve .end img{width:64px;height:64px;border-radius:50%;clip-path:circle(47%);animation:spin 16s linear infinite}
@@ -534,10 +555,10 @@ html:not(.js) .switch{display:none}
 .js .listen .bc:has(.drophead.in) .eq{transform:none}
 /* Bandcamp players slide out like records from their sleeves, one from each side */
 .js .bcplayers.fade{opacity:1;transform:none}
-.js .bcplayers iframe{opacity:0;transform:translateX(-60px) rotate(-2.5deg)}
-.js .bcplayers iframe:nth-child(2){transform:translateX(60px) rotate(2.5deg)}
-.js .bcplayers.in iframe{opacity:1;transform:none;transition:opacity .5s ease,transform .9s cubic-bezier(.2,1.25,.4,1)}
-.js .bcplayers.in iframe:nth-child(2){transition-delay:.16s}
+.js .bcplayers .tk{opacity:0;transform:translateX(-60px) rotate(-2.5deg)}
+.js .bcplayers .tk:nth-child(2){transform:translateX(60px) rotate(2.5deg)}
+.js .bcplayers.in .tk{opacity:1;transform:none;transition:opacity .5s ease,transform .9s cubic-bezier(.2,1.25,.4,1),box-shadow .3s}
+.js .bcplayers.in .tk:nth-child(2){transition-delay:.16s,.16s,0s}
 .js .ig.fade{opacity:1;transform:none}
 .js .ig a{opacity:0;transform:translateX(-16px);transition:opacity .5s ease,transform .6s var(--ease)}
 .js .ig.in a{opacity:1;transform:none}.js .ig.in a:nth-child(2){transition-delay:.12s}
@@ -590,7 +611,7 @@ html:not(.js) .switch{display:none}
 
 @media (prefers-reduced-motion:reduce){
   *,*::before,*::after{animation:none!important;transition:none!important}
-  .js .ch,.js .stamp,.js .neonhead .ln>span,.js .clip .screen,.js .clip figcaption,.js .bcplayers iframe,.js .ig a,.js .form>*,.js .sleeve .tracks li,.js .sleeve .credits div,.js .listen .eq{opacity:1!important;transform:none!important;filter:none!important}
+  .js .ch,.js .stamp,.js .neonhead .ln>span,.js .clip .screen,.js .clip figcaption,.js .bcplayers .tk,.js .ig a,.js .form>*,.js .sleeve .tracks li,.js .sleeve .credits div,.js .listen .eq{opacity:1!important;transform:none!important;filter:none!important}
   .js .rv .ln>span,.js .fade{transform:none;opacity:1}
   .js .print{opacity:1}
   .js .statement .w{opacity:1}
@@ -693,8 +714,16 @@ html:not(.js) .switch{display:none}
       </div>
     </div>
     <div class="bcplayers fade">
-      <iframe title="Beautiful Girl (demo) by Sweet Babe on Bandcamp" loading="lazy" src="https://bandcamp.com/EmbeddedPlayer/track=101692944/size=large/bgcol=15130f/linkcol=ded63d/tracklist=false/artwork=small/transparent=true/" seamless><a href="https://sweetbabe.bandcamp.com/track/beautiful-girl-demo">Beautiful Girl (demo) by Sweet Babe</a></iframe>
-      <iframe title="I've Got Another Feeling (demo) by Sweet Babe on Bandcamp" loading="lazy" src="https://bandcamp.com/EmbeddedPlayer/track=593080872/size=large/bgcol=15130f/linkcol=ded63d/tracklist=false/artwork=small/transparent=true/" seamless><a href="https://sweetbabe.bandcamp.com/track/ive-got-another-feeling-demo">I've Got Another Feeling (demo) by Sweet Babe</a></iframe>
+      <div class="tk" data-src="assets/audio/beautiful-girl-demo.mp3">
+        <button class="art" type="button" aria-label="Play Beautiful Girl"><img src="assets/art-beautiful-girl.jpg" alt="" width="72" height="72" loading="lazy"><span><i><svg class="ic-play" viewBox="0 0 24 24" fill="currentColor" style="margin-left:2px"><path d="M7 4.5v15l13-7.5z"/></svg><svg class="ic-pause" viewBox="0 0 24 24" fill="currentColor"><path d="M6 4h4.5v16H6zM13.5 4H18v16h-4.5z"/></svg></i></span></button>
+        <div class="meta"><b>Beautiful Girl</b><div class="seek" role="slider" tabindex="0" aria-label="Seek in Beautiful Girl" aria-valuemin="0" aria-valuemax="100" aria-valuenow="0"><i></i></div><div class="sub2"><span class="at">0:00</span><span>5:48</span></div></div>
+        <a class="out" href="https://sweetbabe.bandcamp.com/track/beautiful-girl-demo" target="_blank" rel="noopener" aria-label="Beautiful Girl on Bandcamp">Demo ↗</a>
+      </div>
+      <div class="tk" data-src="assets/audio/ive-got-another-feeling-demo.mp3">
+        <button class="art" type="button" aria-label="Play I’ve Got Another Feeling"><img src="assets/art-another-feeling.jpg" alt="" width="72" height="72" loading="lazy"><span><i><svg class="ic-play" viewBox="0 0 24 24" fill="currentColor" style="margin-left:2px"><path d="M7 4.5v15l13-7.5z"/></svg><svg class="ic-pause" viewBox="0 0 24 24" fill="currentColor"><path d="M6 4h4.5v16H6zM13.5 4H18v16h-4.5z"/></svg></i></span></button>
+        <div class="meta"><b>I’ve Got Another Feeling</b><div class="seek" role="slider" tabindex="0" aria-label="Seek in I’ve Got Another Feeling" aria-valuemin="0" aria-valuemax="100" aria-valuenow="0"><i></i></div><div class="sub2"><span class="at">0:00</span><span>3:28</span></div></div>
+        <a class="out" href="https://sweetbabe.bandcamp.com/track/ive-got-another-feeling-demo" target="_blank" rel="noopener" aria-label="I’ve Got Another Feeling on Bandcamp">Demo ↗</a>
+      </div>
     </div>
     <div class="ig fade">
       <a href="https://instagram.com/sweetbabe_music" target="_blank" rel="noopener">@sweetbabe_music on Instagram</a>
@@ -1022,21 +1051,75 @@ addEventListener('hashchange', () => { if (location.hash === '#notes') requestAn
 addEventListener('resize', () => setLineup(current()));
 if (location.hash === '#notes') requestAnimationFrame(() => setLineup('solo'));
 
-// Bandcamp's players live on bandcamp.com, so the page can't pause them directly. Instead:
-// tapping into one stops the record and the clips, and starting the record or a clip reloads
-// any Bandcamp player that was used (which stops it). One thing plays at a time.
+// the two Bandcamp demos, played right on the page (Bandcamp's own players need cross-site cookies, which iPhone Safari blocks).
+// One thing plays at a time: a demo stops the record and the clips, and they stop it.
+// Browsers that keep cross-site cookies (Chrome, Firefox, Edge on a computer) get Bandcamp's own players instead.
+// Safari, and every browser on an iPhone or iPad (they all run on Safari's engine), keep the players below.
+const BC = { 'beautiful-girl-demo.mp3': ['101692944', 'Beautiful Girl (demo)', 'beautiful-girl-demo'], 'ive-got-another-feeling-demo.mp3': ['593080872', 'I\'ve Got Another Feeling (demo)', 'ive-got-another-feeling-demo'] };
+const ua = navigator.userAgent;
+const webkitOnly = /[?&]player=own\b/.test(location.search) || /iPhone|iPad|iPod/.test(ua) || (navigator.maxTouchPoints > 1 && /Macintosh/.test(ua)) || (/Safari/.test(ua) && !/Chrome|Chromium|Edg|OPR|Firefox/.test(ua));
+if (!webkitOnly) document.querySelectorAll('.bcplayers .tk').forEach(k => {
+  const [id, title, slug] = BC[k.dataset.src.split('/').pop()];
+  const f = document.createElement('iframe');
+  f.title = `${title} by Sweet Babe on Bandcamp`; f.loading = 'lazy'; f.setAttribute('seamless', '');
+  f.src = `https://bandcamp.com/EmbeddedPlayer/track=${id}/size=large/bgcol=15130f/linkcol=ded63d/tracklist=false/artwork=small/transparent=true/`;
+  f.className = 'tk bcf'; f.innerHTML = `<a href="https://sweetbabe.bandcamp.com/track/${slug}">${title}</a>`;
+  k.replaceWith(f);
+});
+// Bandcamp's players live on bandcamp.com, so the page can't pause them directly: tapping into one stops
+// everything else, and starting anything else reloads a Bandcamp player that was used (which stops it).
 const bcFrames = [...document.querySelectorAll('.bcplayers iframe')];
 const resetFrame = f => { delete f.dataset.used; f.src = f.src; };
-function stopBandcamp(except) { bcFrames.forEach(f => { if (f !== except && f.dataset.used) resetFrame(f); }); }
 addEventListener('blur', () => setTimeout(() => {
   const f = document.activeElement;
   if (!bcFrames.includes(f)) return;
-  stopBandcamp(f);          // the other Bandcamp player
+  stopBandcamp(f);
   f.dataset.used = '1';
   stopRecord();
   document.querySelectorAll('#clips video').forEach(v => v.pause());
-  setTimeout(() => { f.blur(); window.focus(); }, 0); // so the next tap into a player is noticed too
+  setTimeout(() => { f.blur(); window.focus(); }, 0);
 }, 0));
+const tracks = [...document.querySelectorAll('.bcplayers div.tk')];
+const fmt = t => `${Math.floor(t / 60)}:${String(Math.floor(t % 60)).padStart(2, '0')}`;
+function stopBandcamp(except) {
+  tracks.forEach(k => { if (k !== except && k._a && !k._a.paused) k._a.pause(); });
+  bcFrames.forEach(f => { if (f !== except && f.dataset.used) resetFrame(f); });
+}
+const demoPlaying = () => tracks.some(k => k._a && !k._a.paused);
+tracks.forEach(k => {
+  const seek = k.querySelector('.seek'), at = k.querySelector('.at'), btn = k.querySelector('.art'), name = k.querySelector('b').textContent;
+  const audio = () => {
+    if (k._a) return k._a;
+    const a = k._a = new Audio(k.dataset.src); a.preload = 'metadata';
+    if (ensureCtx()) { try { const n = actx.createMediaElementSource(a); n.connect(actx.destination); n.connect(analyser); } catch {} }
+    const show = () => { const p = a.duration ? a.currentTime / a.duration : 0; seek.style.setProperty('--p', p); seek.setAttribute('aria-valuenow', Math.round(p * 100)); at.textContent = fmt(a.currentTime); };
+    a.addEventListener('timeupdate', show);
+    a.addEventListener('play', () => { k.classList.add('on'); btn.setAttribute('aria-label', 'Pause ' + name); stopBandcamp(k); stopRecord(); document.querySelectorAll('#clips video').forEach(v => v.pause()); actx && actx.resume().catch(() => {}); });
+    a.addEventListener('pause', () => { k.classList.remove('on'); btn.setAttribute('aria-label', 'Play ' + name); });
+    a.addEventListener('ended', () => { a.currentTime = 0; show(); });
+    k._show = show;
+    return a;
+  };
+  btn.addEventListener('click', () => { const a = audio(); a.paused ? a.play().catch(() => {}) : a.pause(); });
+  let drag = false;
+  const to = e => {
+    const a = audio(), r = seek.getBoundingClientRect(), p = Math.min(1, Math.max(0, (e.clientX - r.left) / r.width));
+    const go = () => { a.currentTime = p * a.duration; k._show(); };
+    a.duration ? go() : a.addEventListener('loadedmetadata', go, { once: true });
+    seek.style.setProperty('--p', p);
+  };
+  seek.addEventListener('pointerdown', e => { drag = true; seek.setPointerCapture(e.pointerId); to(e); });
+  seek.addEventListener('pointermove', e => drag && to(e));
+  seek.addEventListener('pointerup', () => { drag = false; const a = audio(); if (a.paused) a.play().catch(() => {}); });
+  seek.addEventListener('pointercancel', () => { drag = false; });
+  seek.addEventListener('keydown', e => {
+    const a = audio(); if (!a.duration) return;
+    if (e.key === 'ArrowRight') a.currentTime = Math.min(a.duration, a.currentTime + 10);
+    else if (e.key === 'ArrowLeft') a.currentTime = Math.max(0, a.currentTime - 10);
+    else return;
+    e.preventDefault(); k._show();
+  });
+});
 
 // the record player: one button; the record and the Stop buttons all go through it
 const playBtn = $('#playBtn'), heroPlay = $('#heroPlay'), deck = $('.deck'), stopBtns = document.querySelectorAll('.stopmusic');
@@ -1476,7 +1559,7 @@ $('#form').addEventListener('submit', async e => {
   (function frame(t) {
     requestAnimationFrame(frame);
     if (!onScreen) return;
-    const clip = [...document.querySelectorAll('#clips video')].some(v => !v.paused && !v.ended);
+    const clip = [...document.querySelectorAll('#clips video')].some(v => !v.paused && !v.ended) || demoPlaying();
     const live = analyser && ((playing && !lifted) || clip);
     if (live) {
       data = data || new Uint8Array(analyser.frequencyBinCount);
