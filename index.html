@@ -298,6 +298,7 @@ section{position:relative}
 .roomcard{padding:30px 26px 26px}
 .rc-close{position:absolute;top:12px;right:12px;width:36px;height:36px;border-radius:50%;border:1px solid var(--line);background:var(--ink);color:var(--muted);font-size:14px;cursor:pointer;z-index:2}
 .roomcard{touch-action:pan-y;-webkit-user-select:none;user-select:none;-webkit-touch-callout:none}
+.roomcard a,.roomcard img{-webkit-user-drag:none;user-drag:none}
 .roomcard img{-webkit-user-drag:none;user-drag:none}
 .roomcard>.confetti{position:absolute;inset:0;pointer-events:none;z-index:4;overflow:visible}
 .confetti i{position:absolute;display:block;will-change:transform,opacity}
@@ -2043,7 +2044,7 @@ const ROOMS = {
   }
   let swipe = null, swiped = false;
   card.addEventListener('pointerdown', e => {
-    if (zoomEl || sliding || e.target.closest('a, button')) return;
+    if (zoomEl || sliding || e.target.closest('button[data-close]')) return;   // Book, the chips and the photo still swipe; a plain tap still works
     swipe = { x: e.clientX, y: e.clientY, t: performance.now(), lx: e.clientX, lt: performance.now(), v: 0, live: false, id: e.pointerId };
   });
   card.addEventListener('pointermove', e => {
@@ -2062,7 +2063,7 @@ const ROOMS = {
     if (!swipe) return;
     const { live, dx = 0, v } = swipe; swipe = null;
     if (!live) return;
-    swiped = true;
+    swiped = true; setTimeout(() => { swiped = false; }, 400);
     const rot = dx / 18;
     if (Math.abs(dx) > 90 || Math.abs(v) > 0.55) stepRoom(dx < 0 ? 1 : -1, dx, rot);
     else springBack(dx, rot);
