@@ -243,6 +243,8 @@ section{position:relative}
 .roomcard{touch-action:pan-y}
 .roomcard>.confetti{position:absolute;inset:0;pointer-events:none;z-index:4;overflow:visible}
 .confetti i{position:absolute;display:block;will-change:transform,opacity}
+.sc-pen{position:absolute;left:0;top:0;width:10px;height:10px;margin:-5px 0 0 -5px;border-radius:50%;background:#fff;pointer-events:none;
+  box-shadow:0 0 6px 2px #fff,0 0 16px 6px rgba(255,60,40,.85),0 0 30px 10px rgba(255,40,30,.45)}
 .confetti i.spark{width:9px;height:9px;background:#fff8e2;clip-path:polygon(50% 0,62% 38%,100% 50%,62% 62%,50% 100%,38% 62%,0 50%,38% 38%);filter:drop-shadow(0 0 3px #fff3c4)}
 .rc-sign .v-wed b{font-size:46px;gap:12px}
 .rc-sign .v-wed .ic-rings{width:54px;height:35px;overflow:visible}
@@ -1337,7 +1339,61 @@ const ROOMS = {
     landed(k);
   }
   // a little moment when certain cards land
-  function landed(k) { if (k === 'party') setTimeout(confetti, 380); if (k === 'wed') setTimeout(clink, 330); }
+  function landed(k) {
+    if (k === 'party') setTimeout(confetti, 380);
+    if (k === 'wed') setTimeout(clink, 330);
+    if (k === 'dodge') neonOn();
+    if (k === 'straycat') writeOn();
+  }
+  // New Dodge: the sign sits dark, stutters, catches and holds; sparks fling off the frame when it pops on
+  function neonOn() {
+    const sg = $('#roomSign .nd-sign'); if (!sg || reduce) return;
+    const dim = { filter: 'brightness(.28) saturate(.3)', opacity: .5 }, lit = { filter: 'none', opacity: 1 };
+    sg.animate([dim, { offset: .22, ...dim }, { offset: .25, ...lit }, { offset: .29, ...dim }, { offset: .42, ...dim }, { offset: .45, ...lit },
+      { offset: .48, filter: 'brightness(.45)', opacity: .7 }, { offset: .52, ...lit }, { offset: .56, filter: 'brightness(.6)', opacity: .85 },
+      { offset: .6, filter: 'brightness(1.35)', opacity: 1 }, lit], { duration: 1700, easing: 'linear', fill: 'backwards' });
+    const live = sg.querySelector('.live');
+    live && live.animate([{ opacity: 0 }, { offset: .7, opacity: 0 }, { offset: .74, opacity: 1 }, { offset: .78, opacity: .2 }, { offset: .84, opacity: 1 }, { opacity: 1 }],
+      { duration: 1900, fill: 'backwards' });
+    setTimeout(() => sparks(sg, ['#ffb43c', '#ffe6c4', '#ff6a00', '#ff5a76'], 16), 760);
+  }
+  function sparks(el, colors, n) {
+    if (!card.open) return;
+    const r = el.getBoundingClientRect(), box = card.getBoundingClientRect();
+    const layer = document.createElement('div'); layer.className = 'confetti'; card.appendChild(layer);
+    for (let i = 0; i < n; i++) {
+      const sp = document.createElement('i'), side = i % 4;
+      const x = side === 0 ? r.left : side === 1 ? r.right : r.left + Math.random() * r.width;
+      const y = side === 2 ? r.top : side === 3 ? r.bottom : r.top + Math.random() * r.height;
+      sp.style.cssText = `left:${x - box.left}px;top:${y - box.top}px;width:2px;height:${6 + Math.random() * 6}px;background:${colors[i % colors.length]};border-radius:2px;box-shadow:0 0 6px ${colors[i % colors.length]}`;
+      layer.appendChild(sp);
+      const dx = (side === 0 ? -1 : side === 1 ? 1 : (Math.random() - .5) * 2) * (20 + Math.random() * 40);
+      const dy = (side === 2 ? -1 : 1) * (10 + Math.random() * 25), fall = 30 + Math.random() * 40, rot = Math.atan2(dy, dx) * 180 / Math.PI + 90;
+      sp.animate([{ transform: `translate(-50%,-50%) rotate(${rot}deg) scale(1)`, opacity: 1 },
+        { offset: .45, transform: `translate(calc(-50% + ${dx}px), calc(-50% + ${dy}px)) rotate(${rot}deg) scale(.9)`, opacity: 1 },
+        { transform: `translate(calc(-50% + ${dx * 1.3}px), calc(-50% + ${dy + fall}px)) rotate(${rot + 40}deg) scale(.3)`, opacity: 0 }],
+        { duration: 500 + Math.random() * 400, easing: 'cubic-bezier(.2,.7,.4,1)', fill: 'forwards' });
+    }
+    setTimeout(() => layer.remove(), 1000);
+  }
+  // Stray Cat: the tube fills with light from the left, like the name being written on in cursive
+  function writeOn() {
+    const sg = $('#roomSign .sc-sign'); if (!sg || reduce) return;
+    const write = (el, delay, dur) => el.animate([{ clipPath: 'inset(-20% 100% -20% -5%)' }, { clipPath: 'inset(-20% -5% -20% -5%)' }],
+      { duration: dur, delay, easing: 'cubic-bezier(.45,.05,.55,.95)', fill: 'backwards' });
+    const l1 = sg.querySelector('.l1'), l2 = sg.querySelector('.l2'), cup = sg.querySelector('.ic-martini'), tag = sg.querySelector('.tag');
+    write(l1, 200, 950); write(l2, 1150, 750);
+    // the bright pen point riding the front edge of the light
+    const pen = document.createElement('span'); pen.className = 'sc-pen'; sg.appendChild(pen);
+    const at = (el, x) => { const r = el.getBoundingClientRect(), b = sg.getBoundingClientRect(); return [r.left - b.left + r.width * x, r.top - b.top + r.height * .55]; };
+    const [a0, a1, b0, b1] = [at(l1, 0), at(l1, 1), at(l2, 0), at(l2, 1)];
+    pen.animate([{ transform: `translate(${a0[0]}px,${a0[1]}px)`, opacity: 0 }, { offset: .1, transform: `translate(${a0[0]}px,${a0[1]}px)`, opacity: 1 },
+      { offset: .55, transform: `translate(${a1[0]}px,${a1[1] - 10}px)`, opacity: 1 }, { offset: .6, transform: `translate(${b0[0]}px,${b0[1]}px)`, opacity: 1 },
+      { offset: .97, transform: `translate(${b1[0]}px,${b1[1] - 6}px)`, opacity: 1 }, { transform: `translate(${b1[0]}px,${b1[1] - 6}px)`, opacity: 0 }],
+      { duration: 1750, delay: 150, easing: 'linear', fill: 'both' }).onfinish = () => pen.remove();
+    cup && cup.animate([{ opacity: 0 }, { offset: .82, opacity: 0 }, { offset: .86, opacity: 1 }, { offset: .9, opacity: .2 }, { offset: .95, opacity: 1 }, { opacity: 1 }], { duration: 2200, fill: 'backwards' });
+    tag && tag.animate([{ opacity: 0, transform: 'translateY(4px)' }, { offset: .88, opacity: 0, transform: 'translateY(4px)' }, { opacity: 1, transform: 'none' }], { duration: 2500, fill: 'backwards', easing: 'ease-out' });
+  }
   // Weddings: the two rings slide together and clink, then the diamond catches the light
   function clink() {
     if (reduce || !card.open || current !== 'wed') return;
@@ -1423,8 +1479,8 @@ const ROOMS = {
   // fling it and it spins off, the next one swoops in from the other side, overshoots, wobbles and settles
   let sliding = false;
   const W = () => Math.max(innerWidth, 400);
-  function popSign() {
-    if (reduce) return;
+  function popSign(k) {
+    if (reduce || k === 'dodge' || k === 'straycat') return;      // those two light up instead (neonOn / writeOn)
     $('#roomSign').animate([{ transform: 'scale(.6) rotate(-6deg)', opacity: 0 }, { offset: .6, transform: 'scale(1.1) rotate(2deg)', opacity: 1 },
       { offset: .82, transform: 'scale(.96) rotate(-1deg)' }, { transform: 'none' }], { duration: 560, delay: 260, easing: 'ease-out', fill: 'backwards' });
     const dot = $('#roomDots .on');
@@ -1448,7 +1504,7 @@ const ROOMS = {
         { offset: .78, transform: `translateX(${dir * 9}px) rotate(${dir * 1.6}deg)` },
         { offset: .9, transform: `translateX(${-dir * 3}px) rotate(${-dir * .5}deg)` },
         { transform: 'none' }], { duration: 720, easing: 'cubic-bezier(.2,.8,.3,1)' }).onfinish = () => { sliding = false; };
-      popSign();
+      popSign(next);
       landed(next);
     };
   }
