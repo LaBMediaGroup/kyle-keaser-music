@@ -231,9 +231,19 @@ section{position:relative}
 .album-head{display:flex;justify-content:space-between;align-items:baseline;gap:16px;margin-bottom:clamp(18px,3vw,28px)}
 .album-head h3{font:italic 400 clamp(30px,4.6vw,46px)/1 var(--serif);margin:0}
 .album-head span{color:var(--muted);font-size:14px}
-.album-grid{columns:2;column-gap:clamp(14px,2.4vw,26px)}
-@media (min-width:760px){.album-grid{columns:3}}
-@media (min-width:1080px){.album-grid{columns:4}}
+/* phone: a little collage. The band shot runs full width, then two stacked beside the tall Chicago one (a grid, not columns: Safari piled columns into one) */
+.album-grid{display:grid;grid-template-columns:1fr 1fr;gap:clamp(16px,2.6vw,28px) clamp(14px,2.4vw,26px);align-items:start}
+.album-grid .snap{margin:0;padding-bottom:9px}
+.album-grid .snap figcaption{position:static;margin:7px 2px 0;white-space:normal;line-height:1.15;text-wrap:balance}
+.album-grid .snap:first-child{grid-column:1/-1;--r:-.9deg}
+.album-grid .snap.tall{grid-row:span 2;align-self:stretch;display:flex;flex-direction:column}
+.album-grid .snap.tall img{flex:1 1 0;min-height:0;height:100%;aspect-ratio:auto}
+@media (min-width:760px){
+  .album-grid{grid-template-columns:repeat(4,1fr)}
+  .album-grid .snap:first-child{grid-column:auto;--r:-1.8deg}
+  .album-grid .snap.tall{grid-row:auto;align-self:start;display:block}
+  .album-grid .snap.tall img{flex:none;height:auto;aspect-ratio:3/5}
+}
 .snap{break-inside:avoid;margin:0 0 clamp(16px,2.6vw,28px);background:#e9e3d0;padding:7px 7px 30px;border-radius:3px;position:relative;cursor:zoom-in;
   box-shadow:0 18px 40px rgba(0,0,0,.5);rotate:var(--r,0deg);transition:rotate .35s var(--ease),scale .35s var(--ease)}
 .snap:nth-child(3n+1){--r:-1.8deg}.snap:nth-child(3n+2){--r:1.4deg}.snap:nth-child(3n){--r:-.6deg}
