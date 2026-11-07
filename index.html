@@ -499,8 +499,65 @@ html:not(.js) .switch{display:none}
 .js .fade{opacity:0;transform:translateY(22px);transition:opacity .9s var(--ease),transform .9s var(--ease)}
 .js .fade.in{opacity:1;transform:none}
 
+/* ── each part of the page arrives in its own way as you scroll ── */
+.ch{display:inline-block;white-space:pre}
+/* Live at / Stray Cat Lounge: the second line flickers on like neon and keeps a faint glow */
+.js .neonhead .ln:nth-child(2)>span{transform:none;opacity:.12;transition:none}
+.js .neonhead.in .ln:nth-child(2)>span{animation:neonline 1.5s .45s linear forwards}
+@keyframes neonline{0%{opacity:.12}14%{opacity:1;text-shadow:0 0 18px rgba(222,214,61,.6)}18%{opacity:.15;text-shadow:none}34%{opacity:.15}
+  37%{opacity:1;text-shadow:0 0 22px rgba(222,214,61,.7)}41%{opacity:.4}45%{opacity:1}100%{opacity:1;text-shadow:0 0 18px rgba(222,214,61,.28)}}
+/* the clips power on like old TVs */
+.js .clip.fade{opacity:1;transform:none}
+.js .clip .screen{opacity:0}
+.js .clip figcaption{opacity:0;transform:translateY(8px);transition:opacity .6s ease .7s,transform .6s ease .7s}
+.js .clip.in .screen{animation:crt .8s cubic-bezier(.2,.8,.2,1) forwards}
+.js .clip.in figcaption{opacity:1;transform:none}
+.js .clips .clip:nth-child(2).in .screen{animation-delay:.22s}
+.js .clips .clip:nth-child(2).in figcaption{transition-delay:.92s}
+@keyframes crt{0%{opacity:1;transform:scale(.04,.012);filter:brightness(5)}30%{transform:scale(1,.012);filter:brightness(4)}
+  55%{transform:scale(1,1.04);filter:brightness(1.6)}75%{transform:scale(1,.99);filter:brightness(1.1)}100%{opacity:1;transform:none;filter:none}}
+/* Put it on.: letters drop like needles on the record, then the level bars spring up */
+.js .drophead .ln>span{transform:none;transition:none}
+.js .drophead .ch{opacity:0;transform:translateY(-110%) rotate(-14deg);transition:transform .75s cubic-bezier(.3,1.7,.5,1) calc(var(--i) * 55ms),opacity .25s calc(var(--i) * 55ms)}
+.js .drophead.in .ch{opacity:1;transform:none}
+.js .listen .eq{transform:scaleY(0);transform-origin:bottom;transition:transform .5s cubic-bezier(.3,1.6,.5,1) .75s}
+.js .listen .bc:has(.drophead.in) .eq{transform:none}
+/* Bandcamp players slide out like records from their sleeves, one from each side */
+.js .bcplayers.fade{opacity:1;transform:none}
+.js .bcplayers iframe{opacity:0;transform:translateX(-60px) rotate(-2.5deg)}
+.js .bcplayers iframe:nth-child(2){transform:translateX(60px) rotate(2.5deg)}
+.js .bcplayers.in iframe{opacity:1;transform:none;transition:opacity .5s ease,transform .9s cubic-bezier(.2,1.25,.4,1)}
+.js .bcplayers.in iframe:nth-child(2){transition-delay:.16s}
+.js .ig.fade{opacity:1;transform:none}
+.js .ig a{opacity:0;transform:translateX(-16px);transition:opacity .5s ease,transform .6s var(--ease)}
+.js .ig.in a{opacity:1;transform:none}.js .ig.in a:nth-child(2){transition-delay:.12s}
+/* the little record peeks out of its sleeve when the liner-notes link shows up */
+.js .notes-cta.in .sleeve-ic::after{animation:peek 1.3s .35s cubic-bezier(.3,1.3,.5,1)}
+@keyframes peek{0%{transform:none}45%{transform:translateX(22px) rotate(120deg)}100%{transform:none}}
+/* Book Sweet Babe.: stamped down */
+.js .stamp .ln>span{transform:none;transition:none}
+.js .stamp{opacity:0}
+.js .stamp.in{animation:stamp .6s cubic-bezier(.55,0,.75,.2) forwards}
+@keyframes stamp{0%{opacity:0;transform:scale(1.8) rotate(-9deg)}65%{opacity:1;transform:scale(.95) rotate(-1deg)}80%{transform:scale(1.025) rotate(.4deg)}100%{opacity:1;transform:none}}
+/* the booking form lays out like a setlist, one line at a time */
+.js .form.fade{opacity:1;transform:none}
+.js .form>:not(.hp):not(.notice){opacity:0;transform:translateY(18px) rotate(-.6deg)}
+.js .form.in>:not(.hp):not(.notice){opacity:1;transform:none;transition:opacity .5s ease,transform .7s cubic-bezier(.2,1.2,.4,1)}
+.js .form.in>:not(.hp):not(.notice):nth-child(2){transition-delay:.12s}.js .form.in>:not(.hp):not(.notice):nth-child(3){transition-delay:.24s}.js .form.in>:not(.hp):not(.notice):nth-child(6){transition-delay:.38s}
+/* footer signature: the letters wave up */
+.js .sig .ch{opacity:0;transform:translateY(55%) rotate(10deg);transition:transform .9s cubic-bezier(.3,1.5,.5,1) calc(var(--i) * 50ms),opacity .4s calc(var(--i) * 50ms)}
+.js .sig.in .ch{opacity:1;transform:none}
+/* liner notes: the venues drop in track by track, the credits slide in row by row */
+.js .sleeve .tracks li{opacity:0;transform:translateX(-22px)}
+.js .sleeve .fade.in .tracks li{opacity:1;transform:none;transition:opacity .5s ease,transform .7s cubic-bezier(.2,1.2,.4,1)}
+.js .sleeve .fade.in .tracks li:nth-child(2){transition-delay:.09s}.js .sleeve .fade.in .tracks li:nth-child(3){transition-delay:.18s}.js .sleeve .fade.in .tracks li:nth-child(4){transition-delay:.27s}
+.js .sleeve .credits div{opacity:0;transform:translateX(22px)}
+.js .sleeve .fade.in .credits div{opacity:1;transform:none;transition:opacity .5s ease,transform .7s var(--ease)}
+.js .sleeve .fade.in .credits div:nth-child(2){transition-delay:.1s}.js .sleeve .fade.in .credits div:nth-child(3){transition-delay:.2s}
+
 @media (prefers-reduced-motion:reduce){
   *,*::before,*::after{animation:none!important;transition:none!important}
+  .js .ch,.js .stamp,.js .neonhead .ln>span,.js .clip .screen,.js .clip figcaption,.js .bcplayers iframe,.js .ig a,.js .form>*,.js .sleeve .tracks li,.js .sleeve .credits div,.js .listen .eq{opacity:1!important;transform:none!important;filter:none!important}
   .js .rv .ln>span,.js .fade{transform:none;opacity:1}
   .js .print{opacity:1}
   .js .statement .w{opacity:1}
@@ -586,7 +643,7 @@ html:not(.js) .switch{display:none}
 
 <section class="live" id="live" hidden>
   <div class="wrap">
-    <h2 class="big rv"><span class="ln"><span>Live at</span></span><span class="ln"><span class="serif">Stray Cat Lounge.</span></span></h2>
+    <h2 class="big rv neonhead"><span class="ln"><span>Live at</span></span><span class="ln"><span class="serif">Stray Cat Lounge.</span></span></h2>
     <div id="clips" class="clips"></div>
   </div>
 </section>
@@ -596,7 +653,7 @@ html:not(.js) .switch{display:none}
     <div class="row">
       <div>
         <a class="bc" href="https://sweetbabe.bandcamp.com" target="_blank" rel="noopener">
-          <span class="big rv"><span class="ln"><span>Put it on.</span></span></span>
+          <span class="big rv drophead"><span class="ln"><span class="split">Put it on.</span></span></span>
           <span class="eq" aria-hidden="true"><i></i><i></i><i></i><i></i></span>
         </a>
         <p class="sub fade">Two demos on <a href="https://sweetbabe.bandcamp.com" target="_blank" rel="noopener">Bandcamp</a>. Press play right here.</p>
@@ -615,7 +672,7 @@ html:not(.js) .switch{display:none}
 
 <section class="book" id="book">
   <div class="wrap">
-    <h2 class="big rv"><span class="ln"><span>Book</span></span><span class="ln"><span>Sweet Babe.</span></span></h2>
+    <h2 class="big rv stamp"><span class="ln"><span>Book</span></span><span class="ln"><span>Sweet Babe.</span></span></h2>
     <p class="intro fade">Tell Kyle the date and the room. He'll take it from there.</p>
     <form class="form fade" id="form" novalidate>
       <div class="row">
@@ -655,7 +712,7 @@ html:not(.js) .switch{display:none}
 </main>
 
 <footer>
-  <div class="sig">Sweet Babe</div>
+  <div class="sig split">Sweet Babe</div>
   <nav aria-label="Links">
     <a href="https://sweetbabe.bandcamp.com" target="_blank" rel="noopener">Bandcamp</a>
     <a href="https://instagram.com/sweetbabe_music" target="_blank" rel="noopener">@sweetbabe_music</a>
@@ -795,7 +852,11 @@ new IntersectionObserver(([e]) => $('#bar').classList.toggle('show', !e.isInters
 const io = new IntersectionObserver(es => es.forEach(e => {
   if (e.isIntersecting) { e.target.classList.add('in'); io.unobserve(e.target); }
 }), { threshold: .1, rootMargin: '0px 0px -6% 0px' });
-document.querySelectorAll('.rv, .fade, .prints').forEach(el => io.observe(el));
+document.querySelectorAll('.split').forEach(el => {   // letters as separate pieces, for the drop-in and the wave
+  const t = el.textContent; el.textContent = ''; el.setAttribute('aria-label', t);
+  [...t].forEach((c, i) => { const s = document.createElement('span'); s.className = 'ch'; s.setAttribute('aria-hidden', 'true'); s.style.setProperty('--i', i); s.textContent = c; el.appendChild(s); });
+});
+document.querySelectorAll('.rv, .fade, .prints, .sig').forEach(el => io.observe(el));
 
 // the statement: split into words that light up as it scrolls through
 const st = $('#statement');
