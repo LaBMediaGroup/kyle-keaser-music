@@ -208,6 +208,29 @@ section{position:relative}
   76%{transform:translate(5px,-1px) rotate(1.4deg) scale(1)}
   90%{transform:translate(-1px,0) rotate(-.4deg)}
   100%{opacity:1;transform:none}}
+/* the album: Kyle's snapshots dealt onto the table under the two big prints */
+.album{margin-top:clamp(10px,3vw,30px)}
+.album-head{display:flex;justify-content:space-between;align-items:baseline;gap:16px;margin-bottom:clamp(18px,3vw,28px)}
+.album-head h3{font:italic 400 clamp(30px,4.6vw,46px)/1 var(--serif);margin:0}
+.album-head span{color:var(--muted);font-size:14px}
+.album-grid{columns:2;column-gap:clamp(14px,2.4vw,26px)}
+@media (min-width:760px){.album-grid{columns:3}}
+@media (min-width:1080px){.album-grid{columns:4}}
+.snap{break-inside:avoid;margin:0 0 clamp(16px,2.6vw,28px);background:#e9e3d0;padding:7px 7px 30px;border-radius:3px;position:relative;cursor:zoom-in;
+  box-shadow:0 18px 40px rgba(0,0,0,.5);rotate:var(--r,0deg);transition:rotate .35s var(--ease),scale .35s var(--ease)}
+.snap:nth-child(3n+1){--r:-1.8deg}.snap:nth-child(3n+2){--r:1.4deg}.snap:nth-child(3n){--r:-.6deg}
+@media (hover:hover){.snap:hover{rotate:0deg;scale:1.03;z-index:2}}
+.snap img{display:block;width:100%;height:auto;aspect-ratio:var(--ar);max-height:none;object-fit:cover}
+.snap.tall img{aspect-ratio:3/5}
+.snap figcaption{position:absolute;left:9px;right:9px;bottom:7px;font:italic 400 clamp(14px,1.6vw,17px)/1.1 var(--serif);color:#2a261d;white-space:nowrap;overflow:hidden;text-overflow:ellipsis}
+.js .snap{opacity:0}
+.js .album.in .snap{animation:deal .9s cubic-bezier(.22,.9,.3,1) calc(var(--i) * 110ms) both}
+@keyframes deal{
+  0%{opacity:0;transform:translateY(-70px) rotate(calc(var(--i) * 5deg - 14deg)) scale(1.12)}
+  20%{opacity:1}
+  65%{transform:translateY(5px) rotate(1.2deg) scale(.99)}
+  85%{transform:translateY(-1px) rotate(-.4deg)}
+  100%{opacity:1;transform:none}}
 .notes-cta{display:flex;align-items:center;gap:18px;margin-top:clamp(36px,6vw,60px);margin-bottom:clamp(70px,11vw,120px);text-decoration:none;max-width:520px}
 .notes-cta .sleeve-ic{flex:none;width:58px;height:58px;position:relative;isolation:isolate;margin-right:14px}
 .notes-cta .sleeve-ic::before{content:"";position:absolute;inset:0;background:radial-gradient(circle closest-side,transparent 82.5%,var(--ink-3) 84%) center/100% no-repeat,url(assets/logo.jpg) center/84% no-repeat,var(--ink-3);border:1px solid var(--line);border-radius:4px;box-shadow:0 8px 20px rgba(0,0,0,.45)}
@@ -487,9 +510,9 @@ html:not(.js) .switch{display:none}
 .gal[hidden]{display:none}
 .gal-track{display:flex;height:100%;will-change:transform}
 .gal-slide{flex:0 0 100%;display:grid;place-items:center;padding:max(64px,env(safe-area-inset-top)) 18px max(70px,env(safe-area-inset-bottom));margin:0}
-.gal-print{width:min(100%,960px,calc((100vh - 170px) * 1.25));background:#e9e3d0;padding:12px 12px 44px;border-radius:3px;position:relative;cursor:default;
+.gal-print{width:min(100%,960px,calc((100vh - 190px) * var(--ar,1.333)));background:#e9e3d0;padding:12px 12px 44px;border-radius:3px;position:relative;cursor:default;
   box-shadow:0 50px 120px rgba(0,0,0,.75);transform-origin:center}
-.gal-print img{display:block;width:100%;height:auto;aspect-ratio:4/3;object-fit:cover;user-select:none;-webkit-user-drag:none;pointer-events:none}
+.gal-print img{display:block;width:100%;height:auto;aspect-ratio:var(--ar,4/3);object-fit:cover;user-select:none;-webkit-user-drag:none;pointer-events:none}
 .gal-print figcaption{position:absolute;left:14px;right:14px;bottom:12px;font:italic 400 clamp(17px,2.2vw,22px)/1 var(--serif);color:#2a261d}
 .gal-x{position:fixed;top:max(14px,env(safe-area-inset-top));right:14px;width:44px;height:44px;border-radius:50%;border:1px solid var(--line);
   background:rgba(11,10,8,.7);color:var(--paper);font-size:17px;cursor:pointer;opacity:0;transform:scale(.6);transition:opacity .3s ease .15s,transform .4s var(--ease) .15s}
@@ -668,7 +691,8 @@ html:not(.js) .switch{display:none}
   *,*::before,*::after{animation:none!important;transition:none!important}
   .js .ch,.js .stamp,.js .neonhead .ln>span,.js .clip .screen,.js .clip figcaption,.js .bcplayers .tk,.js .ig a,.js .form>*,.js .sleeve .tracks li,.js .sleeve .credits div,.js .listen .eq{opacity:1!important;transform:none!important;filter:none!important}
   .js .rv .ln>span,.js .fade{transform:none;opacity:1}
-  .js .print{opacity:1}
+  .js .print,.js .snap{opacity:1}
+  .js .album.in .snap{animation:none}
   .js .statement .w{opacity:1}
   html{scroll-behavior:auto}
 }
@@ -751,6 +775,18 @@ html:not(.js) .switch{display:none}
     <div class="prints">
       <figure class="print a" data-speed="-30"><img src="assets/band-new-dodge-lounge.jpg" alt="Kyle Keaser singing with an acoustic guitar, a second guitarist behind him, under the New Dodge Lounge neon" width="1200" height="900" loading="lazy"><figcaption>New Dodge Lounge, Hamtramck</figcaption></figure>
       <figure class="print b" data-speed="30"><img src="assets/solo-dessert-oasis.jpg" alt="Kyle Keaser seated with an acoustic guitar, playing a solo set at Dessert Oasis Coffee Roasters" width="1100" height="825" loading="lazy"><figcaption>Dessert Oasis, Rochester</figcaption></figure>
+    </div>
+    <div class="album" id="album">
+      <div class="album-head"><h3>From the road</h3><span>Tap a photo</span></div>
+      <div class="album-grid">
+        <figure class="snap" style="--i:0;--ar:1600/1200"><img src="assets/album/band-trio.jpg" alt="Kyle singing at the mic with an acoustic guitar, a guitarist and a bass player on either side" width="1600" height="1200" loading="lazy" decoding="async"><figcaption>Sweet Babe, full band</figcaption></figure>
+        <figure class="snap tall" style="--i:1;--ar:777/1600"><img src="assets/album/chicago-seated.jpg" alt="Kyle seated on a stool with an acoustic guitar under stained-glass windows and candle sconces" width="777" height="1600" loading="lazy" decoding="async"><figcaption>Chicago, candlelight</figcaption></figure>
+        <figure class="snap" style="--i:2;--ar:544/884"><img src="assets/album/headphones.jpg" alt="Black-and-white photo of Kyle in headphones, playing an acoustic guitar" width="544" height="884" loading="lazy" decoding="async"><figcaption>Headphones on</figcaption></figure>
+        <figure class="snap" style="--i:3;--ar:1200/1600"><img src="assets/album/band-new-dodge-stage.jpg" alt="Kyle and the band on a low stage by big street-side windows, drummer at left" width="1200" height="1600" loading="lazy" decoding="async"><figcaption>New Dodge Lounge, Hamtramck</figcaption></figure>
+        <figure class="snap tall" style="--i:4;--ar:750/1290"><img src="assets/album/flag-laugh.jpg" alt="Kyle laughing at the mic with an acoustic guitar, an American flag behind him" width="750" height="1290" loading="lazy" decoding="async"><figcaption>Mid-song, mid-laugh</figcaption></figure>
+        <figure class="snap tall" style="--i:5;--ar:840/1600"><img src="assets/album/chicago-standing.jpg" alt="Kyle standing at the mic with an acoustic guitar beside candle sconces and holiday lights" width="840" height="1600" loading="lazy" decoding="async"><figcaption>Chicago, same night</figcaption></figure>
+        <figure class="snap" style="--i:6;--ar:706/1108"><img src="assets/album/new-dodge-red.jpg" alt="Kyle singing with an acoustic guitar in red light, a guitarist behind him" width="706" height="1108" loading="lazy" decoding="async"><figcaption>Under the red neon</figcaption></figure>
+      </div>
     </div>
     <a class="notes-cta fade notes-link" href="#notes">
       <span class="sleeve-ic" aria-hidden="true"></span>
@@ -1027,7 +1063,7 @@ document.querySelectorAll('.split').forEach(el => {   // letters as separate pie
   const t = el.textContent; el.textContent = ''; el.setAttribute('aria-label', t);
   [...t].forEach((c, i) => { const s = document.createElement('span'); s.className = 'ch'; s.setAttribute('aria-hidden', 'true'); s.style.setProperty('--i', i); s.textContent = c; el.appendChild(s); });
 });
-document.querySelectorAll('.rv, .fade, .prints, .sig').forEach(el => io.observe(el));
+document.querySelectorAll('.rv, .fade, .prints, .album, .sig').forEach(el => io.observe(el));
 
 // the statement: split into words that light up as it scrolls through
 const st = $('#statement');
@@ -2067,16 +2103,17 @@ const ROOMS = {
   card.addEventListener('close', () => opener && opener.focus && opener.focus({ preventScroll: true }));
 })();
 
-// The two prints: tap one and it lifts off the page into a big gallery view. Swipe (or the arrows) for the
+// The two prints and the album: tap one and it lifts off the page into a big gallery view. Swipe (or the arrows) for the
 // other one; ✕, a tap on the dark, a swipe down or Escape puts it back where it came from.
 (() => {
-  const prints = [...document.querySelectorAll('.prints .print')];
+  const prints = [...document.querySelectorAll('.prints .print, .album .snap')];
   if (!prints.length) return;
   const g = document.createElement('div');
   g.className = 'gal'; g.hidden = true;
   g.setAttribute('role', 'dialog'); g.setAttribute('aria-modal', 'true'); g.setAttribute('aria-label', 'Photos');
   g.innerHTML = `<div class="gal-track">${prints.map(p => { const img = p.querySelector('img');
-      return `<figure class="gal-slide"><div class="gal-print"><img src="${img.getAttribute('src')}" alt="${img.alt.replace(/"/g, '&quot;')}"><figcaption>${p.querySelector('figcaption').textContent}</figcaption></div></figure>`; }).join('')}</div>
+      const ar = img.naturalWidth ? img.naturalWidth / img.naturalHeight : (+img.getAttribute('width') / +img.getAttribute('height')) || 4 / 3;
+      return `<figure class="gal-slide"><div class="gal-print" style="--ar:${p.classList.contains('print') ? 4 / 3 : ar}"><img src="${img.getAttribute('src')}" alt="${img.alt.replace(/"/g, '&quot;')}"><figcaption>${p.querySelector('figcaption').textContent}</figcaption></div></figure>`; }).join('')}</div>
     <button class="gal-x" type="button" aria-label="Close the photos">✕</button>
     ${prints.length > 1 ? `<button class="gal-nav prev" type="button" aria-label="Previous photo">‹</button><button class="gal-nav next" type="button" aria-label="Next photo">›</button>
     <div class="gal-dots">${prints.map((_, i) => `<i data-i="${i}"></i>`).join('')}</div>` : ''}`;
