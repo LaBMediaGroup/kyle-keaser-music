@@ -208,6 +208,24 @@ section{position:relative}
   76%{transform:translate(5px,-1px) rotate(1.4deg) scale(1)}
   90%{transform:translate(-1px,0) rotate(-.4deg)}
   100%{opacity:1;transform:none}}
+/* more snapshots strewn under the two prints, poking out past the edges; a touch lifts one out into the big view */
+.prints-wrap{overflow-x:clip}
+.print.stray{position:absolute;z-index:0;padding:6px 6px 26px;box-shadow:0 18px 44px rgba(0,0,0,.55);cursor:zoom-in;transition:scale .3s var(--ease),rotate .3s var(--ease),box-shadow .3s}
+.print.stray img{aspect-ratio:3/4}
+.print.stray figcaption{left:8px;right:8px;bottom:6px;font-size:13px;white-space:nowrap;overflow:hidden;text-overflow:ellipsis}
+.stray.s1{width:36%;top:-9%;right:-13%;rotate:12deg}
+.stray.s2{width:31%;top:38%;left:-15%;rotate:-13deg}
+.stray.s3{width:29%;bottom:3%;right:-11%;rotate:8deg}
+@media (min-width:760px){
+  .stray.s1{width:22%;top:1%;right:5%;rotate:9deg}
+  .stray.s2{width:21%;top:52%;left:7%;rotate:-11deg}
+  .stray.s3{width:17%;top:auto;bottom:4%;right:auto;left:33%;rotate:12deg}
+}
+.print.stray.lift{z-index:4;scale:1.06;rotate:0deg;box-shadow:0 34px 70px rgba(0,0,0,.7)}
+@media (hover:hover){.print.stray:hover{scale:1.04;z-index:3}}
+.js .prints.in .print.stray{animation:strew .9s cubic-bezier(.22,.9,.3,1) both}
+.js .prints.in .stray.s1{animation-delay:.75s}.js .prints.in .stray.s2{animation-delay:.9s}.js .prints.in .stray.s3{animation-delay:1.05s}
+@keyframes strew{0%{opacity:0;transform:translateY(-26px) scale(1.12)}30%{opacity:1}70%{transform:translateY(3px) scale(.99)}100%{opacity:1;transform:none}}
 /* the album: Kyle's snapshots dealt onto the table under the two big prints */
 .album{margin-top:clamp(10px,3vw,30px)}
 .album-head{display:flex;justify-content:space-between;align-items:baseline;gap:16px;margin-bottom:clamp(18px,3vw,28px)}
@@ -509,13 +527,13 @@ html:not(.js) .switch{display:none}
 .gal.on{background:rgba(6,5,4,calc(.92 * var(--dim,1)));backdrop-filter:blur(10px);-webkit-backdrop-filter:blur(10px)}
 .gal[hidden]{display:none}
 .gal-track{display:flex;height:100%;will-change:transform}
-.gal-slide{flex:0 0 100%;display:grid;place-items:center;padding:max(64px,env(safe-area-inset-top)) 18px max(70px,env(safe-area-inset-bottom));margin:0}
-.gal-print{width:min(100%,960px,calc((100vh - 190px) * var(--ar,1.333)));background:#e9e3d0;padding:12px 12px 44px;border-radius:3px;position:relative;cursor:default;
+.gal-slide{flex:0 0 100%;display:grid;place-items:center;padding:calc(max(14px,env(safe-area-inset-top)) + 58px) 18px calc(max(18px,env(safe-area-inset-bottom)) + 84px);margin:0}
+.gal-print{width:min(100%,960px,calc((100svh - 230px) * var(--ar,1.333)));background:#e9e3d0;padding:12px 12px 44px;border-radius:3px;position:relative;cursor:default;
   box-shadow:0 50px 120px rgba(0,0,0,.75);transform-origin:center}
 .gal-print img{display:block;width:100%;height:auto;aspect-ratio:var(--ar,4/3);object-fit:cover;user-select:none;-webkit-user-drag:none;pointer-events:none}
 .gal-print figcaption{position:absolute;left:14px;right:14px;bottom:12px;font:italic 400 clamp(17px,2.2vw,22px)/1 var(--serif);color:#2a261d}
-.gal-x{position:fixed;top:max(14px,env(safe-area-inset-top));right:14px;width:44px;height:44px;border-radius:50%;border:1px solid var(--line);
-  background:rgba(11,10,8,.7);color:var(--paper);font-size:17px;cursor:pointer;opacity:0;transform:scale(.6);transition:opacity .3s ease .15s,transform .4s var(--ease) .15s}
+.gal-x{position:fixed;top:max(14px,env(safe-area-inset-top));right:14px;height:44px;padding:0 18px 0 14px;display:flex;align-items:center;gap:8px;border-radius:999px;border:0;
+  background:var(--sun);color:var(--ink);font:700 15px/1 var(--sans);box-shadow:0 8px 24px rgba(0,0,0,.45);cursor:pointer;opacity:0;transform:scale(.6);transition:opacity .3s ease .15s,transform .4s var(--ease) .15s}
 .gal-nav{position:fixed;top:50%;width:48px;height:48px;margin-top:-24px;border-radius:50%;border:1px solid var(--line);background:rgba(11,10,8,.6);color:var(--paper);
   font:400 30px/1 var(--serif);cursor:pointer;opacity:0;transition:opacity .3s ease .2s,background .2s}
 .gal-nav:hover{background:rgba(222,214,61,.18)}
@@ -524,7 +542,14 @@ html:not(.js) .switch{display:none}
 .gal-dots{position:fixed;left:0;right:0;bottom:max(24px,env(safe-area-inset-bottom));display:flex;justify-content:center;gap:9px;opacity:0;transition:opacity .3s ease .2s}
 .gal-dots i{width:8px;height:8px;border-radius:50%;background:rgba(242,238,223,.3);cursor:pointer;transition:background .25s,transform .25s var(--ease)}
 .gal-dots i.on{background:var(--sun);transform:scale(1.25)}
-.gal.on .gal-x,.gal.on .gal-nav,.gal.on .gal-dots{opacity:1;transform:none}
+.gal-x b{font-size:17px;font-weight:600}
+.gal-back{position:fixed;left:50%;bottom:max(18px,env(safe-area-inset-bottom));translate:-50% 0;display:flex;align-items:center;gap:8px;padding:11px 18px;border-radius:999px;
+  border:1px solid rgba(242,238,223,.28);background:rgba(11,10,8,.7);color:var(--paper);font:600 14px/1 var(--sans);cursor:pointer;white-space:nowrap;
+  opacity:0;transform:translateY(12px);transition:opacity .3s ease .25s,transform .4s var(--ease) .25s}
+.gal-back i{font-style:normal;display:inline-block;animation:nudge 1.6s ease-in-out 1s 3}
+@keyframes nudge{0%,100%{transform:none}50%{transform:translateY(4px)}}
+.gal-dots{bottom:calc(max(18px,env(safe-area-inset-bottom)) + 58px)!important}
+.gal.on .gal-x,.gal.on .gal-nav,.gal.on .gal-dots,.gal.on .gal-back{opacity:1;transform:none}
 
 /* ── now playing: once anything starts, a small bar stays at the bottom to pause or stop it ── */
 .np{position:fixed;left:50%;bottom:max(14px,env(safe-area-inset-bottom));z-index:55;display:flex;align-items:center;gap:10px;
@@ -692,6 +717,8 @@ html:not(.js) .switch{display:none}
   .js .ch,.js .stamp,.js .neonhead .ln>span,.js .clip .screen,.js .clip figcaption,.js .bcplayers .tk,.js .ig a,.js .form>*,.js .sleeve .tracks li,.js .sleeve .credits div,.js .listen .eq{opacity:1!important;transform:none!important;filter:none!important}
   .js .rv .ln>span,.js .fade{transform:none;opacity:1}
   .js .print,.js .snap{opacity:1}
+  .js .prints.in .print.stray{animation:none}
+  .gal-back i{animation:none}
   .js .album.in .snap{animation:none}
   .js .statement .w{opacity:1}
   html{scroll-behavior:auto}
@@ -770,22 +797,22 @@ html:not(.js) .switch{display:none}
   </div>
 </section>
 
-<section>
+<section class="prints-wrap">
   <div class="wrap">
     <div class="prints">
       <figure class="print a" data-speed="-30"><img src="assets/band-new-dodge-lounge.jpg" alt="Kyle Keaser singing with an acoustic guitar, a second guitarist behind him, under the New Dodge Lounge neon" width="1200" height="900" loading="lazy"><figcaption>New Dodge Lounge, Hamtramck</figcaption></figure>
       <figure class="print b" data-speed="30"><img src="assets/solo-dessert-oasis.jpg" alt="Kyle Keaser seated with an acoustic guitar, playing a solo set at Dessert Oasis Coffee Roasters" width="1100" height="825" loading="lazy"><figcaption>Dessert Oasis, Rochester</figcaption></figure>
+      <figure class="print stray s1" data-speed="-55"><img src="assets/album/chicago-seated.jpg" alt="Kyle seated on a stool with an acoustic guitar under stained-glass windows and candle sconces" width="777" height="1600" loading="lazy" decoding="async"><figcaption>Chicago, candlelight</figcaption></figure>
+      <figure class="print stray s2" data-speed="40"><img src="assets/album/flag-laugh.jpg" alt="Kyle singing hard at the mic with an acoustic guitar, an American flag behind him" width="750" height="1290" loading="lazy" decoding="async"><figcaption>Singing his face off</figcaption></figure>
+      <figure class="print stray s3" data-speed="-20"><img src="assets/album/headphones.jpg" alt="Black-and-white photo of Kyle in headphones, playing an acoustic guitar" width="544" height="884" loading="lazy" decoding="async"><figcaption>Headphones on</figcaption></figure>
     </div>
     <div class="album" id="album">
       <div class="album-head"><h3>From the road</h3><span>Tap a photo</span></div>
       <div class="album-grid">
         <figure class="snap" style="--i:0;--ar:1600/1200"><img src="assets/album/band-trio.jpg" alt="Kyle singing at the mic with an acoustic guitar, a guitarist and a bass player on either side" width="1600" height="1200" loading="lazy" decoding="async"><figcaption>Sweet Babe, full band</figcaption></figure>
-        <figure class="snap tall" style="--i:1;--ar:777/1600"><img src="assets/album/chicago-seated.jpg" alt="Kyle seated on a stool with an acoustic guitar under stained-glass windows and candle sconces" width="777" height="1600" loading="lazy" decoding="async"><figcaption>Chicago, candlelight</figcaption></figure>
-        <figure class="snap" style="--i:2;--ar:544/884"><img src="assets/album/headphones.jpg" alt="Black-and-white photo of Kyle in headphones, playing an acoustic guitar" width="544" height="884" loading="lazy" decoding="async"><figcaption>Headphones on</figcaption></figure>
-        <figure class="snap" style="--i:3;--ar:1200/1600"><img src="assets/album/band-new-dodge-stage.jpg" alt="Kyle and the band on a low stage by big street-side windows, drummer at left" width="1200" height="1600" loading="lazy" decoding="async"><figcaption>New Dodge Lounge, Hamtramck</figcaption></figure>
-        <figure class="snap tall" style="--i:4;--ar:750/1290"><img src="assets/album/flag-laugh.jpg" alt="Kyle laughing at the mic with an acoustic guitar, an American flag behind him" width="750" height="1290" loading="lazy" decoding="async"><figcaption>Mid-song, mid-laugh</figcaption></figure>
-        <figure class="snap tall" style="--i:5;--ar:840/1600"><img src="assets/album/chicago-standing.jpg" alt="Kyle standing at the mic with an acoustic guitar beside candle sconces and holiday lights" width="840" height="1600" loading="lazy" decoding="async"><figcaption>Chicago, same night</figcaption></figure>
-        <figure class="snap" style="--i:6;--ar:706/1108"><img src="assets/album/new-dodge-red.jpg" alt="Kyle singing with an acoustic guitar in red light, a guitarist behind him" width="706" height="1108" loading="lazy" decoding="async"><figcaption>Under the red neon</figcaption></figure>
+        <figure class="snap" style="--i:1;--ar:1200/1600"><img src="assets/album/band-new-dodge-stage.jpg" alt="Kyle and the band on a low stage by big street-side windows, drummer at left" width="1200" height="1600" loading="lazy" decoding="async"><figcaption>New Dodge Lounge, Hamtramck</figcaption></figure>
+        <figure class="snap tall" style="--i:2;--ar:840/1600"><img src="assets/album/chicago-standing.jpg" alt="Kyle standing at the mic with an acoustic guitar beside candle sconces and holiday lights" width="840" height="1600" loading="lazy" decoding="async"><figcaption>Chicago, same night</figcaption></figure>
+        <figure class="snap" style="--i:3;--ar:706/1108"><img src="assets/album/new-dodge-red.jpg" alt="Kyle singing with an acoustic guitar in red light, a guitarist behind him" width="706" height="1108" loading="lazy" decoding="async"><figcaption>Under the red neon</figcaption></figure>
       </div>
     </div>
     <a class="notes-cta fade notes-link" href="#notes">
@@ -2113,8 +2140,9 @@ const ROOMS = {
   g.setAttribute('role', 'dialog'); g.setAttribute('aria-modal', 'true'); g.setAttribute('aria-label', 'Photos');
   g.innerHTML = `<div class="gal-track">${prints.map(p => { const img = p.querySelector('img');
       const ar = img.naturalWidth ? img.naturalWidth / img.naturalHeight : (+img.getAttribute('width') / +img.getAttribute('height')) || 4 / 3;
-      return `<figure class="gal-slide"><div class="gal-print" style="--ar:${p.classList.contains('print') ? 4 / 3 : ar}"><img src="${img.getAttribute('src')}" alt="${img.alt.replace(/"/g, '&quot;')}"><figcaption>${p.querySelector('figcaption').textContent}</figcaption></div></figure>`; }).join('')}</div>
-    <button class="gal-x" type="button" aria-label="Close the photos">✕</button>
+      return `<figure class="gal-slide"><div class="gal-print" style="--ar:${p.classList.contains('print') && !p.classList.contains('stray') ? 4 / 3 : ar}"><img src="${img.getAttribute('src')}" alt="${img.alt.replace(/"/g, '&quot;')}"><figcaption>${p.querySelector('figcaption').textContent}</figcaption></div></figure>`; }).join('')}</div>
+    <button class="gal-x" type="button" aria-label="Close the photos"><b aria-hidden="true">✕</b>Close</button>
+    <button class="gal-back" type="button"><i aria-hidden="true">↓</i>Back to the page</button>
     ${prints.length > 1 ? `<button class="gal-nav prev" type="button" aria-label="Previous photo">‹</button><button class="gal-nav next" type="button" aria-label="Next photo">›</button>
     <div class="gal-dots">${prints.map((_, i) => `<i data-i="${i}"></i>`).join('')}</div>` : ''}`;
   document.body.appendChild(g);
@@ -2167,8 +2195,15 @@ const ROOMS = {
     fly(s, p, true, () => { g.hidden = true; p.style.visibility = ''; lastFocus && lastFocus.focus && lastFocus.focus({ preventScroll: true }); });
     if (reduce) { g.hidden = true; p.style.visibility = ''; }
   }
-  prints.forEach((p, i) => { p.style.cursor = 'zoom-in'; p.addEventListener('click', () => openGal(i)); });
-  g.querySelector('.gal-x').addEventListener('click', closeGal);
+  prints.forEach((p, i) => {
+    p.style.cursor = 'zoom-in';
+    p.addEventListener('click', () => {
+      if (!p.classList.contains('stray') || reduce) return openGal(i);
+      p.classList.add('lift');                       // slides out from under the others, then up into the big view
+      setTimeout(() => { openGal(i); p.classList.remove('lift'); }, 230);
+    });
+  });
+  g.querySelectorAll('.gal-x, .gal-back').forEach(b => b.addEventListener('click', closeGal));
   g.querySelector('.prev')?.addEventListener('click', e => { e.stopPropagation(); show(at - 1); });
   g.querySelector('.next')?.addEventListener('click', e => { e.stopPropagation(); show(at + 1); });
   g.querySelectorAll('.gal-dots i').forEach(d => d.addEventListener('click', e => { e.stopPropagation(); show(+d.dataset.i); }));
