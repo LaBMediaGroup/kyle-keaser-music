@@ -481,6 +481,32 @@ html:not(.js) .switch{display:none}
 .sleeve .end{margin-top:clamp(60px,10vw,100px);display:flex;flex-wrap:wrap;align-items:center;gap:20px}
 .sleeve .end img{width:64px;height:64px;border-radius:50%;clip-path:circle(47%);animation:spin 16s linear infinite}
 
+/* ── now playing: once anything starts, a small bar stays at the bottom to pause or stop it ── */
+.np{position:fixed;left:50%;bottom:max(14px,env(safe-area-inset-bottom));z-index:55;display:flex;align-items:center;gap:10px;
+  padding:7px 7px 7px 16px;border-radius:999px;width:min(360px,calc(100vw - 32px));
+  background:rgba(21,19,15,.86);backdrop-filter:blur(16px);-webkit-backdrop-filter:blur(16px);
+  border:1px solid var(--line);box-shadow:0 14px 40px rgba(0,0,0,.5),0 0 0 1px rgba(222,214,61,.08);
+  transform:translate(-50%,140%);opacity:0;transition:transform .5s var(--ease),opacity .3s ease}
+.np.on{transform:translate(-50%,0);opacity:1}
+.np[hidden]{display:none}
+.np-eq{display:flex;align-items:flex-end;gap:2px;width:16px;height:14px;flex:none}
+.np-eq i{flex:1;background:var(--sun);border-radius:1px;height:30%;animation:npeq .9s ease-in-out infinite}
+.np-eq i:nth-child(2){animation-delay:-.3s}.np-eq i:nth-child(3){animation-delay:-.6s}
+.np.paused .np-eq i{animation-play-state:paused;height:30%}
+@keyframes npeq{0%,100%{height:30%}50%{height:100%}}
+.np-t{flex:1;display:grid;min-width:0;line-height:1.15}
+.np-t small{white-space:nowrap;font:700 10px/1.2 var(--sans);letter-spacing:.12em;text-transform:uppercase;color:var(--muted)}
+.np-t b{font:italic 400 17px/1.15 var(--serif);white-space:nowrap;overflow:hidden;text-overflow:ellipsis}
+.np button{appearance:none;flex:none;display:grid;place-items:center;width:38px;height:38px;border-radius:50%;border:0;cursor:pointer;transition:transform .2s var(--ease),background .2s}
+.np button svg{width:16px;height:16px}
+.np button:active{transform:scale(.9)}
+.np-pp{background:var(--sun);color:var(--ink)}
+.np-x{background:rgba(242,238,223,.1);color:var(--paper)}
+.np-x:hover{background:rgba(242,238,223,.18)}
+.np .np-i-play,.np.paused .np-i-pause{display:none}
+.np.paused .np-i-play{display:block;margin-left:2px}
+@media (prefers-reduced-motion:reduce){.np{transition:none}.np-eq i{animation:none;height:60%}}
+
 /* ── record player: only switched on (html.player) once AUDIO.song is set ── */
 .turntable{position:relative;margin-bottom:34px}
 .turntable .deck{margin-bottom:0}
@@ -622,6 +648,13 @@ html:not(.js) .switch{display:none}
 <body>
 
 <div class="progress" id="progress" aria-hidden="true"></div>
+
+<div class="np" id="np" role="region" aria-label="Now playing" hidden>
+  <span class="np-eq" aria-hidden="true"><i></i><i></i><i></i></span>
+  <span class="np-t"><small>Now playing</small><b id="npTitle"></b></span>
+  <button class="np-pp" id="npPP" type="button" aria-label="Pause"><svg class="np-i-pause" viewBox="0 0 24 24" fill="currentColor" aria-hidden="true"><path d="M6 4h4.5v16H6zM13.5 4H18v16h-4.5z"/></svg><svg class="np-i-play" viewBox="0 0 24 24" fill="currentColor" aria-hidden="true"><path d="M7 4.5v15l13-7.5z"/></svg></button>
+  <button class="np-x" id="npX" type="button" aria-label="Stop"><svg viewBox="0 0 24 24" fill="currentColor" aria-hidden="true"><rect x="6" y="6" width="12" height="12" rx="1.5"/></svg></button>
+</div>
 
 <header class="bar" id="bar">
   <a class="mark" href="#top"><img src="assets/logo.jpg" alt="" width="30" height="30">Sweet Babe</a>
@@ -847,7 +880,7 @@ html:not(.js) .switch{display:none}
     <div class="block fade">
       <h3>Credits</h3>
       <dl class="credits">
-        <div><dt>Voice, acoustic guitar</dt><dd>Kyle Keaser</dd></div>
+        <div><dt>Voice, acoustic guitar</dt><dd>Kyle Keaser <a class="ig-at" href="https://instagram.com/kylekeasermusic" target="_blank" rel="noopener">@kylekeasermusic</a></dd></div>
         <div><dt>Lead guitar</dt><dd>Joe <a class="ig-at" href="https://instagram.com/faceonahead" target="_blank" rel="noopener">@faceonahead</a></dd></div>
         <div><dt>Bass, vocals</dt><dd>Tyler <a class="ig-at" href="https://instagram.com/tylerpolinger" target="_blank" rel="noopener">@tylerpolinger</a></dd></div>
         <div><dt>Based in</dt><dd>Metro Detroit, MI</dd></div>
@@ -906,6 +939,30 @@ const VIDEOS = [
 
 const reduce = matchMedia('(prefers-reduced-motion: reduce)').matches;
 const $ = s => document.querySelector(s);
+
+// Now playing: whatever is playing (the record, a demo, a clip) registers here, and a small bar stays at the
+// bottom of the screen until the visitor stops it, so they can always pause or stop without scrolling back.
+let npSrc = null, npHideT = 0;
+function npSet(src) { npSrc = src; npPaint(); }
+function npPaint() {
+  const np = document.getElementById('np');
+  if (!np) return;
+  clearTimeout(npHideT);
+  if (!npSrc) { np.classList.remove('on'); npHideT = setTimeout(() => { np.hidden = true; }, 500); return; }
+  const on = npSrc.isPlaying();
+  document.getElementById('npTitle').textContent = npSrc.title;
+  document.querySelector('#np .np-t small').textContent = on ? 'Now playing' : 'Paused';
+  np.classList.toggle('paused', !on);
+  document.getElementById('npPP').setAttribute('aria-label', (on ? 'Pause ' : 'Play ') + npSrc.title);
+  document.getElementById('npX').setAttribute('aria-label', 'Stop ' + npSrc.title);
+  if (np.hidden) { np.hidden = false; requestAnimationFrame(() => requestAnimationFrame(() => np.classList.add('on'))); }
+  else np.classList.add('on');
+}
+document.addEventListener('click', e => {
+  if (!npSrc) return;
+  if (e.target.closest('#npPP')) npSrc.isPlaying() ? npSrc.pause() : npSrc.play();
+  else if (e.target.closest('#npX')) { const s = npSrc; npSrc = null; s.stop(); npPaint(); }
+});
 const esc = s => String(s).replace(/[&<>"]/g, c => ({ '&':'&amp;', '<':'&lt;', '>':'&gt;', '"':'&quot;' }[c]));
 $('#yr').textContent = new Date().getFullYear();
 
@@ -1094,8 +1151,11 @@ tracks.forEach(k => {
     if (ensureCtx()) { try { const n = actx.createMediaElementSource(a); n.connect(actx.destination); n.connect(analyser); } catch {} }
     const show = () => { const p = a.duration ? a.currentTime / a.duration : 0; seek.style.setProperty('--p', p); seek.setAttribute('aria-valuenow', Math.round(p * 100)); at.textContent = fmt(a.currentTime); };
     a.addEventListener('timeupdate', show);
+    const src = k._np = { title: name, isPlaying: () => !a.paused, play: () => a.play().catch(() => {}), pause: () => a.pause(), stop: () => { a.pause(); a.currentTime = 0; } };
+    a.addEventListener('play', () => npSet(src));
+    a.addEventListener('ended', () => { if (npSrc === src) npSet(null); });
     a.addEventListener('play', () => { k.classList.add('on'); btn.setAttribute('aria-label', 'Pause ' + name); stopBandcamp(k); stopRecord(); document.querySelectorAll('#clips video').forEach(v => v.pause()); actx && actx.resume().catch(() => {}); });
-    a.addEventListener('pause', () => { k.classList.remove('on'); btn.setAttribute('aria-label', 'Play ' + name); });
+    a.addEventListener('pause', () => { k.classList.remove('on'); btn.setAttribute('aria-label', 'Play ' + name); if (npSrc === src) npPaint(); });
     a.addEventListener('ended', () => { a.currentTime = 0; show(); });
     k._show = show;
     return a;
@@ -1134,14 +1194,20 @@ function setPlaying(on) {
   heroPlay.setAttribute('aria-pressed', on);
   heroPlay.querySelector('.lbl').textContent = on ? 'Stop' : `Play “${AUDIO.title || 'a song'}”`;
   $('#who').textContent = on ? `Now playing · ${AUDIO.title || 'Sweet Babe'}, live` : 'Kyle Keaser · Metro Detroit';
+  if (on) npSet(recordSrc); else if (npSrc === recordSrc) npPaint();
 }
+const recordSrc = {
+  title: `${AUDIO.title || 'Sweet Babe'} (live)`,
+  isPlaying: () => playing, play: () => startRecord(), pause: () => stopRecord(),
+  stop: () => { stopRecord(); if (song) song.currentTime = 0; },
+};
 function startRecord(at) {
   // built and played inside the tap, so phones unlock sound; nothing downloads before the first tap.
   // Stopping lifts the needle where it is; playing again carries on from there.
   if (!song) {
     song = new Audio(AUDIO.song);
     song.preservesPitch = song.webkitPreservesPitch = song.mozPreservesPitch = false; // slower = lower, like vinyl
-    song.addEventListener('ended', () => { stopRecord(); song.currentTime = 0; });   // played through: next time from the top
+    song.addEventListener('ended', () => { stopRecord(); song.currentTime = 0; if (npSrc === recordSrc) npSet(null); });   // played through: next time from the top
     if (AUDIO.crackle) crackle = new Audio(AUDIO.crackle);
     setupWarpAudio();
   }
@@ -1458,6 +1524,12 @@ if (VIDEOS.length) {
       actx && actx.resume().catch(() => {});
     });
     vid.addEventListener('play', () => { stopRecord(); stopBandcamp(); clipsEl.querySelectorAll('video').forEach(o => o !== vid && o.pause()); });
+    const title = c.querySelector('figcaption b').textContent;
+    const src = { title, isPlaying: () => !vid.paused && !vid.ended, play: () => vid.play().catch(() => {}), pause: () => vid.pause(),
+      stop: () => { vid.pause(); vid.currentTime = 0; } };
+    vid.addEventListener('play', () => npSet(src));
+    vid.addEventListener('pause', () => { if (npSrc === src) npPaint(); });
+    vid.addEventListener('ended', () => { if (npSrc === src) npSet(null); });
     vid.addEventListener('error', () => c.remove()); // a missing file just disappears
   });
 }
