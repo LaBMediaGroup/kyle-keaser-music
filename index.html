@@ -387,6 +387,14 @@ footer nav{display:flex;justify-content:center;gap:8px 22px;flex-wrap:wrap;margi
 footer nav a{color:var(--muted);text-decoration:none}
 footer nav a:hover{color:var(--sun)}
 footer p{color:var(--muted);font-size:13px;margin-top:14px}
+footer .spins{display:inline-flex;align-items:center;gap:8px;margin-top:18px;font-size:12.5px;letter-spacing:.02em}
+footer .spins[hidden]{display:none}
+footer .spins>i{width:14px;height:14px;border-radius:50%;background:repeating-radial-gradient(circle,#0d0c0a 0 1px,#2a2721 1px 2px);box-shadow:0 0 0 1px rgba(242,238,223,.15);position:relative;animation:spin 4s linear infinite}
+footer .spins>i::after{content:"";position:absolute;inset:5px;border-radius:50%;background:var(--sun)}
+footer .spins b{display:inline-flex;font:600 13px/1 var(--sans);color:var(--paper);font-variant-numeric:tabular-nums}
+.odo{display:inline-block;height:1em;overflow:hidden;line-height:1}
+.odo>span{display:flex;flex-direction:column;transition:transform 1.6s cubic-bezier(.2,.8,.2,1)}
+.odo>span>span{height:1em}
 
 /* ── liner notes: the back of the sleeve, opened over the home page ── */
 .sleeve{position:fixed;inset:0;z-index:80;background:var(--ink-2);overflow-x:hidden;overflow-y:auto;overscroll-behavior:contain;touch-action:pan-y pinch-zoom;display:none}
@@ -724,6 +732,7 @@ html:not(.js) .switch{display:none}
     <a class="notes-link" href="#notes">Liner notes</a>
   </nav>
   <p>© <span id="yr">2026</span> Sweet Babe · Kyle Keaser · Metro Detroit</p>
+  <p class="spins" id="spins" hidden><i aria-hidden="true"></i>This record's been spun <b id="spinCount"></b> times</p>
 </footer>
 
 <!-- the little card that opens when a sign in the rooms banner is tapped -->
@@ -1368,6 +1377,33 @@ $('#form').addEventListener('submit', async e => {
     location.href = mailto;
   }
 });
+
+// ── visit count in the footer: one per browser per day; it rolls up like an odometer when you get there ──
+(function spins() {
+  if (!MAILER_URL) return;
+  const el = $('#spins'), out = $('#spinCount');
+  const today = new Date().toISOString().slice(0, 10);
+  let counted = false;
+  try { counted = localStorage.getItem('sb-spun') === today; } catch {}
+  fetch(MAILER_URL.replace(/\/$/, '') + '/plays', { method: counted ? 'GET' : 'POST' })
+    .then(r => r.json()).then(d => {
+      if (!d || !d.ok || !d.plays) return;
+      if (!counted) { try { localStorage.setItem('sb-spun', today); } catch {} }
+      const digits = d.plays.toLocaleString('en-US').split('');
+      out.innerHTML = digits.map(c => /\d/.test(c)
+        ? `<span class="odo"><span>${'0123456789'.split('').map(n => `<span>${n}</span>`).join('')}</span></span>`
+        : `<span>${c}</span>`).join('');
+      out.setAttribute('aria-label', d.plays.toLocaleString('en-US'));
+      el.hidden = false;
+      const roll = () => out.querySelectorAll('.odo>span').forEach((col, i) => {
+        const n = +digits.filter(c => /\d/.test(c))[i];
+        col.style.transitionDelay = (i * 90) + 'ms';
+        col.style.transform = `translateY(${-n}em)`;
+      });
+      if (reduce) return roll();
+      new IntersectionObserver(([e], o) => { if (e.isIntersecting) { roll(); o.disconnect(); } }).observe(el);
+    }).catch(() => {});
+})();
 
 // ── "Put it on." level bars: they follow the record or a clip when one is playing, and breathe gently otherwise ──
 (function levels() {

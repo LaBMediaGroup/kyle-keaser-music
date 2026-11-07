@@ -1,4 +1,5 @@
 // Booking mailer for sweetbabemusic.com. The form POSTs JSON here; this sends Kyle a styled email via Resend.
+// Also serves /plays, the footer's visit count (KV binding STATS).
 // Secrets: RESEND_API_KEY, BOOKING_TO (who gets the bookings), and optional BCC_EMAIL for a hidden copy (wrangler secret put …). Vars in wrangler.jsonc.
 import { renderEmail } from './email.js';
 
@@ -9,7 +10,7 @@ function cors(origin, env) {
   const ok = env.ALLOWED_ORIGINS.split(',').map(s => s.trim()).includes(origin);
   return {
     'Access-Control-Allow-Origin': ok ? origin : env.ALLOWED_ORIGINS.split(',')[0].trim(),
-    'Access-Control-Allow-Methods': 'POST, OPTIONS',
+    'Access-Control-Allow-Methods': 'GET, POST, OPTIONS',
     'Access-Control-Allow-Headers': 'Content-Type',
     'Access-Control-Max-Age': '86400',
     Vary: 'Origin',
@@ -25,6 +26,17 @@ export default {
     const allowed = env.ALLOWED_ORIGINS.split(',').map(s => s.trim()).includes(origin);
 
     if (req.method === 'OPTIONS') return new Response(null, { status: allowed ? 204 : 403, headers: h });
+
+    // the visit counter for the footer ("This record's been spun N times"): GET reads it, POST adds one.
+    // No cookies, no IPs, nothing about the visitor is stored: just one number in KV (binding STATS).
+    if (new URL(req.url).pathname === '/plays') {
+      if (!allowed) return json({ ok: false }, 403, h);
+      if (!env.STATS) return json({ ok: false }, 503, h);
+      let n = parseInt(await env.STATS.get('plays') || '0', 10) || 0;
+      if (req.method === 'POST') { n += 1; await env.STATS.put('plays', String(n)); }
+      return json({ ok: true, plays: n }, 200, { ...h, 'Cache-Control': 'no-store' });
+    }
+
     if (req.method !== 'POST') return json({ ok: false, error: 'POST only' }, 405, h);
     if (!allowed) return json({ ok: false, error: 'origin' }, 403, h);
 
