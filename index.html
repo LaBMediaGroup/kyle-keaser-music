@@ -553,7 +553,9 @@ html:not(.js) .switch{display:none}
 .js .sleeve .fade.in .tracks li:nth-child(2){transition-delay:.09s}.js .sleeve .fade.in .tracks li:nth-child(3){transition-delay:.18s}.js .sleeve .fade.in .tracks li:nth-child(4){transition-delay:.27s}
 .js .sleeve .credits div{opacity:0;transform:translateX(22px)}
 .js .sleeve .fade.in .credits div{opacity:1;transform:none;transition:opacity .5s ease,transform .7s var(--ease)}
-.js .sleeve .fade.in .credits div:nth-child(2){transition-delay:.1s}.js .sleeve .fade.in .credits div:nth-child(3){transition-delay:.2s}
+.js .sleeve .fade.in .credits div:nth-child(2){transition-delay:.1s}.js .sleeve .fade.in .credits div:nth-child(3){transition-delay:.2s}.js .sleeve .fade.in .credits div:nth-child(4){transition-delay:.3s}
+.credits .ig-at{color:var(--muted);text-decoration:none;font-size:13px;margin-left:6px}
+.credits .ig-at:hover{color:var(--sun)}
 
 @media (prefers-reduced-motion:reduce){
   *,*::before,*::after{animation:none!important;transition:none!important}
@@ -785,7 +787,8 @@ html:not(.js) .switch{display:none}
       <h3>Credits</h3>
       <dl class="credits">
         <div><dt>Voice, acoustic guitar</dt><dd>Kyle Keaser</dd></div>
-        <div><dt>The band</dt><dd>Sweet Babe</dd></div>
+        <div><dt>Lead guitar</dt><dd>Joe <a class="ig-at" href="https://instagram.com/faceonahead" target="_blank" rel="noopener">@faceonahead</a></dd></div>
+        <div><dt>Bass, vocals</dt><dd>Tyler <a class="ig-at" href="https://instagram.com/tylerpolinger" target="_blank" rel="noopener">@tylerpolinger</a></dd></div>
         <div><dt>Based in</dt><dd>Metro Detroit, MI</dd></div>
         <!-- Waiting on Kyle. Uncomment each row once he answers (no TBD boxes on the live site):
         <div><dt>Style</dt><dd>…</dd></div>
@@ -928,7 +931,7 @@ addEventListener('keydown', e => { if (e.key === 'Escape' && location.hash === '
 // solo / band
 const LINEUP = {
   solo: { desc: 'Kyle on his own: voice and acoustic guitar. Easy to fit into a lounge, a coffee shop, or the corner of a reception.', cap: 'Solo · Dessert Oasis, Downtown Rochester' },
-  band: { desc: 'Kyle with the band, Sweet Babe. A fuller sound for bigger rooms and later nights.', cap: 'Band · New Dodge Lounge, Hamtramck' }
+  band: { desc: 'Kyle with the band: Joe on lead guitar, Tyler on bass and vocals. A fuller sound for bigger rooms and later nights.', cap: 'Band · New Dodge Lounge, Hamtramck' }
 };
 const pill = $('.switch .pill'), switches = document.querySelectorAll('.switch button');
 function setLineup(mode) {
