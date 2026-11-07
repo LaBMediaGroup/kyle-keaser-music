@@ -10,9 +10,9 @@
     "SITE_URL": "https://sweetbabemusic.com",
     "ALLOWED_ORIGINS": "https://sweetbabemusic.com,https://www.sweetbabemusic.com,http://localhost:8799"
   },
-  // the footer's visit count: one number. Create once with: npx wrangler kv namespace create STATS, then paste its id here
+  // the footer's visit count: one number. KV namespace "sweet-babe-stats" (created Nov 6)
   "kv_namespaces": [
-    { "binding": "STATS", "id": "PASTE_KV_ID_HERE" }
+    { "binding": "STATS", "id": "ec6eb585996e4838aa6ff7433bbc0993" }
   ],
   // 5 requests per minute per visitor
   "ratelimits": [
