@@ -242,7 +242,7 @@ section{position:relative}
   box-shadow:0 0 18px rgba(255,40,30,.45)}
 .rc-title{position:absolute!important;width:1px;height:1px;overflow:hidden;clip:rect(0 0 0 0)}
 .rc-body{font-size:16.5px;line-height:1.55;margin-top:14px}
-.rc-where{color:var(--muted);font-size:14px;margin-top:12px}
+.rc-where{color:var(--muted);font-size:14px;line-height:1.6;margin-top:12px;white-space:pre-line}
 .rc-where:empty{display:none}
 .rc-links{display:flex;flex-wrap:wrap;gap:10px;margin-top:20px}
 .rc-links a{font:600 14px/1 var(--sans);text-decoration:none;padding:11px 16px;border-radius:999px;border:1px solid rgba(242,238,223,.3)}
@@ -622,7 +622,7 @@ html:not(.js) .switch{display:none}
         <h3>Side A · the regulars</h3>
         <ol class="tracks">
           <li><b>Eagles Club</b><small>Metro Detroit</small></li>
-          <li><b>Old Detroit Bar and Grille</b><small>Lake Orion</small></li>
+          <li><b>Old Detroit Bar and Grille</b><small>Metro Detroit</small></li>
           <li><b>Stray Cat Lounge</b><small>Clinton Township</small></li>
         </ol>
       </div>
@@ -1190,8 +1190,9 @@ $('#form').addEventListener('submit', async e => {
 // ── the rooms banner: drifts on its own, can be dragged and flung, and each sign opens a little card ──
 const ROOMS = {
   eagles:     { kicker: 'Side A · a regular', body: "One of the rooms Kyle plays regularly around Metro Detroit." },
-  olddetroit: { kicker: 'Side A · a regular', body: "A bar and grille in Lake Orion, and one of Kyle's regular rooms.",
-                where: '741 S Lapeer Rd, Lake Orion', site: 'https://olddetroitbarandgrille.com', map: 'Old Detroit Bar & Grille, 741 S Lapeer Rd, Lake Orion, MI' },
+  olddetroit: { kicker: 'Side A · a regular', body: "Classic American comfort food and Detroit craft beer, and one of Kyle's regular rooms. Two locations:",
+                where: 'Rochester Hills · 6870 N Rochester Rd\nLake Orion · 741 S Lapeer Rd',
+                links: [['Rochester Hills ↗', 'https://olddetroitrochesterhills.com'], ['Lake Orion ↗', 'https://olddetroitbarandgrille.com']] },
   straycat:   { kicker: 'Side A · a regular',
                 sign: '<div class="sc-sign" aria-hidden="true"><span class="l1">Stray Cat</span><span class="l2">Lounge</span><svg class="ic-martini big" viewBox="0 0 26 28" aria-hidden="true"><path class="glass" d="M3 5h18l-9 10z"/><path class="glass" d="M12 15v9M7.5 25h9"/><circle class="olive" cx="13.5" cy="8.4" r="2.3"/><path class="pick" d="M10 11.5L22 2"/></svg><span class="tag">martinis. cigars. music.</span></div>', body: "Martinis, cigars, music: a lounge with a stage for local bands, and one of Kyle's regulars. The live clips on this site were filmed here.",
                 where: '40813 Garfield Rd, Clinton Township', map: 'Stray Cat Lounge, 40813 Garfield Rd, Clinton Township, MI' },
@@ -1263,6 +1264,7 @@ const ROOMS = {
     $('#roomBody').textContent = r.body;
     $('#roomWhere').textContent = r.where || '';
     const links = [];
+    (r.links || []).forEach(([label, href]) => links.push(`<a href="${href}" target="_blank" rel="noopener">${label}</a>`));
     if (r.site) links.push(`<a href="${r.site}" target="_blank" rel="noopener">Website ↗</a>`);
     if (r.map) links.push(`<a href="https://www.google.com/maps/search/?api=1&query=${encodeURIComponent(r.map)}" target="_blank" rel="noopener">Map ↗</a>`);
     links.push(`<a class="go" href="#book" data-close>${r.book ? 'Book a date' : 'Book Kyle'}</a>`);
