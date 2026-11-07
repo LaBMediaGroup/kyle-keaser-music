@@ -243,8 +243,12 @@ section{position:relative}
 .roomcard{touch-action:pan-y}
 .roomcard>.confetti{position:absolute;inset:0;pointer-events:none;z-index:4;overflow:visible}
 .confetti i{position:absolute;display:block;will-change:transform,opacity}
-.sc-pen{position:absolute;left:0;top:0;width:10px;height:10px;margin:-5px 0 0 -5px;border-radius:50%;background:#fff;pointer-events:none;
-  box-shadow:0 0 6px 2px #fff,0 0 16px 6px rgba(255,60,40,.85),0 0 30px 10px rgba(255,40,30,.45)}
+.sc-sign .filling{-webkit-mask-image:linear-gradient(90deg,#000 44%,transparent 56%);mask-image:linear-gradient(90deg,#000 44%,transparent 56%);
+  -webkit-mask-size:240% 100%;mask-size:240% 100%;-webkit-mask-repeat:no-repeat;mask-repeat:no-repeat}
+.sc-sign.unlit{color:#4d4741;text-shadow:2px 2px 0 #141a2c,0 0 1px rgba(255,255,255,.15)}
+.sc-sign.unlit .ic-martini{opacity:.22;filter:none}
+.sc-sign.unlit .tag{background:#151b2d;color:#3d4254;box-shadow:none}
+.sc-sign .tag{white-space:nowrap}
 .confetti i.spark{width:9px;height:9px;background:#fff8e2;clip-path:polygon(50% 0,62% 38%,100% 50%,62% 62%,50% 100%,38% 62%,0 50%,38% 38%);filter:drop-shadow(0 0 3px #fff3c4)}
 .rc-sign .v-wed b{font-size:46px;gap:12px}
 .rc-sign .v-wed .ic-rings{width:54px;height:35px;overflow:visible}
@@ -1376,23 +1380,25 @@ const ROOMS = {
     }
     setTimeout(() => layer.remove(), 1000);
   }
-  // Stray Cat: the tube fills with light from the left, like the name being written on in cursive
+  // Stray Cat: the sign is a dark glass tube; the light runs through it from the left, "Stray Cat" then "Lounge"
   function writeOn() {
     const sg = $('#roomSign .sc-sign'); if (!sg || reduce) return;
-    const write = (el, delay, dur) => el.animate([{ clipPath: 'inset(-20% 100% -20% -5%)' }, { clipPath: 'inset(-20% -5% -20% -5%)' }],
-      { duration: dur, delay, easing: 'cubic-bezier(.45,.05,.55,.95)', fill: 'backwards' });
+    const holder = $('#roomSign');
+    holder.style.position = 'relative';
+    const ghost = sg.cloneNode(true);                 // the unlit tube, sitting right behind the lit one
+    ghost.classList.add('unlit');
+    ghost.style.cssText = `position:absolute;left:${sg.offsetLeft}px;top:${sg.offsetTop}px;width:${sg.offsetWidth}px;margin:0;pointer-events:none`;
+    holder.insertBefore(ghost, sg);
+    sg.style.position = 'relative';
+    const fill = (el, delay, dur) => el.animate(
+      [{ maskPosition: '100% 0', webkitMaskPosition: '100% 0' }, { maskPosition: '0% 0', webkitMaskPosition: '0% 0' }],
+      { duration: dur, delay, easing: 'cubic-bezier(.5,0,.6,1)', fill: 'backwards' });
     const l1 = sg.querySelector('.l1'), l2 = sg.querySelector('.l2'), cup = sg.querySelector('.ic-martini'), tag = sg.querySelector('.tag');
-    write(l1, 200, 950); write(l2, 1150, 750);
-    // the bright pen point riding the front edge of the light
-    const pen = document.createElement('span'); pen.className = 'sc-pen'; sg.appendChild(pen);
-    const at = (el, x) => { const r = el.getBoundingClientRect(), b = sg.getBoundingClientRect(); return [r.left - b.left + r.width * x, r.top - b.top + r.height * .55]; };
-    const [a0, a1, b0, b1] = [at(l1, 0), at(l1, 1), at(l2, 0), at(l2, 1)];
-    pen.animate([{ transform: `translate(${a0[0]}px,${a0[1]}px)`, opacity: 0 }, { offset: .1, transform: `translate(${a0[0]}px,${a0[1]}px)`, opacity: 1 },
-      { offset: .55, transform: `translate(${a1[0]}px,${a1[1] - 10}px)`, opacity: 1 }, { offset: .6, transform: `translate(${b0[0]}px,${b0[1]}px)`, opacity: 1 },
-      { offset: .97, transform: `translate(${b1[0]}px,${b1[1] - 6}px)`, opacity: 1 }, { transform: `translate(${b1[0]}px,${b1[1] - 6}px)`, opacity: 0 }],
-      { duration: 1750, delay: 150, easing: 'linear', fill: 'both' }).onfinish = () => pen.remove();
-    cup && cup.animate([{ opacity: 0 }, { offset: .82, opacity: 0 }, { offset: .86, opacity: 1 }, { offset: .9, opacity: .2 }, { offset: .95, opacity: 1 }, { opacity: 1 }], { duration: 2200, fill: 'backwards' });
-    tag && tag.animate([{ opacity: 0, transform: 'translateY(4px)' }, { offset: .88, opacity: 0, transform: 'translateY(4px)' }, { opacity: 1, transform: 'none' }], { duration: 2500, fill: 'backwards', easing: 'ease-out' });
+    [l1, l2].forEach(el => el.classList.add('filling'));
+    fill(l1, 250, 1000); fill(l2, 1200, 800).onfinish = () => [l1, l2].forEach(el => el.classList.remove('filling'));
+    cup && cup.animate([{ opacity: 0 }, { offset: .84, opacity: 0 }, { offset: .87, opacity: 1 }, { offset: .91, opacity: .2 }, { offset: .95, opacity: 1 }, { opacity: 1 }], { duration: 2300, fill: 'backwards' });
+    tag && tag.animate([{ opacity: 0 }, { offset: .9, opacity: 0 }, { offset: .93, opacity: 1 }, { offset: .96, opacity: .4 }, { opacity: 1 }], { duration: 2600, fill: 'backwards' });
+    setTimeout(() => ghost.remove(), 2800);
   }
   // Weddings: the two rings slide together and clink, then the diamond catches the light
   function clink() {
