@@ -218,7 +218,7 @@ section{position:relative}
 /* ── room cards: tap a sign in the banner ── */
 .roomcard{margin:auto;border:0;padding:0;background:none;color:var(--paper);max-width:min(420px,calc(100vw - 32px));width:100%;overflow:visible}
 .roomcard::backdrop{background:rgba(6,5,4,.62);backdrop-filter:blur(4px);-webkit-backdrop-filter:blur(4px)}
-.roomcard[open]{animation:cardIn .5s cubic-bezier(.2,1.25,.4,1) both}
+.roomcard[open]{animation:cardIn .5s cubic-bezier(.2,1.25,.4,1) backwards}   /* not 'both': a leftover transform would trap the zoomed photo inside the card */
 .roomcard.closing{animation:cardOut .22s ease-in forwards}
 .roomcard[open]::backdrop{animation:fadeIn .3s ease both}
 @keyframes cardIn{from{opacity:0;transform:translateY(26px) rotate(-3deg) scale(.92)}}
@@ -244,6 +244,13 @@ section{position:relative}
 .rc-title{position:absolute!important;width:1px;height:1px;overflow:hidden;clip:rect(0 0 0 0)}
 .rc-body{font-size:16.5px;line-height:1.55;margin-top:14px}
 .rc-photo{float:right;width:min(190px,56%);margin:12px 0 8px 16px;background:#e9e3d0;padding:6px 6px 16px;border-radius:2px;rotate:2.5deg;box-shadow:0 12px 26px rgba(0,0,0,.5);position:relative}
+.rc-photo{cursor:zoom-in}
+.roomcard>.rc-zoom{position:fixed;inset:0;z-index:6;display:grid;place-items:center;padding:16px;background:rgba(6,5,4,0);transition:background .35s ease;cursor:zoom-out}
+.rc-zoom.on{background:rgba(6,5,4,.8)}
+.rc-zoom figure{width:min(100%,640px);background:#e9e3d0;padding:10px 10px 30px;border-radius:3px;box-shadow:0 40px 90px rgba(0,0,0,.7);transform-origin:0 0;rotate:-1deg}
+.rc-zoom img{display:block;width:100%;height:auto;aspect-ratio:4/3;object-fit:cover}
+.rc-zoom .x{position:fixed;top:max(14px,env(safe-area-inset-top));right:14px;width:42px;height:42px;border-radius:50%;border:1px solid var(--line);background:var(--ink);color:var(--paper);font-size:16px;cursor:pointer;opacity:0;transition:opacity .3s}
+.rc-zoom.on .x{opacity:1}
 .rc-photo img{display:block;width:100%;height:auto;aspect-ratio:4/3;object-fit:cover}
 .rc-links{clear:both}
 .rc-where{color:var(--muted);font-size:14px;line-height:1.6;margin-top:12px;white-space:pre-line}
@@ -1295,7 +1302,42 @@ const ROOMS = {
       if (go) { e.preventDefault(); setTimeout(() => $('#book').scrollIntoView({ behavior: reduce ? 'auto' : 'smooth' }), 220); }
     }
   });
-  card.addEventListener('cancel', e => { e.preventDefault(); closeRoom(); });
+  card.addEventListener('cancel', e => { e.preventDefault(); if (zoomEl) shrinkPhoto(); else closeRoom(); });
+
+  // tap the little print to blow it up; tap again (or ✕, outside, Escape) to put it back
+  let zoomEl = null;
+  const photo = $('#roomPhoto');
+  function zoomPhoto() {
+    if (zoomEl) return;
+    const img = photo.querySelector('img'), from = photo.getBoundingClientRect();
+    zoomEl = document.createElement('div');
+    zoomEl.className = 'rc-zoom';
+    zoomEl.innerHTML = `<figure><img src="${img.getAttribute('src')}" alt="${esc(img.alt)}"></figure><button class="x" type="button" aria-label="Shrink the photo">✕</button>`;
+    card.appendChild(zoomEl);
+    const fig = zoomEl.querySelector('figure'), to = fig.getBoundingClientRect();
+    photo.style.visibility = 'hidden';
+    zoomEl.addEventListener('click', e => { e.stopPropagation(); shrinkPhoto(); });
+    requestAnimationFrame(() => zoomEl && zoomEl.classList.add('on'));
+    if (!reduce) fig.animate([
+      { transform: `translate(${from.left - to.left}px, ${from.top - to.top}px) scale(${from.width / to.width}) rotate(3.5deg)` },
+      { transform: 'none' }
+    ], { duration: 480, easing: 'cubic-bezier(.2,.9,.25,1)' });
+    zoomEl.querySelector('.x').focus({ preventScroll: true });
+  }
+  function shrinkPhoto() {
+    if (!zoomEl) return;
+    const z = zoomEl; zoomEl = null;
+    const fig = z.querySelector('figure'), to = photo.getBoundingClientRect(), from = fig.getBoundingClientRect();
+    z.classList.remove('on');
+    const done = () => { z.remove(); photo.style.visibility = ''; };
+    if (reduce) return done();
+    fig.animate([
+      { transform: 'none' },
+      { transform: `translate(${to.left - from.left}px, ${to.top - from.top}px) scale(${to.width / from.width}) rotate(3.5deg)` }
+    ], { duration: 360, easing: 'cubic-bezier(.4,0,.2,1)', fill: 'forwards' }).onfinish = done;
+  }
+  photo.addEventListener('click', e => { e.stopPropagation(); zoomPhoto(); });
+  card.addEventListener('close', () => { if (zoomEl) { zoomEl.remove(); zoomEl = null; } photo.style.visibility = ''; });
   card.addEventListener('close', () => opener && opener.focus && opener.focus({ preventScroll: true }));
 })();
 </script>
