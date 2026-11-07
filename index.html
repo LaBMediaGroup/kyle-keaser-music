@@ -114,6 +114,15 @@ section{position:relative}
 .tagline{font:italic 400 clamp(28px,5.6vw,48px)/1.08 var(--serif);max-width:18ch;margin:16px auto 30px}
 .tagline b{font-weight:400;color:var(--sun)}
 .ctas{display:flex;gap:12px;flex-wrap:wrap;justify-content:center}
+.nextshow{margin-top:18px;display:inline-flex;align-items:center;gap:9px;white-space:nowrap;max-width:100%;appearance:none;border:1px solid rgba(222,214,61,.3);background:rgba(222,214,61,.07);
+  color:var(--paper);border-radius:999px;padding:9px 15px 9px 12px;font:400 14px/1.2 var(--sans);cursor:pointer;transition:border-color .2s,background .2s}
+.nextshow:hover{border-color:var(--sun);background:rgba(222,214,61,.12)}
+.nextshow[hidden]{display:none}
+@media (max-width:380px){.nextshow span{display:none}.nextshow{font-size:13.5px}}
+.nextshow i{width:8px;height:8px;border-radius:50%;background:var(--sun);box-shadow:0 0 0 0 rgba(222,214,61,.6);animation:beat 1.8s ease-out infinite}
+.nextshow span{font-weight:600;font-size:11px;letter-spacing:.16em;text-transform:uppercase;color:var(--sun)}
+.nextshow b{font-weight:600}
+@keyframes beat{0%{box-shadow:0 0 0 0 rgba(222,214,61,.55)}70%{box-shadow:0 0 0 9px rgba(222,214,61,0)}100%{box-shadow:0 0 0 0 rgba(222,214,61,0)}}
 .rise{animation:rise 1s var(--ease) .35s both}.rise.d1{animation-delay:.5s}.rise.d2{animation-delay:.65s}
 @keyframes rise{from{opacity:0;transform:translateY(22px)}}
 
@@ -517,6 +526,7 @@ html:not(.js) .switch{display:none}
       <button class="btn btn-line heroplay" id="heroPlay" type="button" aria-pressed="false" hidden><span class="ic" aria-hidden="true"></span><span class="lbl">Play a song</span></button>
       <a class="btn btn-line notes-link hero-notes" href="#notes">Liner notes</a>
     </div>
+    <button class="nextshow rise d2" id="nextShow" type="button" hidden></button>
   </div>
 </section>
 
@@ -731,9 +741,11 @@ const AUDIO = {
   crackle: 'assets/audio/needle-drop.mp3',   // generated locally, ours to ship
 };
 
-// Upcoming shows for the liner notes. Example:
-//   { date:'Sat Nov 14', venue:'Stray Cat Lounge', city:'Clinton Township' },
-const SHOWS = [];
+// Upcoming shows: they appear in the liner notes and as "Next show" up top, and drop off once the day has passed.
+//   date: 'YYYY-MM-DD'   room: which banner card the "Next show" pill opens (optional)
+const SHOWS = [
+  { date:'2026-11-13', time:'8:30 pm', venue:'Eagles Club', city:'Rochester', short:'Rochester Eagles', room:'eagles' },   // on the Rochester Eagles' own calendar
+];
 
 // Live clips for the home page. Put the .mp4 (and a .jpg still with the same name) in assets/videos/.
 // Only clips Kyle has approved for the site.
@@ -1151,8 +1163,16 @@ function hideGrabHint() {
 }
 
 // shows + clips in the liner notes
-if (SHOWS.length) {
-  $('#dates').innerHTML = '<ol class="tracks">' + SHOWS.map(s => `<li><b>${esc(s.venue)}</b><small>${esc(s.date)}${s.city ? ' · ' + esc(s.city) : ''}</small></li>`).join('') + '</ol>';
+const showDay = s => { const [y, m, d] = s.date.split('-').map(Number); return new Date(y, m - 1, d); };
+const today = (() => { const n = new Date(); return new Date(n.getFullYear(), n.getMonth(), n.getDate()); })();
+const upcoming = SHOWS.filter(s => showDay(s) >= today).sort((a, b) => showDay(a) - showDay(b));
+const niceDay = s => showDay(s).toLocaleDateString('en-US', { weekday: 'short', month: 'short', day: 'numeric' });
+if (upcoming.length) {
+  $('#dates').innerHTML = '<ol class="tracks">' + upcoming.map(s => `<li><b>${esc(s.venue)}</b><small>${esc(niceDay(s))}${s.time ? ', ' + esc(s.time) : ''}${s.city ? ' · ' + esc(s.city) : ''}</small></li>`).join('') + '</ol>';
+  const s = upcoming[0], pill = $('#nextShow');
+  pill.innerHTML = `<i aria-hidden="true"></i><span>Next show</span><b>${esc(niceDay(s))} · ${esc(s.short || s.venue)}</b>`;
+  pill.hidden = false;
+  pill.addEventListener('click', () => { if (s.room && window.openRoomKey) window.openRoomKey(s.room); else location.hash = '#notes'; });
 }
 if (VIDEOS.length) {
   const clipsEl = $('#clips');
@@ -1305,6 +1325,7 @@ const ROOMS = {
   const ORDER = Object.keys(ROOMS);
   let current = null;
   $('#roomDots').innerHTML = ORDER.map(() => '<i></i>').join('');
+  window.openRoomKey = k => openRoom(k, document.querySelector(`#marquee .v[data-k="${k}"]`));
   function openRoom(k, from) {
     if (!ROOMS[k] || !card.showModal) return;
     opener = from;
