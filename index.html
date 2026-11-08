@@ -226,33 +226,6 @@ section{position:relative}
 .js .prints.in .print.stray{animation:strew .9s cubic-bezier(.22,.9,.3,1) both}
 .js .prints.in .stray.s1{animation-delay:.75s}.js .prints.in .stray.s2{animation-delay:.9s}.js .prints.in .stray.s3{animation-delay:1.05s}
 @keyframes strew{0%{opacity:0;transform:translateY(-26px) scale(1.12)}30%{opacity:1}70%{transform:translateY(3px) scale(.99)}100%{opacity:1;transform:none}}
-/* the album: Kyle's snapshots dealt onto the table under the two big prints */
-.album{margin-top:clamp(10px,3vw,30px)}
-.album-head{display:flex;justify-content:space-between;align-items:baseline;gap:16px;margin-bottom:clamp(18px,3vw,28px)}
-.album-head h3{font:italic 400 clamp(30px,4.6vw,46px)/1 var(--serif);margin:0}
-.album-head span{color:var(--muted);font-size:14px}
-/* phone: a little collage. The band shot runs full width, then two stacked beside the tall Chicago one (a grid, not columns: Safari piled columns into one) */
-.album-grid{display:grid;grid-template-columns:1fr 1fr;gap:clamp(16px,2.6vw,28px) clamp(14px,2.4vw,26px);align-items:start}
-.album-grid .snap{margin:0;padding-bottom:9px}
-.album-grid .snap figcaption{position:static;margin:7px 2px 0;white-space:normal;line-height:1.15;text-wrap:balance}
-.album-grid .snap:first-child{grid-column:1/-1;--r:-.9deg}
-.album-grid .snap.tall{grid-row:span 2;align-self:stretch;display:flex;flex-direction:column}
-.album-grid .snap.tall img{flex:1 1 0;min-height:0;height:100%;aspect-ratio:auto}
-@media (min-width:760px){
-  .album-grid{grid-template-columns:repeat(4,1fr)}
-  .album-grid .snap:first-child{grid-column:auto;--r:-1.8deg}
-  .album-grid .snap.tall{grid-row:auto;align-self:start;display:block}
-  .album-grid .snap.tall img{flex:none;height:auto;aspect-ratio:3/5}
-}
-.snap{break-inside:avoid;margin:0 0 clamp(16px,2.6vw,28px);background:#e9e3d0;padding:7px 7px 30px;border-radius:3px;position:relative;cursor:zoom-in;
-  box-shadow:0 18px 40px rgba(0,0,0,.5);rotate:var(--r,0deg);transition:rotate .35s var(--ease),scale .35s var(--ease)}
-.snap:nth-child(3n+1){--r:-1.8deg}.snap:nth-child(3n+2){--r:1.4deg}.snap:nth-child(3n){--r:-.6deg}
-@media (hover:hover){.snap:hover{rotate:0deg;scale:1.03;z-index:2}}
-.snap img{display:block;width:100%;height:auto;aspect-ratio:var(--ar);max-height:none;object-fit:cover}
-.snap.tall img{aspect-ratio:3/5}
-.snap figcaption{position:absolute;left:9px;right:9px;bottom:7px;font:italic 400 clamp(14px,1.6vw,17px)/1.1 var(--serif);color:#2a261d;white-space:nowrap;overflow:hidden;text-overflow:ellipsis}
-.js .snap{opacity:0}
-.js .album.in .snap{animation:deal .9s cubic-bezier(.22,.9,.3,1) calc(var(--i) * 110ms) both}
 @keyframes deal{
   0%{opacity:0;transform:translateY(-70px) rotate(calc(var(--i) * 5deg - 14deg)) scale(1.12)}
   20%{opacity:1}
@@ -727,10 +700,9 @@ html:not(.js) .switch{display:none}
   *,*::before,*::after{animation:none!important;transition:none!important}
   .js .ch,.js .stamp,.js .neonhead .ln>span,.js .clip .screen,.js .clip figcaption,.js .bcplayers .tk,.js .ig a,.js .form>*,.js .sleeve .tracks li,.js .sleeve .credits div,.js .listen .eq{opacity:1!important;transform:none!important;filter:none!important}
   .js .rv .ln>span,.js .fade{transform:none;opacity:1}
-  .js .print,.js .snap{opacity:1}
+  .js .print{opacity:1}
   .js .prints.in .print.stray{animation:none}
   .gal-back i{animation:none}
-  .js .album.in .snap{animation:none}
   .js .statement .w{opacity:1}
   html{scroll-behavior:auto}
 }
@@ -817,15 +789,12 @@ html:not(.js) .switch{display:none}
       <figure class="print stray s2" data-speed="40"><img src="assets/album/flag-laugh.jpg" alt="Kyle singing hard at the mic with an acoustic guitar, an American flag behind him" width="750" height="1290" loading="lazy" decoding="async"><figcaption>Singing his face off</figcaption></figure>
       <figure class="print stray s3" data-speed="-20"><img src="assets/album/headphones.jpg" alt="Black-and-white photo of Kyle in headphones, playing an acoustic guitar" width="544" height="884" loading="lazy" decoding="async"><figcaption>Headphones on</figcaption></figure>
     </div>
-    <div class="album" id="album">
-      <div class="album-head"><h3>From the road</h3><span>Tap a photo</span></div>
-      <div class="album-grid">
-        <figure class="snap" style="--i:0;--ar:1600/1200"><img src="assets/album/band-trio.jpg" alt="Kyle singing at the mic with an acoustic guitar, a guitarist and a bass player on either side" width="1600" height="1200" loading="lazy" decoding="async"><figcaption>Sweet Babe, full band</figcaption></figure>
-        <figure class="snap" style="--i:1;--ar:1200/1600"><img src="assets/album/band-new-dodge-stage.jpg" alt="Kyle and the band on a low stage by big street-side windows, drummer at left" width="1200" height="1600" loading="lazy" decoding="async"><figcaption>New Dodge Lounge, Hamtramck</figcaption></figure>
-        <figure class="snap tall" style="--i:2;--ar:840/1600"><img src="assets/album/chicago-standing.jpg" alt="Kyle standing at the mic with an acoustic guitar beside candle sconces and holiday lights" width="840" height="1600" loading="lazy" decoding="async"><figcaption>Chicago, same night</figcaption></figure>
-        <figure class="snap" style="--i:3;--ar:706/1108"><img src="assets/album/new-dodge-red.jpg" alt="Kyle singing with an acoustic guitar in red light, a guitarist behind him" width="706" height="1108" loading="lazy" decoding="async"><figcaption>Under the red neon</figcaption></figure>
-      </div>
-    </div>
+    <template id="morePhotos"><!-- more of Kyle's photos: they live only in the photo view, after the prints -->
+      <figure><img src="assets/album/band-trio.jpg" alt="Kyle singing at the mic with an acoustic guitar, a guitarist and a bass player on either side" width="1600" height="1200"><figcaption>Sweet Babe, full band</figcaption></figure>
+      <figure><img src="assets/album/band-new-dodge-stage.jpg" alt="Kyle and the band on a low stage by big street-side windows, drummer at left" width="1200" height="1600"><figcaption>New Dodge Lounge, Hamtramck</figcaption></figure>
+      <figure><img src="assets/album/chicago-standing.jpg" alt="Kyle standing at the mic with an acoustic guitar beside candle sconces and holiday lights" width="840" height="1600"><figcaption>Chicago, same night</figcaption></figure>
+      <figure><img src="assets/album/new-dodge-red.jpg" alt="Kyle singing with an acoustic guitar in red light, a guitarist behind him" width="706" height="1108"><figcaption>Under the red neon</figcaption></figure>
+    </template>
     <a class="notes-cta fade notes-link" href="#notes">
       <span class="sleeve-ic" aria-hidden="true"></span>
       <span><b>Read the liner notes</b><span>Solo or with the band, the rooms he plays, and the details.</span></span>
@@ -1101,7 +1070,7 @@ document.querySelectorAll('.split').forEach(el => {   // letters as separate pie
   const t = el.textContent; el.textContent = ''; el.setAttribute('aria-label', t);
   [...t].forEach((c, i) => { const s = document.createElement('span'); s.className = 'ch'; s.setAttribute('aria-hidden', 'true'); s.style.setProperty('--i', i); s.textContent = c; el.appendChild(s); });
 });
-document.querySelectorAll('.rv, .fade, .prints, .album, .sig').forEach(el => io.observe(el));
+document.querySelectorAll('.rv, .fade, .prints, .sig').forEach(el => io.observe(el));
 
 // the statement: split into words that light up as it scrolls through
 const st = $('#statement');
@@ -2141,11 +2110,15 @@ const ROOMS = {
   card.addEventListener('close', () => opener && opener.focus && opener.focus({ preventScroll: true }));
 })();
 
-// The two prints and the album: tap one and it lifts off the page into a big gallery view. Swipe (or the arrows) for the
+// The prints: tap one and it lifts off the page into a big gallery view. Swipe (or the arrows) for the
 // other one; ✕, a tap on the dark, a swipe down or Escape puts it back where it came from.
 (() => {
-  const prints = [...document.querySelectorAll('.prints .print, .album .snap')];
-  if (!prints.length) return;
+  const onPage = [...document.querySelectorAll('.prints .print')];
+  if (!onPage.length) return;
+  const more = [...(document.getElementById('morePhotos')?.content.querySelectorAll('figure') || [])];
+  const prints = [...onPage, ...more];               // the extras have no spot on the page: closing on one flies it back to the print you tapped
+  let home = onPage[0];
+  const spot = i => onPage.includes(prints[i]) ? prints[i] : home;
   const g = document.createElement('div');
   g.className = 'gal'; g.hidden = true;
   g.setAttribute('role', 'dialog'); g.setAttribute('aria-modal', 'true'); g.setAttribute('aria-label', 'Photos');
@@ -2188,7 +2161,7 @@ const ROOMS = {
   };
   function openGal(i) {
     if (open) return;
-    open = true; lastFocus = document.activeElement;
+    open = true; lastFocus = document.activeElement; home = prints[i];
     g.hidden = false; show(i, false); pin(true);
     requestAnimationFrame(() => g.classList.add('on'));
     prints[at].style.visibility = 'hidden';
@@ -2200,13 +2173,13 @@ const ROOMS = {
     open = false;
     pin(false);
     g.classList.remove('on');
-    const p = prints[at], s = slides[at];
-    prints.forEach(x => x.style.visibility = x === p ? 'hidden' : '');
+    const p = spot(at), s = slides[at];
+    onPage.forEach(x => x.style.visibility = x === p ? 'hidden' : '');
     s.style.transform = '';
     fly(s, p, true, () => { g.hidden = true; p.style.visibility = ''; lastFocus && lastFocus.focus && lastFocus.focus({ preventScroll: true }); });
     if (reduce) { g.hidden = true; p.style.visibility = ''; }
   }
-  prints.forEach((p, i) => {
+  onPage.forEach((p, i) => {
     p.style.cursor = 'zoom-in';
     p.addEventListener('click', () => {
       if (!p.classList.contains('stray') || reduce) return openGal(i);
