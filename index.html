@@ -1630,14 +1630,18 @@ if (VIDEOS.length) {
   // bring a clip up front (and the others down to Up next cards), or put them back side by side; the move glides (FLIP)
   const clipList = () => [...clipsEl.querySelectorAll('.clip')];
   const reflow = change => {
-    const cs = clipList(), r0 = cs.map(c => c.getBoundingClientRect());
+    // only the screens scale; the words just slide and fade (Safari keeps scaled text squished)
+    const cs = clipList(), scr = c => c.querySelector('.screen'), r0 = cs.map(c => scr(c).getBoundingClientRect());
     change();
-    const r1s = cs.map(c => c.getBoundingClientRect());      // where each one lands (before the glide's transforms go on)
+    const r1s = cs.map(c => c.getBoundingClientRect()), s1 = cs.map(c => scr(c).getBoundingClientRect());
+    const ease = { duration: 560, easing: 'cubic-bezier(.2,.85,.25,1)' };
     if (!reduce) cs.forEach((c, i) => {
-      const r1 = r1s[i], a = r0[i];
-      if (!r1.width) return;
-      c.animate([{ transformOrigin: '0 0', transform: `translate(${a.left - r1.left}px,${a.top - r1.top}px) scale(${a.width / r1.width})` },
-        { transformOrigin: '0 0', transform: 'none' }], { duration: 560, easing: 'cubic-bezier(.2,.85,.25,1)' });
+      const a = r0[i], b = s1[i];
+      if (!b.width) return;
+      scr(c).animate([{ transformOrigin: '0 0', transform: `translate(${a.left - b.left}px,${a.top - b.top}px) scale(${a.width / b.width},${a.height / b.height})` },
+        { transformOrigin: '0 0', transform: 'none' }], ease);
+      c.querySelectorAll('figcaption, .clip-tools').forEach(t => t.animate([{ opacity: 0, transform: 'translateY(8px)' }, { opacity: 1, transform: 'none' }],
+        { duration: 380, delay: 260, easing: 'ease-out', fill: 'backwards' }));
     });
     return new Map(cs.map((c, i) => [c, r1s[i]]));
   };
