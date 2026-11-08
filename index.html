@@ -478,6 +478,28 @@ html:not(.js) .switch{display:none}
 .clip figcaption{display:flex;justify-content:space-between;align-items:baseline;gap:14px;margin-top:14px}
 .clip figcaption b{font:italic 400 clamp(22px,2.6vw,28px)/1.1 var(--serif);font-weight:400}
 .clip figcaption small{color:var(--muted);font-size:14px;text-align:right}
+/* playing a clip brings it up front: it takes the whole row, centred and bigger; the other shrinks to an "Up next" card */
+.clips.focus{grid-template-columns:1fr;justify-items:center}
+.clips.focus .clip.big{order:-1;width:min(100%,calc((100svh - 230px) * 16 / 9))}
+@media (max-width:759px){.clips.focus .clip.big .screen{margin-inline:calc(6px - var(--gut));border-radius:12px;transition:margin .5s var(--ease)}}   /* phones: nearly edge to edge */
+.clips.focus .clip:not(.big){width:min(100%,460px);display:grid;grid-template-columns:132px 1fr;align-items:center;gap:16px;cursor:pointer;
+  padding:10px;border-radius:16px;background:rgba(242,238,223,.04);border:1px solid var(--line);transition:background .2s}
+.clips.focus .clip:not(.big):hover{background:rgba(242,238,223,.08)}
+.clips.focus .clip:not(.big) .screen{border-radius:10px;pointer-events:none;box-shadow:none}
+.clips.focus .clip:not(.big) .play{display:grid}
+.clips.focus .clip:not(.big) .play span{width:34px;height:34px}
+.clips.focus .clip:not(.big) .play svg{width:14px;height:14px;margin-left:2px}
+.clips.focus .clip:not(.big) figcaption{margin:0;flex-direction:column;align-items:flex-start;gap:2px}
+.clips.focus .clip:not(.big) figcaption::before{content:'Up next';order:-1;font:700 10px/1.2 var(--sans);letter-spacing:.12em;text-transform:uppercase;color:var(--sun)}
+.clips.focus .clip:not(.big) figcaption b{font-size:20px}
+.clips.focus .clip:not(.big) figcaption small{text-align:left;font-size:13px}
+.clip-tools{display:none;justify-content:center;gap:10px;margin-top:16px;flex-wrap:wrap}
+.clips.focus .clip.big .clip-tools{display:flex}
+.clip-tools button{appearance:none;display:inline-flex;align-items:center;gap:8px;height:44px;padding:0 18px;border-radius:999px;font:600 15px/1 var(--sans);cursor:pointer;
+  border:1px solid var(--line);background:rgba(242,238,223,.06);color:var(--paper);transition:transform .2s var(--ease),background .2s}
+.clip-tools button:active{transform:scale(.95)}
+.clip-tools .c-next{background:var(--sun);border-color:var(--sun);color:var(--ink)}
+.clip-tools svg{width:16px;height:16px;fill:none;stroke:currentColor;stroke-width:2.2;stroke-linecap:round;stroke-linejoin:round}
 .bcplayers{display:grid;gap:12px;margin-top:clamp(28px,4vw,40px)}
 @media (min-width:760px){.bcplayers{grid-template-columns:1fr 1fr;gap:16px}}
 .bcplayers .tk{display:grid;grid-template-columns:auto 1fr auto;align-items:center;gap:14px;padding:12px 16px 12px 12px;border-radius:16px;background:var(--ink-2);box-shadow:0 0 0 1px var(--line);transition:box-shadow .3s}
@@ -1603,14 +1625,53 @@ if (VIDEOS.length) {
         <button class="play" type="button" aria-label="Play ${esc(v.title)}"><span><svg viewBox="0 0 24 24" fill="currentColor"><path d="M7 4.5v15l13-7.5z"/></svg></span></button>
       </div>
       <figcaption><b>${esc(v.title)}</b><small>${esc(v.note || '')}</small></figcaption>
+      <div class="clip-tools"><button class="c-small" type="button"><svg viewBox="0 0 24 24" aria-hidden="true"><path d="M4 14h6v6M20 10h-6V4M14 10l7-7M3 21l7-7"/></svg>Back to both</button>${VIDEOS.length > 1 ? '<button class="c-next" type="button">Next clip<svg viewBox="0 0 24 24" aria-hidden="true"><path d="M5 12h13M13 6l6 6-6 6"/></svg></button>' : ''}</div>
     </figure>`).join('');
+  // bring a clip up front (and the others down to Up next cards), or put them back side by side; the move glides (FLIP)
+  const clipList = () => [...clipsEl.querySelectorAll('.clip')];
+  const reflow = change => {
+    const cs = clipList(), r0 = cs.map(c => c.getBoundingClientRect());
+    change();
+    const r1s = cs.map(c => c.getBoundingClientRect());      // where each one lands (before the glide's transforms go on)
+    if (!reduce) cs.forEach((c, i) => {
+      const r1 = r1s[i], a = r0[i];
+      if (!r1.width) return;
+      c.animate([{ transformOrigin: '0 0', transform: `translate(${a.left - r1.left}px,${a.top - r1.top}px) scale(${a.width / r1.width})` },
+        { transformOrigin: '0 0', transform: 'none' }], { duration: 560, easing: 'cubic-bezier(.2,.85,.25,1)' });
+    });
+    return new Map(cs.map((c, i) => [c, r1s[i]]));
+  };
+  const bigClip = () => clipsEl.querySelector('.clip.big');
+  const enlarge = c => {
+    if (clipsEl.classList.contains('focus') && c.classList.contains('big')) return;
+    const r = reflow(() => { clipList().forEach(x => x.classList.toggle('big', x === c)); clipsEl.classList.add('focus'); }).get(c);
+    const dy = r.top - Math.max(70, (innerHeight - r.height) / 2);    // centre it (under the top bar)
+    if (Math.abs(dy) > 12) scrollTo({ top: scrollY + dy, behavior: reduce ? 'auto' : 'smooth' });
+  };
+  const shrink = () => {
+    if (!clipsEl.classList.contains('focus')) return;
+    reflow(() => { clipsEl.classList.remove('focus'); clipList().forEach(x => x.classList.remove('big')); });
+  };
+  const playClip = c => {
+    const v = c.querySelector('video');
+    clipsEl.querySelectorAll('video').forEach(o => o !== v && o.pause());
+    stopRecord();
+    c.classList.add('on'); v.controls = true; v.play().catch(() => {});
+  };
+  const nextClip = dir => { const cs = clipList(), b = bigClip(); if (cs.length < 2 || !b) return; const n = cs[(cs.indexOf(b) + dir + cs.length) % cs.length]; enlarge(n); playClip(n); };
+  clipsEl.addEventListener('click', e => {
+    if (e.target.closest('.c-small')) return shrink();
+    if (e.target.closest('.c-next')) return nextClip(1);
+    const c = e.target.closest('.clip');
+    if (c && clipsEl.classList.contains('focus') && !c.classList.contains('big')) { enlarge(c); playClip(c); }   // tap an Up next card
+  });
+  addEventListener('keydown', e => { if (e.key === 'Escape' && clipsEl.classList.contains('focus') && !document.querySelector('dialog[open], .gal:not([hidden])')) shrink(); });
   clipsEl.querySelectorAll('.fade').forEach(el => io.observe(el));
   clipsEl.querySelectorAll('.clip').forEach(c => {
     const vid = c.querySelector('video');
-    c.querySelector('.play').addEventListener('click', () => {
-      clipsEl.querySelectorAll('video').forEach(o => o !== vid && o.pause());
-      stopRecord();
-      c.classList.add('on'); vid.controls = true; vid.play();
+    c.querySelector('.play').addEventListener('click', e => {
+      if (clipsEl.classList.contains('focus') && !c.classList.contains('big')) return;   // the Up next card handles it
+      enlarge(c); playClip(c);
     });
     vid.addEventListener('play', () => {
       if (!vid._tap && ensureCtx()) {           // route the clip's sound past the analyser (first play is a tap, so phones allow it)
@@ -1622,7 +1683,7 @@ if (VIDEOS.length) {
     const title = c.querySelector('figcaption b').textContent;
     const src = { title, isPlaying: () => !vid.paused && !vid.ended, play: () => vid.play().catch(() => {}), pause: () => vid.pause(),
       stop: () => { vid.pause(); vid.currentTime = 0; } };
-    vid.addEventListener('play', () => npSet(src));
+    vid.addEventListener('play', () => { npSet(src); if (clipsEl.classList.contains('focus')) enlarge(c); });   // skipping from the now-playing bar keeps it up front
     vid.addEventListener('pause', () => { if (npSrc === src) npPaint(); });
     vid.addEventListener('ended', () => { if (npSrc === src) npSet(null); });
     vid.addEventListener('error', () => c.remove()); // a missing file just disappears
