@@ -1,0 +1,32 @@
+<!DOCTYPE html>
+<!-- The link-preview picture (assets/share.jpg, 1200 × 630): what shows when the site is shared by text or on social.
+     To remake it: serve this folder (python3 -m http.server 8799), open /tools/share-card.html in a 1200 × 630 window
+     and save a screenshot over assets/share.jpg. -->
+<html lang="en"><head><meta charset="utf-8">
+<link href="https://fonts.googleapis.com/css2?family=Bricolage+Grotesque:opsz,wght@12..96,600;12..96,800&family=Instrument+Serif:ital@0;1&display=swap" rel="stylesheet">
+<style>
+*{box-sizing:border-box;margin:0;padding:0}
+body{width:1200px;height:630px;overflow:hidden;background:#0b0a08;color:#f2eedf;font-family:"Bricolage Grotesque",sans-serif;position:relative}
+body::before{content:"";position:absolute;inset:0;background:radial-gradient(60% 70% at 22% 0%,rgba(222,214,61,.2),transparent 70%),radial-gradient(40% 50% at 95% 100%,rgba(255,106,43,.12),transparent 70%)}
+.disc{position:absolute;left:-150px;top:-120px;width:470px;height:470px;border-radius:50%;background:repeating-radial-gradient(circle,#0d0c0a 0 1.6px,#191610 1.6px 3.2px);box-shadow:0 30px 80px rgba(0,0,0,.7),inset 0 0 0 10px #0a0907}
+.disc img{position:absolute;inset:23%;width:54%;height:54%;border-radius:50%;box-shadow:0 0 0 6px #0a0907,0 0 0 7px rgba(222,214,61,.3)}
+.copy{position:absolute;left:72px;bottom:64px;width:610px}
+.k{font:600 19px/1 "Bricolage Grotesque";letter-spacing:.22em;text-transform:uppercase;color:#9e9885}
+h1{font:italic 400 72px/1.03 "Instrument Serif",serif;margin-top:18px;letter-spacing:-.01em}
+h1 b{font-weight:400;color:#DED63D}
+.u{display:inline-block;margin-top:26px;background:#DED63D;color:#0b0a08;font:800 22px/1 "Bricolage Grotesque";padding:15px 24px;border-radius:999px}
+.p{position:absolute;background:#e9e3d0;padding:12px 12px 0;border-radius:3px;box-shadow:0 30px 70px rgba(0,0,0,.65)}
+.p img{display:block;width:100%}
+.p span{display:block;font:italic 400 24px/1 "Instrument Serif",serif;color:#2a261d;padding:9px 4px 11px}
+.p.b{width:372px;right:26px;top:300px;rotate:4deg}
+.p.k2{width:236px;left:668px;top:44px;rotate:-6deg;z-index:2}
+</style></head><body>
+<div class="disc"><img src="../assets/logo.jpg" alt=""></div>
+<div class="p b"><img src="../assets/hero-band.jpg" alt=""><span>Sweet Babe, the band</span></div>
+<div class="p k2"><img src="../assets/hero-kyle.jpg" alt=""><span>Kyle Keaser</span></div>
+<div class="copy">
+  <p class="k">Kyle Keaser · Metro Detroit</p>
+  <h1>Live acoustic music, <b>solo or with the band.</b></h1>
+  <span class="u">sweetbabemusic.com</span>
+</div>
+</body></html>

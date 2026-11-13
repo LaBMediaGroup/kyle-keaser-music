@@ -7,7 +7,7 @@
 
   FILES: index.html + assets/ (+ assets/videos/ once clips arrive, assets/audio/ for the record player).
   HOSTING: GitHub Pages, push this folder as-is. No build step. If the address changes (own domain),
-  update og:url and og:image in the head so link previews keep the logo.
+  update og:url and og:image in the head so link previews keep their picture (assets/share.jpg, made from tools/share-card.html).
 
   RECORD PLAYER: set AUDIO.song in the script to a file Kyle has said yes to. Until then the play
   button isn't shown and the record keeps its plain idle spin. Tap play: arm drops, record spins up,
@@ -22,13 +22,27 @@
 <meta charset="utf-8">
 <meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
 <title>Sweet Babe · Live acoustic music, Metro Detroit</title>
-<meta name="description" content="Kyle Keaser, voice and acoustic guitar, solo or with his band Sweet Babe, around Metro Detroit. Listen and book a date.">
+<meta name="description" content="Kyle Keaser, voice and acoustic guitar, solo or with his band Sweet Babe. Live music for bars, weddings, parties and company events around Metro Detroit. Listen and book a date.">
 <meta name="theme-color" content="#0b0a08">
 <meta property="og:title" content="Sweet Babe · Live acoustic music">
 <meta property="og:description" content="Kyle Keaser, voice and acoustic guitar. Solo or with the band. Metro Detroit.">
 <meta property="og:type" content="website">
 <meta property="og:url" content="https://sweetbabemusic.com/">
-<meta property="og:image" content="https://sweetbabemusic.com/assets/logo.jpg">
+<meta property="og:image" content="https://sweetbabemusic.com/assets/share.jpg">
+<meta property="og:image:width" content="1200">
+<meta property="og:image:height" content="630">
+<meta property="og:image:alt" content="Kyle Keaser with his acoustic guitar, and with his band Sweet Babe">
+<meta name="twitter:card" content="summary_large_image">
+<link rel="canonical" href="https://sweetbabemusic.com/">
+<!-- for search engines: who this is, where, and where else to find him. Only facts that are on the page. -->
+<script type="application/ld+json">
+{"@context":"https://schema.org","@type":"MusicGroup","name":"Sweet Babe","alternateName":"Kyle Keaser","url":"https://sweetbabemusic.com/",
+ "image":"https://sweetbabemusic.com/assets/share.jpg","logo":"https://sweetbabemusic.com/assets/logo.jpg",
+ "description":"Kyle Keaser, voice and acoustic guitar, solo or with his band Sweet Babe. Live music for bars, weddings, parties and company events around Metro Detroit.",
+ "foundingLocation":{"@type":"Place","name":"Metro Detroit, Michigan"},"areaServed":"Metro Detroit, Michigan",
+ "member":{"@type":"Person","name":"Kyle Keaser"},
+ "sameAs":["https://sweetbabe.bandcamp.com","https://instagram.com/sweetbabe_music","https://instagram.com/kylekeasermusic"]}
+</script>
 <script>document.documentElement.classList.add('js')</script>
 <link rel="icon" href="assets/icon.png">
 <link rel="apple-touch-icon" href="assets/icon.png">
@@ -697,7 +711,7 @@ html:not(.js) .switch{display:none}
 .js .form.fade{opacity:1;transform:none}
 .js .form>:not(.hp):not(.notice){opacity:0;transform:translateY(18px) rotate(-.6deg)}
 .js .form.in>:not(.hp):not(.notice){opacity:1;transform:none;transition:opacity .5s ease,transform .7s cubic-bezier(.2,1.2,.4,1)}
-.js .form.in>:not(.hp):not(.notice):nth-child(2){transition-delay:.12s}.js .form.in>:not(.hp):not(.notice):nth-child(3){transition-delay:.24s}.js .form.in>:not(.hp):not(.notice):nth-child(6){transition-delay:.38s}
+.js .form.in>:not(.hp):not(.notice):nth-child(2){transition-delay:.08s}.js .form.in>:not(.hp):not(.notice):nth-child(3){transition-delay:.16s}.js .form.in>:not(.hp):not(.notice):nth-child(4){transition-delay:.24s}.js .form.in>:not(.hp):not(.notice):nth-child(5){transition-delay:.32s}.js .form.in>:not(.hp):not(.notice):nth-child(8){transition-delay:.42s}
 /* footer signature: the letters wave up */
 .js .sig .ch{opacity:0;transform:translateY(55%) rotate(10deg);transition:transform .9s cubic-bezier(.3,1.5,.5,1) calc(var(--i) * 50ms),opacity .4s calc(var(--i) * 50ms)}
 .js .sig.in .ch{opacity:1;transform:none}
@@ -710,6 +724,86 @@ html:not(.js) .switch{display:none}
 .js .sleeve .fade.in .credits div:nth-child(2){transition-delay:.1s}.js .sleeve .fade.in .credits div:nth-child(3){transition-delay:.2s}.js .sleeve .fade.in .credits div:nth-child(4){transition-delay:.3s}
 .credits .ig-at{color:var(--muted);text-decoration:none;font-size:13px;margin-left:6px}
 .credits .ig-at:hover{color:var(--sun)}
+
+/* ── What's the occasion?: four ways to book him; each one opens its card ── */
+.occ{padding:0 0 clamp(70px,11vw,120px)}
+.occ-kicker{font:600 12px/1 var(--sans);letter-spacing:.2em;text-transform:uppercase;color:var(--sun)}
+.occ h2{font:800 clamp(30px,5.2vw,56px)/1 var(--sans);letter-spacing:-.035em;margin-top:14px}
+.occ h2 .serif{color:var(--sun);letter-spacing:-.01em}
+.occ-grid{display:grid;gap:12px;margin-top:clamp(24px,4vw,40px)}
+@media (min-width:640px){.occ-grid{grid-template-columns:1fr 1fr;gap:16px}}
+@media (min-width:1000px){.occ-grid{grid-template-columns:repeat(4,1fr)}}
+.occ-card{appearance:none;text-align:left;color:var(--paper);font:inherit;cursor:pointer;display:grid;grid-template-columns:1fr auto;align-items:end;gap:12px 14px;padding:20px 18px 18px 20px;
+  border-radius:18px;border:1px solid var(--line);background:radial-gradient(120% 90% at 0% 0%,rgba(222,214,61,.07),transparent 60%),var(--ink-3);
+  transition:transform .3s var(--ease),border-color .3s,box-shadow .3s;-webkit-tap-highlight-color:transparent}
+.occ-card:hover{transform:translateY(-4px);border-color:rgba(222,214,61,.45);box-shadow:0 18px 40px rgba(0,0,0,.45)}
+.occ-card:active{transform:scale(.98)}
+.occ-card .v{grid-column:1 / -1;display:flex;align-items:center;min-height:46px;white-space:nowrap}
+.occ-card b{font-weight:400}
+.occ-card .v-corp b{letter-spacing:.11em;padding:8px 9px}
+.occ-card p{color:var(--muted);font-size:15.5px;line-height:1.4}
+.occ-card .more{width:36px;height:36px;border-radius:50%;border:1px solid rgba(242,238,223,.2);display:grid;place-items:center;transition:background .25s,border-color .25s,transform .25s var(--ease)}
+.occ-card .more svg{width:16px;height:16px;fill:none;stroke:var(--sun);stroke-width:2.2;stroke-linecap:round;stroke-linejoin:round;transition:stroke .25s}
+.occ-card:hover .more{background:var(--sun);border-color:var(--sun);transform:translateX(3px)}
+.occ-card:hover .more svg{stroke:var(--ink)}
+.v-bar b{display:inline-flex;align-items:center;gap:10px;font:400 21px/1 "Tilt Neon",system-ui,sans-serif;letter-spacing:.08em;text-transform:uppercase;color:#dcfbff;
+  text-shadow:0 0 4px #5fdcec,0 0 12px #17b7cf,0 0 26px rgba(23,183,207,.55)}
+.ic-mic{width:17px;height:24px;fill:none;stroke:#bdf3fb;stroke-width:1.8;stroke-linecap:round;stroke-linejoin:round;filter:drop-shadow(0 0 6px rgba(23,183,207,.8))}
+.rc-sign .v-bar b{font-size:30px;gap:14px}
+.rc-sign .v-bar .ic-mic{width:24px;height:34px}
+/* the card's "how it can go" rows */
+.rc-rows{list-style:none;margin-top:16px;border-top:1px dashed rgba(242,238,223,.16)}
+.rc-rows:empty{display:none}
+.rc-rows li{display:flex;justify-content:space-between;align-items:baseline;gap:14px;padding:10px 0;border-bottom:1px dashed rgba(242,238,223,.16);font-size:15px;line-height:1.3}
+.rc-rows li span{color:var(--sun);font-weight:600;white-space:nowrap}
+
+/* ── booking form: quick taps for the occasion and the lineup ── */
+.picks{border:0;padding:0;margin:0;min-width:0}
+.picks legend{font:600 12px/1 var(--sans);letter-spacing:.06em;color:var(--muted);padding:0;margin-bottom:10px}
+.pills{display:flex;flex-wrap:wrap;gap:8px}
+.pill{display:block;position:relative;letter-spacing:0}
+.pill input{position:absolute;inset:0;width:100%;height:100%;margin:0;padding:0;border:0;opacity:0;cursor:pointer}
+.pill span{display:block;padding:13px 17px;border-radius:999px;border:1px solid rgba(242,238,223,.2);background:var(--ink);color:var(--paper);font:600 15px/1 var(--sans);
+  transition:background .2s,border-color .2s,color .2s,transform .2s var(--ease)}
+.pill:hover span{border-color:var(--sun)}
+.pill input:active+span{transform:scale(.94)}
+.pill input:checked+span{background:var(--sun);border-color:var(--sun);color:var(--ink);animation:pillPop .32s cubic-bezier(.3,1.6,.5,1)}
+.pill input:focus-visible+span{outline:2px solid var(--sun);outline-offset:3px}
+@keyframes pillPop{0%{transform:scale(.9)}60%{transform:scale(1.06)}100%{transform:none}}
+.form .duo{display:grid;grid-template-columns:1fr 1fr;gap:14px}
+.form .duo input{min-width:0}
+.form label small{font:400 12px/1 var(--sans);letter-spacing:0;opacity:.75;margin-left:6px}
+.form label:has(small){display:block}
+.form label:has(small) input,.form label:has(small) textarea{margin-top:7px}
+.form-foot .easy{flex-basis:100%;order:3;color:var(--muted);font-size:14px}
+
+/* ── the flyer that comes with the thank-you ── */
+.flyer{grid-column:1 / -1;display:grid;gap:22px;align-items:center;padding-top:26px;border-top:1px dashed rgba(242,238,223,.16);animation:rise .8s var(--ease) 1.25s both}
+.flyer[hidden]{display:none}
+.thanks{scroll-margin-top:84px}
+@media (min-width:640px){.flyer{grid-template-columns:200px 1fr;gap:40px}}
+.flyer-pic{position:relative;width:min(100%,230px);margin:0 auto;rotate:-2deg;box-shadow:0 22px 50px rgba(0,0,0,.6);border-radius:4px;overflow:hidden;background:var(--ink);aspect-ratio:4/5}
+.flyer-pic img{display:block;width:100%;height:100%;object-fit:cover}
+.flyer-pic.swap img{animation:flyerSwap .45s var(--ease)}
+@keyframes flyerSwap{from{opacity:0;transform:scale(1.06) rotate(2deg)}}
+.flyer h4{font:italic 400 clamp(28px,4.4vw,38px)/1.05 var(--serif);margin-top:10px}
+.flyer p.f-body{color:var(--paper);font-size:16px;margin-top:10px;max-width:34ch}
+.flyer .f-btns{display:flex;flex-wrap:wrap;align-items:center;gap:12px 20px;margin-top:18px}
+.flyer .t-again{margin-top:0}
+
+/* ── show alerts: leave an email, hear when a date goes up ── */
+.follow{margin-top:clamp(40px,6vw,64px);padding:22px 22px 20px;border:1px solid var(--line);border-radius:18px;background:var(--ink-3);display:grid;gap:14px;max-width:760px}
+@media (min-width:760px){.follow{grid-template-columns:1fr auto;align-items:center;gap:14px 28px}}
+.follow b{display:block;font:800 22px/1.15 var(--sans);letter-spacing:-.02em}
+.follow>div>span{display:block;color:var(--muted);font-size:15px;margin-top:4px}
+.follow form{display:flex;gap:8px}
+.follow input[type=email]{min-width:0;width:min(100%,250px);flex:1;border-radius:999px;padding:13px 18px}
+.follow .btn{padding:13px 20px;white-space:nowrap}
+.follow .f-note{grid-column:1 / -1;color:var(--muted);font-size:14px}
+.follow .f-note:empty{display:none}
+.follow[hidden]{display:none}
+.follow.done form{display:none}
+.follow.done .f-note{color:var(--sun);font-size:15px}
 
 /* ── a phone on its side (wide and short): words and buttons on the left, record on the right ── */
 @media (orientation:landscape) and (max-height:520px){
@@ -801,8 +895,9 @@ html:not(.js) .switch{display:none}
 
 <div class="marquee" id="marquee" aria-label="Rooms Sweet Babe has played. Tap one to read about it.">
   <div class="track">
-    <span class="v v-eagles" data-k="eagles" role="button" tabindex="0" aria-label="About Eagles Club"><b><small>Rochester</small><span class="eg">Eagles</span></b></span><span class="v v-olddetroit" data-k="olddetroit" role="button" tabindex="0" aria-label="About Old Detroit Bar &amp; Grille"><b><small>Old</small><span class="od"><i>D</i>etroit</span><small>Bar · Grille</small></b></span><span class="v v-straycat" data-k="straycat" role="button" tabindex="0" aria-label="About Stray Cat Lounge"><b>Stray Cat Lounge<svg class="ic-martini" viewBox="0 0 26 28" aria-hidden="true"><path class="glass" d="M3 5h18l-9 10z"/><path class="glass" d="M12 15v9M7.5 25h9"/><circle class="olive" cx="13.5" cy="8.4" r="2.3"/><path class="pick" d="M10 11.5L22 2"/></svg></b></span><span class="v v-dodge" data-k="dodge" role="button" tabindex="0" aria-label="About New Dodge Lounge"><b>New Dodge Lounge</b></span><span class="v v-oasis" data-k="oasis" role="button" tabindex="0" aria-label="About Dessert Oasis Coffee Roasters"><b><svg class="mug" viewBox="0 0 32 32" aria-hidden="true"><path class="steam" d="M11 9c-2-2 2-3 0-6M16 9c-2-2 2-3 0-6M21 9c-2-2 2-3 0-6"/><path d="M6 12h18v8a7 7 0 0 1-7 7h-4a7 7 0 0 1-7-7z"/><path d="M24 14h2.5a3.5 3.5 0 0 1 0 7H23.5"/></svg><span class="do"><span>Dessert Oasis</span><small>Coffee Roasters</small></span></b></span><span class="v v-wed" data-k="wed" role="button" tabindex="0" aria-label="About Weddings"><b><svg class="ic-rings" viewBox="0 0 34 22" aria-hidden="true"><circle cx="12" cy="12" r="7.5"/><circle cx="22" cy="12" r="7.5"/><path class="gem" d="M10 2.5l2-2 2 2-2 2.2z"/></svg>Weddings</b></span><span class="v v-party" data-k="party" role="button" tabindex="0" aria-label="About Parties"><b><svg class="ic-confetti" viewBox="0 0 26 22" aria-hidden="true"><path class="c1" d="M3 5l3 1-1 3"/><circle class="c2" cx="12" cy="4" r="1.8"/><path class="c3" d="M19 3l4 2"/><circle class="c4" cx="22" cy="13" r="1.6"/><path class="c5" d="M5 15l2 4"/><circle class="c1f" cx="14" cy="18" r="1.4"/></svg>Parties</b></span><span class="v v-corp" data-k="corp" role="button" tabindex="0" aria-label="About Corporate events"><b><svg class="ic-case" viewBox="0 0 24 20" aria-hidden="true"><rect x="2" y="6" width="20" height="12" rx="2"/><path d="M8.5 6V4a1.5 1.5 0 0 1 1.5-1.5h4A1.5 1.5 0 0 1 15.5 4v2M2 11.5h20"/></svg>Corporate events</b></span>
-    <span class="v v-eagles" data-k="eagles" aria-hidden="true"><b><small>Rochester</small><span class="eg">Eagles</span></b></span><span class="v v-olddetroit" data-k="olddetroit" aria-hidden="true"><b><small>Old</small><span class="od"><i>D</i>etroit</span><small>Bar · Grille</small></b></span><span class="v v-straycat" data-k="straycat" aria-hidden="true"><b>Stray Cat Lounge<svg class="ic-martini" viewBox="0 0 26 28" aria-hidden="true"><path class="glass" d="M3 5h18l-9 10z"/><path class="glass" d="M12 15v9M7.5 25h9"/><circle class="olive" cx="13.5" cy="8.4" r="2.3"/><path class="pick" d="M10 11.5L22 2"/></svg></b></span><span class="v v-dodge" data-k="dodge" aria-hidden="true"><b>New Dodge Lounge</b></span><span class="v v-oasis" data-k="oasis" aria-hidden="true"><b><svg class="mug" viewBox="0 0 32 32" aria-hidden="true"><path class="steam" d="M11 9c-2-2 2-3 0-6M16 9c-2-2 2-3 0-6M21 9c-2-2 2-3 0-6"/><path d="M6 12h18v8a7 7 0 0 1-7 7h-4a7 7 0 0 1-7-7z"/><path d="M24 14h2.5a3.5 3.5 0 0 1 0 7H23.5"/></svg><span class="do"><span>Dessert Oasis</span><small>Coffee Roasters</small></span></b></span><span class="v v-wed" data-k="wed" aria-hidden="true"><b><svg class="ic-rings" viewBox="0 0 34 22" aria-hidden="true"><circle cx="12" cy="12" r="7.5"/><circle cx="22" cy="12" r="7.5"/><path class="gem" d="M10 2.5l2-2 2 2-2 2.2z"/></svg>Weddings</b></span><span class="v v-party" data-k="party" aria-hidden="true"><b><svg class="ic-confetti" viewBox="0 0 26 22" aria-hidden="true"><path class="c1" d="M3 5l3 1-1 3"/><circle class="c2" cx="12" cy="4" r="1.8"/><path class="c3" d="M19 3l4 2"/><circle class="c4" cx="22" cy="13" r="1.6"/><path class="c5" d="M5 15l2 4"/><circle class="c1f" cx="14" cy="18" r="1.4"/></svg>Parties</b></span><span class="v v-corp" data-k="corp" aria-hidden="true"><b><svg class="ic-case" viewBox="0 0 24 20" aria-hidden="true"><rect x="2" y="6" width="20" height="12" rx="2"/><path d="M8.5 6V4a1.5 1.5 0 0 1 1.5-1.5h4A1.5 1.5 0 0 1 15.5 4v2M2 11.5h20"/></svg>Corporate events</b></span>
+    <!-- the five rooms, repeated so the bar never runs out on a wide screen; only the first set is tappable by keyboard -->
+    <span class="v v-eagles" data-k="eagles" role="button" tabindex="0" aria-label="About Eagles Club"><b><small>Rochester</small><span class="eg">Eagles</span></b></span><span class="v v-olddetroit" data-k="olddetroit" role="button" tabindex="0" aria-label="About Old Detroit Bar &amp; Grille"><b><small>Old</small><span class="od"><i>D</i>etroit</span><small>Bar · Grille</small></b></span><span class="v v-straycat" data-k="straycat" role="button" tabindex="0" aria-label="About Stray Cat Lounge"><b>Stray Cat Lounge<svg class="ic-martini" viewBox="0 0 26 28" aria-hidden="true"><path class="glass" d="M3 5h18l-9 10z"/><path class="glass" d="M12 15v9M7.5 25h9"/><circle class="olive" cx="13.5" cy="8.4" r="2.3"/><path class="pick" d="M10 11.5L22 2"/></svg></b></span><span class="v v-dodge" data-k="dodge" role="button" tabindex="0" aria-label="About New Dodge Lounge"><b>New Dodge Lounge</b></span><span class="v v-oasis" data-k="oasis" role="button" tabindex="0" aria-label="About Dessert Oasis Coffee Roasters"><b><svg class="mug" viewBox="0 0 32 32" aria-hidden="true"><path class="steam" d="M11 9c-2-2 2-3 0-6M16 9c-2-2 2-3 0-6M21 9c-2-2 2-3 0-6"/><path d="M6 12h18v8a7 7 0 0 1-7 7h-4a7 7 0 0 1-7-7z"/><path d="M24 14h2.5a3.5 3.5 0 0 1 0 7H23.5"/></svg><span class="do"><span>Dessert Oasis</span><small>Coffee Roasters</small></span></b></span><span class="v v-eagles" data-k="eagles" aria-hidden="true"><b><small>Rochester</small><span class="eg">Eagles</span></b></span><span class="v v-olddetroit" data-k="olddetroit" aria-hidden="true"><b><small>Old</small><span class="od"><i>D</i>etroit</span><small>Bar · Grille</small></b></span><span class="v v-straycat" data-k="straycat" aria-hidden="true"><b>Stray Cat Lounge<svg class="ic-martini" viewBox="0 0 26 28" aria-hidden="true"><path class="glass" d="M3 5h18l-9 10z"/><path class="glass" d="M12 15v9M7.5 25h9"/><circle class="olive" cx="13.5" cy="8.4" r="2.3"/><path class="pick" d="M10 11.5L22 2"/></svg></b></span><span class="v v-dodge" data-k="dodge" aria-hidden="true"><b>New Dodge Lounge</b></span><span class="v v-oasis" data-k="oasis" aria-hidden="true"><b><svg class="mug" viewBox="0 0 32 32" aria-hidden="true"><path class="steam" d="M11 9c-2-2 2-3 0-6M16 9c-2-2 2-3 0-6M21 9c-2-2 2-3 0-6"/><path d="M6 12h18v8a7 7 0 0 1-7 7h-4a7 7 0 0 1-7-7z"/><path d="M24 14h2.5a3.5 3.5 0 0 1 0 7H23.5"/></svg><span class="do"><span>Dessert Oasis</span><small>Coffee Roasters</small></span></b></span>
+    <span class="v v-eagles" data-k="eagles" aria-hidden="true"><b><small>Rochester</small><span class="eg">Eagles</span></b></span><span class="v v-olddetroit" data-k="olddetroit" aria-hidden="true"><b><small>Old</small><span class="od"><i>D</i>etroit</span><small>Bar · Grille</small></b></span><span class="v v-straycat" data-k="straycat" aria-hidden="true"><b>Stray Cat Lounge<svg class="ic-martini" viewBox="0 0 26 28" aria-hidden="true"><path class="glass" d="M3 5h18l-9 10z"/><path class="glass" d="M12 15v9M7.5 25h9"/><circle class="olive" cx="13.5" cy="8.4" r="2.3"/><path class="pick" d="M10 11.5L22 2"/></svg></b></span><span class="v v-dodge" data-k="dodge" aria-hidden="true"><b>New Dodge Lounge</b></span><span class="v v-oasis" data-k="oasis" aria-hidden="true"><b><svg class="mug" viewBox="0 0 32 32" aria-hidden="true"><path class="steam" d="M11 9c-2-2 2-3 0-6M16 9c-2-2 2-3 0-6M21 9c-2-2 2-3 0-6"/><path d="M6 12h18v8a7 7 0 0 1-7 7h-4a7 7 0 0 1-7-7z"/><path d="M24 14h2.5a3.5 3.5 0 0 1 0 7H23.5"/></svg><span class="do"><span>Dessert Oasis</span><small>Coffee Roasters</small></span></b></span><span class="v v-eagles" data-k="eagles" aria-hidden="true"><b><small>Rochester</small><span class="eg">Eagles</span></b></span><span class="v v-olddetroit" data-k="olddetroit" aria-hidden="true"><b><small>Old</small><span class="od"><i>D</i>etroit</span><small>Bar · Grille</small></b></span><span class="v v-straycat" data-k="straycat" aria-hidden="true"><b>Stray Cat Lounge<svg class="ic-martini" viewBox="0 0 26 28" aria-hidden="true"><path class="glass" d="M3 5h18l-9 10z"/><path class="glass" d="M12 15v9M7.5 25h9"/><circle class="olive" cx="13.5" cy="8.4" r="2.3"/><path class="pick" d="M10 11.5L22 2"/></svg></b></span><span class="v v-dodge" data-k="dodge" aria-hidden="true"><b>New Dodge Lounge</b></span><span class="v v-oasis" data-k="oasis" aria-hidden="true"><b><svg class="mug" viewBox="0 0 32 32" aria-hidden="true"><path class="steam" d="M11 9c-2-2 2-3 0-6M16 9c-2-2 2-3 0-6M21 9c-2-2 2-3 0-6"/><path d="M6 12h18v8a7 7 0 0 1-7 7h-4a7 7 0 0 1-7-7z"/><path d="M24 14h2.5a3.5 3.5 0 0 1 0 7H23.5"/></svg><span class="do"><span>Dessert Oasis</span><small>Coffee Roasters</small></span></b></span>
   </div>
 </div>
 
@@ -832,6 +927,35 @@ html:not(.js) .switch{display:none}
       <span class="sleeve-ic" aria-hidden="true"></span>
       <span><b>Read the liner notes</b><span>Solo or with the band, the rooms he plays, and the details.</span></span>
     </a>
+  </div>
+</section>
+
+<section class="occ" id="occasions">
+  <div class="wrap">
+    <p class="occ-kicker fade">Book him for</p>
+    <h2 class="fade">What's the <span class="serif">occasion?</span></h2>
+    <div class="occ-grid fade">
+      <button class="occ-card" type="button" data-k="bar" aria-label="Bars and venues: how it works">
+        <span class="v v-bar" aria-hidden="true"><b><svg class="ic-mic" viewBox="0 0 18 26" aria-hidden="true"><rect x="5" y="1.5" width="8" height="13" rx="4"/><path d="M2 11.5a7 7 0 0 0 14 0M9 18.5v5M5 24h8"/></svg>Bar nights</b></span>
+        <p>A night of live music for your room.</p>
+        <span class="more" aria-hidden="true"><svg viewBox="0 0 24 24"><path d="M5 12h13M13 6l6 6-6 6"/></svg></span>
+      </button>
+      <button class="occ-card" type="button" data-k="wed" aria-label="Weddings: how it works">
+        <span class="v v-wed" aria-hidden="true"><b><svg class="ic-rings" viewBox="0 0 34 22" aria-hidden="true"><circle cx="12" cy="12" r="7.5"/><circle cx="22" cy="12" r="7.5"/><path class="gem" d="M10 2.5l2-2 2 2-2 2.2z"/></svg>Weddings</b></span>
+        <p>Ceremony, cocktail hour, reception.</p>
+        <span class="more" aria-hidden="true"><svg viewBox="0 0 24 24"><path d="M5 12h13M13 6l6 6-6 6"/></svg></span>
+      </button>
+      <button class="occ-card" type="button" data-k="party" aria-label="Parties: how it works">
+        <span class="v v-party" aria-hidden="true"><b><svg class="ic-confetti" viewBox="0 0 26 22" aria-hidden="true"><path class="c1" d="M3 5l3 1-1 3"/><circle class="c2" cx="12" cy="4" r="1.8"/><path class="c3" d="M19 3l4 2"/><circle class="c4" cx="22" cy="13" r="1.6"/><path class="c5" d="M5 15l2 4"/><circle class="c1f" cx="14" cy="18" r="1.4"/></svg>Parties</b></span>
+        <p>Birthdays, anniversaries, backyards.</p>
+        <span class="more" aria-hidden="true"><svg viewBox="0 0 24 24"><path d="M5 12h13M13 6l6 6-6 6"/></svg></span>
+      </button>
+      <button class="occ-card" type="button" data-k="corp" aria-label="Corporate events: how it works">
+        <span class="v v-corp" aria-hidden="true"><b><svg class="ic-case" viewBox="0 0 24 20" aria-hidden="true"><rect x="2" y="6" width="20" height="12" rx="2"/><path d="M8.5 6V4a1.5 1.5 0 0 1 1.5-1.5h4A1.5 1.5 0 0 1 15.5 4v2M2 11.5h20"/></svg>Corporate events</b></span>
+        <p>Company nights, Detroit to Chicago.</p>
+        <span class="more" aria-hidden="true"><svg viewBox="0 0 24 24"><path d="M5 12h13M13 6l6 6-6 6"/></svg></span>
+      </button>
+    </div>
   </div>
 </section>
 
@@ -869,28 +993,60 @@ html:not(.js) .switch{display:none}
       <a href="https://instagram.com/sweetbabe_music" target="_blank" rel="noopener">@sweetbabe_music on Instagram</a>
       <a href="https://instagram.com/kylekeasermusic" target="_blank" rel="noopener">@kylekeasermusic</a>
     </div>
+    <!-- show alerts: the email is saved by the mailer (POST /follow). Hidden until FOLLOW is switched on in the script. -->
+    <div class="follow fade" id="follow" hidden>
+      <div><b>Catch him live.</b><span>Leave your email and you'll hear when a show goes up. Nothing else.</span></div>
+      <form id="followForm" novalidate>
+        <input name="email" type="email" autocomplete="email" placeholder="you@email.com" aria-label="Your email" required>
+        <label class="hp" aria-hidden="true">Company<input name="company" tabindex="-1" autocomplete="off"></label>
+        <button class="btn btn-line" type="submit">Tell me</button>
+      </form>
+      <p class="f-note" id="followNote" role="status"></p>
+    </div>
   </div>
 </section>
 
 <section class="book" id="book">
   <div class="wrap">
-    <h2 class="big rv stamp"><span class="ln"><span>Book</span></span><span class="ln"><span>Sweet Babe.</span></span></h2>
-    <p class="intro fade">Tell Kyle the date and the room. He'll take it from there.</p>
+    <h2 class="big rv stamp"><span class="ln"><span>Book</span></span><span class="ln"><span id="bookWho">Sweet Babe.</span></span></h2>
+    <p class="intro fade">A few taps, a date and the room. It goes straight to Kyle, and he'll take it from there.</p>
     <form class="form fade" id="form" novalidate>
+      <fieldset class="picks">
+        <legend>What's the occasion?</legend>
+        <div class="pills">
+          <label class="pill"><input type="radio" name="kind" value="Bar or venue night"><span>Bar or venue night</span></label>
+          <label class="pill"><input type="radio" name="kind" value="Wedding"><span>Wedding</span></label>
+          <label class="pill"><input type="radio" name="kind" value="Party"><span>Party</span></label>
+          <label class="pill"><input type="radio" name="kind" value="Company event"><span>Company event</span></label>
+          <label class="pill"><input type="radio" name="kind" value="Something else"><span>Something else</span></label>
+        </div>
+      </fieldset>
+      <fieldset class="picks">
+        <legend>Solo or the band?</legend>
+        <div class="pills">
+          <label class="pill"><input type="radio" name="lineup" value="Kyle solo"><span>Kyle solo</span></label>
+          <label class="pill"><input type="radio" name="lineup" value="The full band"><span>The full band</span></label>
+          <label class="pill"><input type="radio" name="lineup" value="Not sure yet"><span>Not sure yet</span></label>
+        </div>
+      </fieldset>
       <div class="row">
         <label>Name<input name="name" autocomplete="name" required></label>
         <label>Email<input name="email" type="email" autocomplete="email" required></label>
       </div>
       <div class="row">
-        <label>Date<input name="date" type="date"></label>
+        <div class="duo">
+          <label>Date<input name="date" type="date"></label>
+          <label>Start time<input name="time" type="time"></label>
+        </div>
         <label>Where<input name="venue" placeholder="Venue or city"></label>
       </div>
-      <label>The event<textarea name="msg" placeholder="Bar night, wedding, party, company event… times, crowd, solo or band"></textarea></label>
+      <label>Anything else?<small>Optional</small><textarea name="msg" placeholder="The crowd, the room, songs you love…"></textarea></label>
       <label class="hp" aria-hidden="true">Company<input name="company" tabindex="-1" autocomplete="off"></label>
       <div class="notice" id="notice" role="status"></div>
       <div class="form-foot">
         <p id="emailOut">Or email kylejameskeaser [at] gmail [dot] com</p>
-        <button class="btn btn-sun" type="submit">Send</button>
+        <button class="btn btn-sun" type="submit">Send to Kyle</button>
+        <p class="easy">Sending this doesn't lock anything in. It just starts the conversation.</p>
       </div>
     </form>
     <div class="thanks" id="thanks" role="status" aria-live="polite" hidden>
@@ -903,9 +1059,22 @@ html:not(.js) .switch{display:none}
       <div class="thanks-copy">
         <p class="t-kicker">Request sent</p>
         <h3 class="t-title">Thank you, <span id="thanksName">friend</span>.</h3>
-        <p class="t-body">Really appreciate you taking the time to stop by and reach out. Kyle has your request and will get back to you soon<span id="thanksAt"> at <b id="thanksEmail"></b></span>.</p>
-        <p class="t-sign">Talk soon,<br><span>Kyle &amp; Sweet Babe</span></p>
+        <p class="t-body">Really appreciate you taking the time to stop by and reach out. Kyle has your request<span id="thanksFor"></span> and will get back to you soon<span id="thanksAt"> at <b id="thanksEmail"></b></span>.</p>
+        <p class="t-sign">Talk soon,<br><span id="thanksSign">Kyle &amp; Sweet Babe</span></p>
         <button class="t-again" type="button" id="thanksAgain">Send another request</button>
+      </div>
+      <!-- the flyer: drawn in the browser from what they just sent (FLYER in the script). Only shown when they gave a date. -->
+      <div class="flyer" id="flyer" hidden>
+        <div class="flyer-pic" id="flyerPic"><img id="flyerImg" alt="" width="1080" height="1350"></div>
+        <div>
+          <p class="t-kicker">One more thing</p>
+          <h4>Here's a flyer for it.</h4>
+          <p class="f-body">Made from what you just sent. Hang on to it until Kyle confirms the date, then post it wherever your people are.</p>
+          <div class="f-btns">
+            <button class="btn btn-sun" type="button" id="flyerSave">Save the flyer</button>
+            <button class="t-again" type="button" id="flyerNext">Try another look</button>
+          </div>
+        </div>
       </div>
     </div>
   </div>
@@ -934,6 +1103,7 @@ html:not(.js) .switch{display:none}
   <h3 class="rc-title" id="roomTitle"></h3>
   <p class="rc-body" id="roomBody"></p>
   <figure class="rc-photo" id="roomPhoto" hidden><img alt="" width="176" height="132"></figure>
+  <ul class="rc-rows" id="roomRows"></ul>
   <p class="rc-where" id="roomWhere"></p>
   <div class="rc-links" id="roomLinks"></div>
   </div>
@@ -1028,6 +1198,10 @@ const AUDIO = {
   title:   'Beautiful Girl',
   crackle: 'assets/audio/needle-drop.mp3',   // generated locally, ours to ship
 };
+
+// Show alerts ("Catch him live", under the demos): visitors leave an email and the mailer keeps the list.
+// Someone has to actually write to that list when a date goes up, so switch it off (false) if nobody will.
+const FOLLOW = true;
 
 // Upcoming shows: they appear in the liner notes and as "Next show" up top, and drop off once the day has passed.
 //   date: 'YYYY-MM-DD'   room: which banner card the "Next show" pill opens (optional)
@@ -1204,7 +1378,7 @@ function arriveBook() {
   line.getAnimations().forEach(x => x.cancel());
   line.animate([{ transform: 'scaleX(0)', opacity: 1 }, { offset: .25, transform: 'scaleX(1)', opacity: 1 }, { offset: .75, transform: 'scaleX(1)', opacity: 1 },
     { transform: 'scaleX(1)', opacity: 0 }], { duration: 2400, delay: 400, easing: 'cubic-bezier(.3,.8,.3,1)', fill: 'both' });
-  [...document.querySelectorAll('#form input:not([name=company]), #form textarea')].forEach((f, i) => f.animate([
+  [...document.querySelectorAll('#form input:not([name=company]):not([type=radio]), #form textarea')].forEach((f, i) => f.animate([
     { borderColor: 'rgba(242,238,223,.12)', boxShadow: '0 0 0 0 rgba(222,214,61,0)' },
     { offset: .35, borderColor: '#DED63D', boxShadow: '0 0 0 4px rgba(222,214,61,.14), 0 0 30px rgba(222,214,61,.18)' },
     { borderColor: 'rgba(242,238,223,.12)', boxShadow: '0 0 0 0 rgba(222,214,61,0)' }], { duration: 1300, delay: 120 + i * 80, easing: 'ease-out' }));
@@ -1720,24 +1894,268 @@ if (VIDEOS.length) {
 $('#emailOut').innerHTML = BOOKING_EMAIL
   ? `Or email <a href="mailto:${esc(BOOKING_EMAIL)}">${esc(BOOKING_EMAIL)}</a>`
   : '<span class="tbd">TBD: Kyle\'s booking email</span>';
+// an occasion card (or a banner sign's card) sets the form's occasion before the page glides down to it
+function pickKind(kind) {
+  const r = [...document.querySelectorAll('#form input[name=kind]')].find(i => i.value === kind);
+  if (r) r.checked = true;
+}
+// Solo is Kyle Keaser; the full band is Sweet Babe. The heading, the thank-you and the flyer follow the choice.
+const actFor = lineup => lineup === 'Kyle solo' ? 'solo' : lineup === 'The full band' ? 'band' : '';
+function showAct() {
+  const el = $('#bookWho'), who = actFor(new FormData($('#form')).get('lineup')) === 'solo' ? 'Kyle Keaser.' : 'Sweet Babe.';
+  if (el.textContent === who) return;
+  el.textContent = who;
+  if (!reduce) el.animate([{ opacity: 0, transform: 'translateY(40%) rotate(-3deg)' }, { offset: .7, opacity: 1, transform: 'translateY(-4%) rotate(.5deg)' }, { opacity: 1, transform: 'none' }],
+    { duration: 420, easing: 'cubic-bezier(.2,.8,.3,1)' });
+}
+$('#form').addEventListener('change', e => { if (e.target.name === 'lineup') showAct(); });
+$('#form').addEventListener('reset', () => setTimeout(showAct, 0));
+document.querySelectorAll('.occ-card').forEach(c => c.addEventListener('click', () => window.openRoomKey && window.openRoomKey(c.dataset.k, c)));
+
+// '2026-12-12' → a local calendar date (no time-zone shift); '20:30' → '8:30 PM'
+const dayOf = iso => { const m = /^(\d{4})-(\d{2})-(\d{2})$/.exec(iso || ''); return m ? new Date(+m[1], +m[2] - 1, +m[3]) : null; };
+const clock = t => { const m = /^(\d{1,2}):(\d{2})$/.exec(t || ''); if (!m) return ''; const h = +m[1]; return `${h % 12 || 12}${m[2] === '00' ? '' : ':' + m[2]} ${h < 12 ? 'AM' : 'PM'}`; };
+
+// ── The flyer. Once a request is sent, the thank-you comes with a poster drawn from what they typed:
+// who is playing (Kyle, or Sweet Babe when they asked for the band), the day, the time and the place.
+// Four looks; the occasion picks the first one and "Try another look" deals the next. It is drawn on a
+// canvas from Kyle's own photos, so nothing is uploaded anywhere. ──
+const FLYER = (() => {
+  const W = 1080, H = 1350, PAPER = '#f2eedf', INK = '#0b0a08', SUN = '#DED63D';
+  const LOOKS = ['night', 'sun', 'candle', 'ink'];
+  const FIRST = { 'Wedding': 'candle', 'Party': 'sun', 'Company event': 'ink' };
+  // photo, then where the face is (0–1 across, 0–1 down) so a crop keeps it
+  const PHOTO = {
+    night:  { solo: ['assets/solo-dessert-oasis.jpg', .3, .5, 90, 1080], band: ['assets/band-new-dodge-lounge.jpg', .554, .6, 220, 960, true] },   // + where the photo sits (left edge, width); true = already one colour, leave its tones alone
+    sun:    { solo: ['assets/album/flag-laugh.jpg', .42, .2],      band: ['assets/album/band-trio.jpg', .5, .45] },
+    candle: { solo: ['assets/album/flag-laugh.jpg', .42, .22],      band: ['assets/album/band-trio.jpg', .5, .42] },
+    ink:    { solo: ['assets/solo-dessert-oasis.jpg', .44, .52],   band: ['assets/album/band-trio.jpg', .5, .4] },
+  };
+  const BEBAS = s => `400 ${s}px "Bebas Neue","Bricolage Grotesque",sans-serif`, GROT = (s, w = 800) => `${w} ${s}px "Bricolage Grotesque",system-ui,sans-serif`,
+    SERIF = (s, it = true) => `${it ? 'italic ' : ''}400 ${s}px "Instrument Serif",Georgia,serif`, SCRIPT = s => `400 ${s}px "Great Vibes","Instrument Serif",cursive`;
+  let fontsP = null, data = null, look = 0, url = '', blob = null, busy = false;
+  const imgs = {};
+  const fonts = () => fontsP || (fontsP = new Promise(done => {
+    const go = () => Promise.all([BEBAS(100), GROT(100), GROT(100, 600), SERIF(100), SERIF(100, false), SCRIPT(100)].map(f => document.fonts.load(f).catch(() => {}))).then(done);
+    const l = document.createElement('link'); l.rel = 'stylesheet'; l.href = 'https://fonts.googleapis.com/css2?family=Bebas+Neue&family=Great+Vibes&display=swap';   // the page's own Great Vibes only has the letters in "Weddings"; this brings the whole face
+    l.onload = go; l.onerror = go; document.head.appendChild(l);
+    setTimeout(done, 5000);                        // a slow connection still gets a flyer, in the page's own type
+  }));
+  const photo = src => imgs[src] || (imgs[src] = new Promise((ok, no) => { const i = new Image(); i.onload = () => ok(i); i.onerror = no; i.src = src; }));
+
+  // drawing helpers
+  function cover(c, img, x, y, w, h, fx = .5, fy = .5) {
+    const s = Math.max(w / img.width, h / img.height), sw = w / s, sh = h / s;
+    const sx = Math.min(img.width - sw, Math.max(0, img.width * fx - sw / 2)), sy = Math.min(img.height - sh, Math.max(0, img.height * fy - sh / 2));
+    c.drawImage(img, sx, sy, sw, sh, x, y, w, h);
+  }
+  const wash = (c, mode, color, x = 0, y = 0, w = W, h = H) => { c.save(); c.globalCompositeOperation = mode; c.fillStyle = color; c.fillRect(x, y, w, h); c.restore(); };
+  // letter-spaced text, drawn a letter at a time (canvas letter-spacing isn't in every Safari); returns its width
+  function track(c, text, x, y, gap, align = 'left', draw = true) {
+    const ch = [...text], ws = ch.map(k => c.measureText(k).width), total = ws.reduce((a, b) => a + b, 0) + gap * (ch.length - 1);
+    if (!draw) return total;
+    let cx = align === 'center' ? x - total / 2 : align === 'right' ? x - total : x;
+    c.textAlign = 'left';
+    ch.forEach((k, i) => { c.fillText(k, cx, y); cx += ws[i] + gap; });
+    return total;
+  }
+  // the biggest size (up to max) at which the text fits the width
+  function fit(c, text, font, max, width, gap = 0) {
+    let s = max;
+    for (; s > 18; s -= 2) { c.font = font(s); if ((gap ? track(c, text, 0, 0, gap * s, 'left', false) : c.measureText(text).width) <= width) break; }
+    c.font = font(s); return s;
+  }
+  // a little scatter that lands the same way every time
+  const rnd = seed => () => (seed = (seed * 16807) % 2147483647) / 2147483647;
+
+  const LOOK = {
+    // a bar-night poster: the photo washed dark red, big white capitals down the left
+    night(c, d, img, f) {
+      c.fillStyle = '#1c0a0f'; c.fillRect(0, 0, W, H);
+      cover(c, img, f[2], 0, f[3], H, f[0], f[1]);            // set to the right, so the words don't sit on his face
+      if (f[4]) wash(c, 'multiply', '#f3d7cf'); else { wash(c, 'saturation', '#000'); wash(c, 'multiply', '#eec6b4'); wash(c, 'screen', '#2a0f16'); }
+      const g = c.createLinearGradient(0, 0, W, 0); g.addColorStop(0, '#1c0a0f'); g.addColorStop(Math.max(.02, f[2] / W), 'rgba(28,10,15,.92)'); g.addColorStop(.42, 'rgba(28,10,15,.62)'); g.addColorStop(.7, 'rgba(28,10,15,.12)'); g.addColorStop(1, 'rgba(28,10,15,0)');
+      c.fillStyle = g; c.fillRect(0, 0, W, H);
+      const b = c.createLinearGradient(0, H * .62, 0, H); b.addColorStop(0, 'rgba(18,6,10,0)'); b.addColorStop(1, 'rgba(18,6,10,.82)');
+      c.fillStyle = b; c.fillRect(0, 0, W, H);
+      c.fillStyle = '#f7f2e8'; c.textBaseline = 'alphabetic';
+      c.font = GROT(24, 600); track(c, 'SWEETBABEMUSIC.COM', 84, 112, 7);
+      const [a, z] = d.act.split(' '), s = Math.min(fit(c, a, BEBAS, 330, 610), fit(c, z, BEBAS, 330, 610));
+      c.font = BEBAS(s); c.textAlign = 'left';
+      c.fillText(a, 76, 150 + s * .78); c.fillText(z, 76, 150 + s * .78 + s * .86);
+      let y = 150 + s * .78 + s * .86 + 96;
+      c.font = SERIF(54, false);
+      if (d.sub) { c.font = GROT(26, 600); track(c, d.sub, 84, y - 34, 6); y += 34; c.font = SERIF(54, false); }
+      if (d.day) { track(c, d.day, 84, y, 11); y += 70; track(c, d.date, 84, y, 11); y += 70; }
+      if (d.time) track(c, d.time.replace(' ', ''), 84, y, 11);
+      c.font = BEBAS(Math.min(s, 300)); c.textAlign = 'left'; c.fillText('LIVE!', 76, H - 150);
+      if (d.place) { const ps = fit(c, d.place, x => GROT(x, 600), 30, W - 168, .2); c.font = GROT(ps, 600); track(c, d.place, W - 84, H - 76, ps * .2, 'right'); }
+    },
+    // a party flyer: sun yellow, his photo on a record, confetti
+    sun(c, d, img, f) {
+      c.fillStyle = SUN; c.fillRect(0, 0, W, H);
+      const r = rnd(41), bits = ['#0b0a08', '#f7f2e8', '#ff5cab', '#ff8a3d', '#0b0a08'];
+      for (let i = 0; i < 70; i++) {
+        const x = r() * W, y = r() * H, dx = x - W / 2, dy = y - 640;
+        if (Math.hypot(dx, dy) < 400 || (y > 880 && y < 1210) || y < 250) continue;       // keep clear of the record and the words
+        c.save(); c.translate(x, y); c.rotate(r() * 6.28); c.fillStyle = bits[i % bits.length];
+        if (i % 3) c.fillRect(-9, -4, 18 + r() * 14, 8); else { c.beginPath(); c.arc(0, 0, 7 + r() * 5, 0, 6.29); c.fill(); }
+        c.restore();
+      }
+      c.fillStyle = INK; c.textBaseline = 'alphabetic';
+      const s = fit(c, d.act, BEBAS, 250, W - 150); c.textAlign = 'center'; c.fillText(d.act, W / 2, 96 + s * .76);
+      const cx = W / 2, cy = 640, R = 330;
+      c.save(); c.shadowColor = 'rgba(0,0,0,.35)'; c.shadowBlur = 50; c.shadowOffsetY = 24; c.beginPath(); c.arc(cx, cy, R, 0, 6.29); c.fill(); c.restore();
+      c.strokeStyle = 'rgba(242,238,223,.09)'; c.lineWidth = 1.5;
+      for (let q = R - 14; q > 222; q -= 9) { c.beginPath(); c.arc(cx, cy, q, 0, 6.29); c.stroke(); }
+      c.save(); c.beginPath(); c.arc(cx, cy, 212, 0, 6.29); c.clip(); cover(c, img, cx - 212, cy - 212, 424, 424, f[0], f[1]); c.restore();
+      c.strokeStyle = SUN; c.lineWidth = 5; c.beginPath(); c.arc(cx, cy, 214, 0, 6.29); c.stroke();
+      c.save(); c.translate(cx + 250, cy + 215); c.rotate(-.2); c.fillStyle = INK; c.beginPath(); c.arc(0, 0, 112, 0, 6.29); c.fill();
+      c.strokeStyle = SUN; c.lineWidth = 3; c.beginPath(); c.arc(0, 0, 98, 0, 6.29); c.stroke();
+      c.fillStyle = SUN; c.font = BEBAS(92); c.textAlign = 'center'; c.fillText('LIVE!', 2, 32); c.restore();
+      c.fillStyle = INK; c.textAlign = 'center';
+      let y = 1010;
+      if (d.sub) { c.font = GROT(28, 600); track(c, d.sub, cx, y - 6, 6, 'center'); y += 66; } else y += 26;
+      const when = [d.day && d.day.slice(0, 3), d.date, d.time].filter(Boolean).join('  ·  ');
+      if (when) { const ws = fit(c, when, BEBAS, 120, W - 150); c.textAlign = 'center'; c.fillText(when, cx, y + ws * .36); y += ws * .36 + 74; }
+      if (d.place) { const ps = fit(c, d.place, x => GROT(x, 800), 46, W - 170); c.textAlign = 'center'; c.fillText(d.place, cx, y); }
+      c.font = GROT(22, 600); track(c, 'SWEETBABEMUSIC.COM', cx, H - 58, 6, 'center');
+    },
+    // a wedding card: ivory paper, two rings, the photo in a ring of greenery, the name in script
+    candle(c, d, img, f) {
+      c.fillStyle = '#f7f2e7'; c.fillRect(0, 0, W, H);
+      const GOLD = '#b0904a', SOFT = '#6f6857', DARK = '#2a261d';
+      c.strokeStyle = GOLD; c.lineWidth = 3; c.strokeRect(40, 40, W - 80, H - 80); c.lineWidth = 1.2; c.strokeRect(54, 54, W - 108, H - 108);
+      c.lineWidth = 5; c.beginPath(); c.arc(W / 2 - 22, 150, 34, 0, 6.29); c.stroke(); c.beginPath(); c.arc(W / 2 + 22, 150, 34, 0, 6.29); c.stroke();   // the rings
+      c.fillStyle = GOLD; c.save(); c.translate(W / 2 - 22, 106); c.rotate(Math.PI / 4); c.fillRect(-8, -8, 16, 16); c.restore();
+      const cx = W / 2, cy = 520, R = 232;                                    // the photo, black and white, in a gold ring
+      c.save(); c.beginPath(); c.arc(cx, cy, R, 0, 6.29); c.clip(); cover(c, img, cx - R, cy - R, R * 2, R * 2, f[0], f[1]);
+      wash(c, 'saturation', '#000', cx - R, cy - R, R * 2, R * 2); wash(c, 'screen', 'rgba(60,48,30,.35)', cx - R, cy - R, R * 2, R * 2); c.restore();
+      c.strokeStyle = GOLD; c.lineWidth = 3; c.beginPath(); c.arc(cx, cy, R + 10, 0, 6.29); c.stroke();
+      // two sprigs of greenery, up either side from the bottom, open at the top
+      const leaf = (x, y, ang, len, col) => { c.save(); c.translate(x, y); c.rotate(ang); c.fillStyle = col; c.beginPath(); c.moveTo(0, 0);
+        c.quadraticCurveTo(len * .45, -len * .34, len, 0); c.quadraticCurveTo(len * .45, len * .34, 0, 0); c.fill(); c.restore(); };
+      const GREENS = ['#8f9d7c', '#a9b598', '#77866a'];
+      for (const side of [1, -1]) {
+        const a0 = Math.PI / 2 + side * .16, a1 = Math.PI / 2 + side * 2.5, RS = R + 46;
+        c.strokeStyle = '#77866a'; c.lineWidth = 3; c.beginPath(); c.arc(cx, cy, RS, Math.min(a0, a1), Math.max(a0, a1)); c.stroke();
+        for (let i = 0; i <= 16; i++) {
+          const t = i / 16, a = a0 + (a1 - a0) * t, x = cx + Math.cos(a) * RS, y = cy + Math.sin(a) * RS, tan = a + side * Math.PI / 2, len = 62 - t * 26;
+          leaf(x, y, tan + side * .75, len, GREENS[i % 3]); leaf(x, y, tan - side * .75, len * .9, GREENS[(i + 1) % 3]);
+          if (i % 4 === 2) { c.fillStyle = GOLD; c.beginPath(); c.arc(cx + Math.cos(a) * (RS + 34), cy + Math.sin(a) * (RS + 34), 6, 0, 6.29); c.fill(); }
+        }
+      }
+      c.textAlign = 'center'; c.textBaseline = 'alphabetic';
+      c.fillStyle = SOFT; c.font = GROT(24, 600); track(c, 'LIVE MUSIC BY', cx, 906, 8, 'center');
+      c.fillStyle = DARK; const name = d.band ? 'Sweet Babe' : 'Kyle Keaser';
+      c.font = SCRIPT(fit(c, name, SCRIPT, 176, W - 220)); c.textAlign = 'center'; c.fillText(name, cx, 1052);
+      let y = 1106;
+      if (d.band) { c.fillStyle = SOFT; c.font = SERIF(38); c.fillText('Kyle Keaser and the band', cx, y); y += 26; }
+      c.strokeStyle = GOLD; c.lineWidth = 2; c.beginPath(); c.moveTo(cx - 150, y + 6); c.lineTo(cx - 16, y + 6); c.moveTo(cx + 16, y + 6); c.lineTo(cx + 150, y + 6); c.stroke();
+      c.fillStyle = GOLD; c.save(); c.translate(cx, y + 6); c.rotate(Math.PI / 4); c.fillRect(-6, -6, 12, 12); c.restore();
+      y += 56; c.fillStyle = DARK;
+      const when = [d.long, d.time].filter(Boolean).join('  ·  ').toUpperCase();
+      if (when) { const ws = fit(c, when, x => GROT(x, 600), 28, W - 240, .2); track(c, when, cx, y, ws * .2, 'center'); y += 44; }
+      if (d.place) { c.fillStyle = SOFT; const ps = fit(c, d.place, x => GROT(x, 600), 24, W - 260, .2); track(c, d.place, cx, y, ps * .2, 'center'); }
+      c.fillStyle = '#8e866f'; c.font = GROT(17, 600); track(c, 'SWEETBABEMUSIC.COM', cx, H - 74, 5, 'center');
+    },
+    // a clean company-night card: the site's own ink and yellow, details set out like liner notes
+    ink(c, d, img, f) {
+      c.fillStyle = INK; c.fillRect(0, 0, W, H);
+      cover(c, img, 0, 0, W, 700, f[0], f[1]); wash(c, 'saturation', '#000', 0, 0, W, 700); wash(c, 'multiply', '#d9d4c2', 0, 0, W, 700);
+      const g = c.createLinearGradient(0, 300, 0, 702); g.addColorStop(0, 'rgba(11,10,8,0)'); g.addColorStop(1, INK); c.fillStyle = g; c.fillRect(0, 300, W, 402);
+      c.fillStyle = SUN; c.fillRect(84, 742, 96, 8);
+      c.textBaseline = 'alphabetic'; c.font = GROT(28, 600); track(c, 'LIVE MUSIC', 84, 812, 8);
+      c.fillStyle = PAPER; const name = d.band ? 'Sweet Babe' : 'Kyle Keaser';
+      c.font = GROT(fit(c, name, GROT, 150, W - 168)); c.textAlign = 'left'; c.fillText(name, 78, 948);
+      c.fillStyle = '#9e9885'; c.font = SERIF(52); c.fillText(d.band ? 'Kyle Keaser and the band' : 'Voice and acoustic guitar', 84, 1016);
+      let y = 1076;
+      const row = (label, value) => {
+        c.strokeStyle = 'rgba(242,238,223,.22)'; c.lineWidth = 2; c.setLineDash([6, 8]); c.beginPath(); c.moveTo(84, y); c.lineTo(W - 84, y); c.stroke(); c.setLineDash([]);
+        c.fillStyle = '#9e9885'; c.font = GROT(22, 600); track(c, label, 84, y + 56, 5);
+        c.fillStyle = PAPER; fit(c, value, x => GROT(x, 600), 40, W - 168 - 190); c.textAlign = 'left'; c.fillText(value, 274, y + 60);
+        y += 92;
+      };
+      const when = [d.long, d.time].filter(Boolean).join(' · ');
+      if (when) row('WHEN', when);
+      if (d.place) row('WHERE', d.placeMixed);
+      c.fillStyle = SUN; c.font = GROT(22, 600); track(c, 'SWEETBABEMUSIC.COM', 84, H - 62, 6);
+    },
+  };
+
+  async function draw() {
+    if (!data || busy) return;
+    busy = true;
+    const name = LOOKS[look], who = data.band ? 'band' : 'solo', [src, ...at] = PHOTO[name][who];
+    try {
+      const [img] = await Promise.all([photo(src), fonts()]);
+      const cv = document.createElement('canvas'); cv.width = W; cv.height = H;
+      const c = cv.getContext('2d');
+      LOOK[name](c, data, img, at);
+      blob = await new Promise(ok => cv.toBlob(ok, 'image/jpeg', .9));
+      if (!blob) throw 0;
+      if (url) URL.revokeObjectURL(url);
+      url = URL.createObjectURL(blob);
+      const pic = $('#flyerPic'), im = $('#flyerImg');
+      im.src = url; im.alt = `Flyer: ${data.band ? 'Sweet Babe' : 'Kyle Keaser'} live${data.long ? ', ' + data.long : ''}${data.placeMixed ? ', ' + data.placeMixed : ''}`;
+      pic.classList.remove('swap'); void pic.offsetWidth; pic.classList.add('swap');
+      $('#flyer').hidden = false;
+    } catch { $('#flyer').hidden = true; }
+    busy = false;
+  }
+  $('#flyerNext').addEventListener('click', () => { look = (look + 1) % LOOKS.length; draw(); });
+  $('#flyerSave').addEventListener('click', async () => {
+    if (!blob) return;
+    const file = new File([blob], data.file, { type: 'image/jpeg' });
+    // phones: the share sheet (Save Image, Instagram, Messages…). Computers: a plain download.
+    if (matchMedia('(pointer:coarse)').matches && navigator.canShare && navigator.canShare({ files: [file] })) {
+      try { await navigator.share({ files: [file] }); return; } catch (e) { if (e && e.name === 'AbortError') return; }
+    }
+    const a = document.createElement('a'); a.href = url; a.download = data.file; document.body.appendChild(a); a.click(); a.remove();
+  });
+  return {
+    hide() { $('#flyer').hidden = true; data = null; },
+    // f: what the form sent. No date, no flyer: a poster with no day on it isn't one.
+    make(f) {
+      const day = dayOf(f.date);
+      if (!day) return this.hide();
+      const band = f.lineup === 'The full band', place = String(f.venue || '').trim().replace(/\s+/g, ' ').slice(0, 60);
+      data = {
+        band, act: band ? 'SWEET BABE' : 'KYLE KEASER', sub: band ? 'KYLE KEASER AND THE BAND' : '',
+        day: day.toLocaleDateString('en-US', { weekday: 'long' }).toUpperCase(),
+        date: day.toLocaleDateString('en-US', { month: 'short', day: 'numeric' }).toUpperCase(),
+        long: day.toLocaleDateString('en-US', { weekday: 'long', month: 'long', day: 'numeric' }),
+        time: clock(f.time), place: place.toUpperCase(), placeMixed: place,
+        file: `${band ? 'sweet-babe' : 'kyle-keaser'}-live-${f.date}.jpg`,
+      };
+      look = Math.max(0, LOOKS.indexOf(FIRST[f.kind] || 'night'));
+      draw();
+    },
+  };
+})();
+
 // the thank-you: the form folds away, a record slides out of its sleeve and spins
-function showThanks(first, email) {
+function showThanks(first, email, sent) {
   const form = $('#form'), t = $('#thanks'), btn = form.querySelector('button[type=submit]');
   $('#thanksName').textContent = first || 'friend';
   $('#thanksEmail').textContent = email;
   $('#thanksAt').hidden = !email;
+  const act = actFor((sent || {}).lineup);
+  $('#thanksFor').textContent = act === 'band' ? ' for the full band' : act === 'solo' ? ' for a solo set' : '';
+  $('#thanksSign').textContent = act === 'solo' ? 'Kyle' : 'Kyle & Sweet Babe';
+  FLYER.make(sent || {});
   const swap = () => {
     form.hidden = true; form.classList.remove('leaving'); form.reset(); $('#notice').className = 'notice';
-    btn.disabled = false; btn.classList.remove('sending'); btn.textContent = 'Send';
+    btn.disabled = false; btn.classList.remove('sending'); btn.textContent = 'Send to Kyle';
     t.hidden = false;
-    t.scrollIntoView({ behavior: reduce ? 'auto' : 'smooth', block: 'center' });
+    t.scrollIntoView({ behavior: reduce ? 'auto' : 'smooth', block: 'start' });
   };
   if (reduce) return swap();
   form.classList.add('leaving');
   setTimeout(swap, 430);
 }
 $('#thanksAgain').addEventListener('click', () => {
-  $('#thanks').hidden = true; $('#form').hidden = false;
+  $('#thanks').hidden = true; $('#form').hidden = false; FLYER.hide();
   $('#form').querySelector('input[name=name]').focus();
 });
 $('#form').addEventListener('submit', async e => {
@@ -1746,9 +2164,10 @@ $('#form').addEventListener('submit', async e => {
   const say = (cls, html) => { notice.className = 'notice show ' + cls; notice.innerHTML = html; };
   if (!f.get('name') || !f.get('email')) { say('', 'Add your name and email so Kyle can write back.'); return; }
   if (!/^[^\s@]+@[^\s@]+\.[^\s@]{2,}$/.test(f.get('email'))) { say('', 'That email doesn\'t look right. Kyle needs it to write back.'); return; }
-  const subject = `Booking: ${f.get('date') || 'date TBD'}${f.get('venue') ? ', ' + f.get('venue') : ''}`;
-  const body = [`Name: ${f.get('name')}`, `Email: ${f.get('email')}`, `Date: ${f.get('date') || '-'}`,
-    `Where: ${f.get('venue') || '-'}`, '', f.get('msg') || ''].join('\n');
+  const sent = Object.fromEntries(f);
+  const subject = `Booking: ${sent.kind ? sent.kind + ', ' : ''}${sent.date || 'date TBD'}${sent.venue ? ', ' + sent.venue : ''}`;
+  const body = [`Name: ${sent.name}`, `Email: ${sent.email}`, `Occasion: ${sent.kind || '-'}`, `Solo or band: ${sent.lineup || '-'}`,
+    `Date: ${sent.date || '-'}${sent.time ? ' at ' + clock(sent.time) : ''}`, `Where: ${sent.venue || '-'}`, '', sent.msg || ''].join('\n');
   if (!BOOKING_EMAIL) {
     say('', `<b>Booking email isn't set yet.</b> This is what will be sent:<pre>${esc(subject)}\n\n${esc(body)}</pre>`);
     return;
@@ -1760,21 +2179,41 @@ $('#form').addEventListener('submit', async e => {
   btn.disabled = true; btn.classList.add('sending'); btn.textContent = 'Sending…';
   try {
     const r = await fetch(MAILER_URL, { method: 'POST', headers: { 'Content-Type': 'application/json' },
-      body: JSON.stringify(Object.fromEntries(f)) });
+      body: JSON.stringify(sent) });
     const out = await r.json().catch(() => ({}));
     if (r.ok && out.ok) {
-      showThanks(String(f.get('name')).trim().split(/\s+/)[0], String(f.get('email')).trim());
+      showThanks(String(sent.name).trim().split(/\s+/)[0], String(sent.email).trim(), sent);
       return;
     }
     if (r.status === 422 || r.status === 429) { say('', esc(out.error || 'Something\'s off. Check the form and try again.')); throw 0; }
     throw new Error('mailer');
   } catch (err) {
-    btn.disabled = false; btn.classList.remove('sending'); btn.textContent = 'Send';
+    btn.disabled = false; btn.classList.remove('sending'); btn.textContent = 'Send to Kyle';
     if (err === 0) return;
     say('', `Couldn't send from here, so your email app is opening with it all filled in. Or write to <a href="${mailto}">${esc(BOOKING_EMAIL)}</a>.`);
     location.href = mailto;
   }
 });
+
+// ── show alerts: an email saved by the mailer, so Kyle can tell people when a date goes up ──
+(function follow() {
+  const box = $('#follow'), form = $('#followForm'), note = $('#followNote');
+  if (!FOLLOW || !MAILER_URL) return;
+  box.hidden = false;
+  const fallback = 'Couldn\'t save that just now. Dates also go up on <a href="https://instagram.com/sweetbabe_music" target="_blank" rel="noopener">@sweetbabe_music</a>.';
+  form.addEventListener('submit', async e => {
+    e.preventDefault();
+    const f = Object.fromEntries(new FormData(form)), btn = form.querySelector('button');
+    if (!/^[^\s@]+@[^\s@]+\.[^\s@]{2,}$/.test(f.email || '')) { note.textContent = 'That email doesn\'t look right.'; return; }
+    btn.disabled = true; btn.textContent = 'Saving…';
+    try {
+      const r = await fetch(MAILER_URL.replace(/\/$/, '') + '/follow', { method: 'POST', headers: { 'Content-Type': 'application/json' }, body: JSON.stringify(f) });
+      const out = await r.json().catch(() => ({}));
+      if (!(r.ok && out.ok && out.saved)) throw 0;
+      box.classList.add('done'); note.textContent = 'You\'re on the list. See you at the next one. ♪';
+    } catch { btn.disabled = false; btn.textContent = 'Tell me'; note.innerHTML = fallback; }
+  });
+})();
 
 // ── visit count in the footer: one per browser per day; it rolls up like an odometer when you get there ──
 (function spins() {
@@ -1862,9 +2301,26 @@ const ROOMS = {
                 where: '8850 Joseph Campau Ave, Hamtramck', map: 'New Dodge Lounge, 8850 Joseph Campau Ave, Hamtramck, MI' },
   oasis:      { kicker: 'Side B · also played', body: "A family-run coffee roaster in downtown Rochester.", photo: ['assets/solo-dessert-oasis.jpg'],
                 where: '336 S Main St, Rochester', site: 'https://docr.coffee', map: 'Dessert Oasis Coffee Roasters, 336 S Main St, Rochester, MI' },
-  wed:        { kicker: 'Private dates', body: 'Ceremony, cocktail hour or reception: solo for the quiet moments, the band when it\'s time to dance.', book: true },
-  party:      { kicker: 'Private dates', body: 'Birthdays, anniversaries, backyards and back rooms. Songs that fit the room.', book: true },
-  corp:       { kicker: 'Private dates', body: 'Company nights from Detroit to Chicago, with sets that suit the room and the schedule.', book: true },
+  // The four ways to book him (the "What's the occasion?" cards open these; the sign bar is rooms only).
+  // rows: how the day can go, and who plays it. pick: the occasion the booking form gets set to.
+  // Keep these to what Kyle has said he does: no set lengths, prices or gear until he answers.
+  bar:        { kicker: 'For your room', title: 'Bars and venues', pick: 'Bar or venue night', go: 'Book a night',
+                sign: '<span class="v v-bar" aria-hidden="true"><b><svg class="ic-mic" viewBox="0 0 18 26" aria-hidden="true"><rect x="5" y="1.5" width="8" height="13" rx="4"/><path d="M2 11.5a7 7 0 0 0 14 0M9 18.5v5M5 24h8"/></svg>Bar nights</b></span>',
+                body: "A night of live music for your place. Kyle plays solo in lounges and coffee shops, and brings the band when there's a stage. His regular rooms are the Rochester Eagles, Old Detroit Bar and Grille and Stray Cat Lounge.",
+                rows: [['Lounge or coffee shop', 'Solo'], ['A stage and a crowd', 'The band']],
+                where: 'Tell Kyle about the room and the night you have in mind.' },
+  wed:        { kicker: 'Private dates', pick: 'Wedding', go: 'Ask about your wedding',
+                body: "Solo for the quiet moments, the band when it's time to dance. Kyle on his own, voice and acoustic guitar, suits a ceremony or a cocktail hour. For the reception, keep it solo or bring the whole band.",
+                rows: [['Ceremony', 'Solo'], ['Cocktail hour', 'Solo'], ['Reception', 'Solo or the band']],
+                where: "Not sure which? Say what you're picturing and Kyle will help you sort it out." },
+  party:      { kicker: 'Private dates', pick: 'Party', go: 'Book a party',
+                body: "Birthdays, anniversaries, backyards and back rooms. Kyle on his own fits a living room or the corner of a restaurant. Got the space and want a bigger sound? Bring the band.",
+                rows: [['House or backyard', 'Solo'], ['Back room or hall', 'Solo or the band']],
+                where: 'Tell Kyle who it is for and how many are coming.' },
+  corp:       { kicker: 'Private dates', pick: 'Company event', go: 'Book a company night',
+                body: "Company nights from Detroit to Chicago. Solo sits easily behind dinner and conversation. The band is for the part of the night when people want a show.",
+                rows: [['Dinner or mixer', 'Solo'], ['Holiday party', 'Solo or the band']],
+                where: 'Tell Kyle the schedule and he will fit the music to it.' },
 };
 (function rooms() {
   const mq = $('#marquee'), track = mq.querySelector('.track'), card = $('#roomCard');
@@ -1912,14 +2368,14 @@ const ROOMS = {
   });
 
   let opener = null;
-  const ORDER = Object.keys(ROOMS);
+  const VENUES = Object.keys(ROOMS).filter(k => !ROOMS[k].pick), OCCASIONS = Object.keys(ROOMS).filter(k => ROOMS[k].pick);
+  const setOf = k => ROOMS[k].pick ? OCCASIONS : VENUES;      // a room's card flips through the rooms, an occasion's through the occasions
   let current = null;
-  $('#roomDots').innerHTML = ORDER.map(() => '<i></i>').join('');
   // the tap that opened the card is followed by a 'click' that would land on whatever is now under the
   // finger (the photo, Book…). Swallow clicks for a moment after opening.
   let openedAt = 0;
   card.addEventListener('click', e => { if (performance.now() - openedAt < 450) { e.stopPropagation(); e.preventDefault(); } }, true);
-  window.openRoomKey = k => openRoom(k, document.querySelector(`#marquee .v[data-k="${k}"]`));
+  window.openRoomKey = (k, from) => openRoom(k, from || document.querySelector(`#marquee .v[data-k="${k}"]`));
   function openRoom(k, from) {
     if (!ROOMS[k] || !card.showModal) return;
     opener = from;
@@ -2041,16 +2497,17 @@ const ROOMS = {
     setTimeout(() => layer.remove(), 2300);
   }
   function fillRoom(k) {
-    const r = ROOMS[k], from = document.querySelector(`#marquee .v[data-k="${k}"]`);
+    const r = ROOMS[k], from = document.querySelector(`#marquee .v[data-k="${k}"], .occ-card[data-k="${k}"] .v`);
     current = k;
-    [...$('#roomDots').children].forEach((d, i) => d.classList.toggle('on', ORDER[i] === k));
+    $('#roomDots').innerHTML = setOf(k).map(x => `<i${x === k ? ' class="on"' : ''}></i>`).join('');
     if (r.sign) $('#roomSign').innerHTML = r.sign;          // a bigger, fuller sign for the card
-    else {
+    else if (from) {
       const sign = from.cloneNode(true);
       sign.removeAttribute('role'); sign.removeAttribute('tabindex'); sign.setAttribute('aria-hidden', 'true');
       $('#roomSign').replaceChildren(sign);
     }
-    $('#roomTitle').textContent = from.getAttribute('aria-label')?.replace(/^About /, '') || from.textContent.trim();
+    $('#roomTitle').textContent = r.title || from.getAttribute('aria-label')?.replace(/^About /, '') || from.textContent.trim();
+    $('#roomRows').innerHTML = (r.rows || []).map(([what, who]) => `<li>${esc(what)}<span>${esc(who)}</span></li>`).join('');
     $('#roomKicker').textContent = r.kicker;
     $('#roomBody').textContent = r.body;
     $('#roomWhere').textContent = r.where || '';
@@ -2066,7 +2523,7 @@ const ROOMS = {
     if (r.site) chips.push(`<a class="chip" href="${r.site}" target="_blank" rel="noopener">${GLOBE}<span>Website</span></a>`);
     if (r.map) chips.push(`<a class="chip" href="https://www.google.com/maps/search/?api=1&query=${encodeURIComponent(r.map)}" target="_blank" rel="noopener">${PIN}<span>Map</span></a>`);
     $('#roomLinks').innerHTML = (chips.length ? `<div class="chips">${chips.join('')}</div>` : '') +
-      `<a class="go" href="#book" data-close><span>${r.book ? 'Book a date' : 'Book Kyle'}</span><i>${ARROW}</i></a>`;
+      `<a class="go" href="#book" data-close${r.pick ? ` data-pick="${esc(r.pick)}"` : ''}><span>${r.go || 'Book Kyle'}</span><i>${ARROW}</i></a>`;
   }
   // swipe or flick sideways (or arrow keys): the card follows your finger and tilts like a playing card;
   // fling it and it spins off, the next one swoops in from the other side, overshoots, wobbles and settles
@@ -2091,7 +2548,7 @@ const ROOMS = {
   }
   function stepRoom(dir, fromX = 0, fromRot = 0) {
     if (!current || zoomEl || sliding) return;
-    const next = ORDER[(ORDER.indexOf(current) + dir + ORDER.length) % ORDER.length];
+    const set = setOf(current), next = set[(set.indexOf(current) + dir + set.length) % set.length];
     if (reduce) { card.style.transform = ''; return fillRoom(next); }
     sliding = true;
     const out = card.animate([{ transform: `translateX(${fromX}px) rotate(${fromRot}deg)` },
@@ -2164,7 +2621,7 @@ const ROOMS = {
     if (e.target.closest('[data-close]')) {
       const go = e.target.closest('a.go');
       closeRoom();
-      if (go) { e.preventDefault(); setTimeout(() => goBook(), 220); }
+      if (go) { e.preventDefault(); if (go.dataset.pick) pickKind(go.dataset.pick); setTimeout(() => goBook(), 220); }
     }
   });
   card.addEventListener('cancel', e => { e.preventDefault(); if (zoomEl) shrinkPhoto(); else closeRoom(); });

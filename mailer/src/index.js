@@ -1,9 +1,11 @@
 // Booking mailer for sweetbabemusic.com. The form POSTs JSON here; this sends Kyle a styled email via Resend.
 // Also serves /plays, the footer's visit count (KV binding STATS).
+// And /follow, the "Catch him live" list: one KV entry per email (key fan:<email>), so Kyle can write when a date goes up.
+//   See the list:  npx wrangler kv key list --binding STATS --prefix fan: --remote
 // Secrets: RESEND_API_KEY, BOOKING_TO (who gets the bookings), and optional BCC_EMAIL for a hidden copy (wrangler secret put …). Vars in wrangler.jsonc.
 import { renderEmail } from './email.js';
 
-const MAX = { name: 120, email: 200, date: 10, venue: 160, msg: 4000 };
+const MAX = { name: 120, email: 200, kind: 40, lineup: 40, date: 10, time: 5, venue: 160, msg: 4000 };
 const EMAIL_RE = /^[^\s@<>"]+@[^\s@<>"]+\.[^\s@<>"]{2,}$/;
 
 function cors(origin, env) {
@@ -29,7 +31,8 @@ export default {
 
     // the visit counter for the footer ("This record's been spun N times"): GET reads it, POST adds one.
     // No cookies, no IPs, nothing about the visitor is stored: just one number in KV (binding STATS).
-    if (new URL(req.url).pathname === '/plays') {
+    const path = new URL(req.url).pathname;
+    if (path === '/plays') {
       if (!allowed) return json({ ok: false }, 403, h);
       if (!env.STATS) return json({ ok: false }, 503, h);
       let n = parseInt(await env.STATS.get('plays') || '0', 10) || 0;
@@ -50,13 +53,23 @@ export default {
     try { d = await req.json(); } catch { return json({ ok: false, error: 'bad request' }, 400, h); }
 
     // honeypot: people never see this field, bots fill it. Pretend it worked.
-    if (d.company) return json({ ok: true }, 200, h);
+    if (d.company) return json({ ok: true, saved: true }, 200, h);
+
+    // show alerts: keep the email and the day it was left. Nothing else about the visitor is stored.
+    if (path === '/follow') {
+      if (!env.STATS) return json({ ok: false }, 503, h);
+      const email = String(d.email ?? '').trim().toLowerCase().slice(0, MAX.email);
+      if (!EMAIL_RE.test(email)) return json({ ok: false, error: 'That email doesn\'t look right.' }, 422, h);
+      await env.STATS.put('fan:' + email, JSON.stringify({ at: new Date().toISOString().slice(0, 10) }));
+      return json({ ok: true, saved: true }, 200, h);
+    }
 
     const f = {};
     for (const k of Object.keys(MAX)) f[k] = String(d[k] ?? '').trim().slice(0, MAX[k]);
     if (!f.name) return json({ ok: false, error: 'Add your name.' }, 422, h);
     if (!EMAIL_RE.test(f.email)) return json({ ok: false, error: 'That email doesn\'t look right.' }, 422, h);
     if (f.date && !/^\d{4}-\d{2}-\d{2}$/.test(f.date)) f.date = '';
+    if (f.time && !/^\d{2}:\d{2}$/.test(f.time)) f.time = '';
 
     const { subject, html, text } = renderEmail(f, { site: env.SITE_URL });
     if (env.DRY_RUN === '1') { console.log('DRY_RUN', subject); return json({ ok: true, dry: true }, 200, h); }

@@ -15,10 +15,20 @@ export function prettyDate(iso) {
   return d.toLocaleDateString('en-US', { weekday: 'long', month: 'long', day: 'numeric', year: 'numeric', timeZone: 'UTC' });
 }
 
-export function renderEmail({ name, email, date, venue, msg }, { site = 'https://sweetbabemusic.com' } = {}) {
+// '20:30' → '8:30 pm'
+export function prettyTime(t) {
+  const m = /^(\d{2}):(\d{2})$/.exec(t || '');
+  if (!m) return '';
+  const h = +m[1];
+  return `${h % 12 || 12}${m[2] === '00' ? '' : ':' + m[2]} ${h < 12 ? 'am' : 'pm'}`;
+}
+
+export function renderEmail({ name, email, kind, lineup, date, time, venue, msg }, { site = 'https://sweetbabemusic.com' } = {}) {
   const first = (name || '').trim().split(/\s+/)[0] || 'them';
-  const when = prettyDate(date);
-  const subject = `Booking request: ${when || 'date open'}${venue ? ' · ' + venue : ''} (${name})`;
+  const when = prettyDate(date), at = prettyTime(time);
+  // solo is Kyle Keaser, the full band is Sweet Babe
+  const act = lineup === 'Kyle solo' ? 'Kyle solo' : lineup === 'The full band' ? 'Sweet Babe, the full band' : 'Sweet Babe';
+  const subject = `Booking request: ${kind ? kind + ' · ' : ''}${when || 'date open'}${venue ? ' · ' + venue : ''} (${name})`;
   const replySubject = encodeURIComponent(`Re: Sweet Babe booking${when ? ', ' + when : ''}`);
   const replyHref = `mailto:${encodeURIComponent(email)}?subject=${replySubject}`;
   const note = esc(msg || '').replace(/\r?\n/g, '<br>');
@@ -45,7 +55,7 @@ export function renderEmail({ name, email, date, venue, msg }, { site = 'https:/
 </style>
 </head>
 <body style="margin:0;padding:0;background:${INK};-webkit-text-size-adjust:100%">
-<div style="display:none;max-height:0;overflow:hidden;opacity:0">${esc(name)} wants to book Sweet Babe${when ? ' for ' + esc(when) : ''}${venue ? ' at ' + esc(venue) : ''}.</div>
+<div style="display:none;max-height:0;overflow:hidden;opacity:0">${esc(name)} wants to book ${act}${when ? ' for ' + esc(when) : ''}${venue ? ' at ' + esc(venue) : ''}.</div>
 <table role="presentation" width="100%" cellpadding="0" cellspacing="0" border="0" style="background:${INK}">
   <tr><td align="center" style="padding:28px 12px 40px">
     <table role="presentation" width="100%" cellpadding="0" cellspacing="0" border="0" style="max-width:560px">
@@ -75,6 +85,7 @@ export function renderEmail({ name, email, date, venue, msg }, { site = 'https:/
             <div style="font:600 12px/1 ${SANS};letter-spacing:.2em;text-transform:uppercase;color:${SUN}">${when ? 'Wants the date' : 'Date still open'}</div>
             <div class="when" style="margin-top:12px;font:italic 400 40px/1.08 ${SERIF};color:${PAPER}">${esc(when || 'Ask them when')}</div>
             ${venue ? `<div style="margin-top:10px;font:400 18px/1.35 ${SANS};color:${SUN}">${esc(venue)}</div>` : ''}
+            ${kind || lineup ? `<div style="margin-top:14px;font:600 12px/1.4 ${SANS};letter-spacing:.14em;text-transform:uppercase;color:${PAPER}">${esc([kind, lineup].filter(Boolean).join('  ·  '))}</div>` : ''}
             <div style="margin-top:18px;font:400 16px/1.5 ${SANS};color:${MUTED}">from <b style="color:${PAPER};font-weight:600">${esc(name)}</b></div>
           </td></tr>
         </table>
@@ -85,7 +96,9 @@ export function renderEmail({ name, email, date, venue, msg }, { site = 'https:/
             <table role="presentation" width="100%" cellpadding="0" cellspacing="0" border="0" style="border-top:1px dashed ${LINE}">
               ${row('Name', esc(name))}
               ${row('Email', `<a href="mailto:${esc(email)}" style="color:${SUN};text-decoration:none">${esc(email)}</a>`)}
-              ${row('Date', esc(when || 'Not picked yet'))}
+              ${row('Occasion', esc(kind || 'Not said'))}
+              ${row('Lineup', esc(lineup || 'Not said'))}
+              ${row('Date', esc(when || 'Not picked yet') + (at ? ` &nbsp;·&nbsp; starts ${esc(at)}` : ''))}
               ${row('Where', esc(venue || 'Not said yet'))}
             </table>
           </td></tr>
@@ -94,7 +107,7 @@ export function renderEmail({ name, email, date, venue, msg }, { site = 'https:/
         <!-- their message -->
         <table role="presentation" width="100%" cellpadding="0" cellspacing="0" border="0">
           <tr><td class="pad" style="padding:22px 40px 6px">
-            <div style="font:600 11px/1 ${SANS};letter-spacing:.14em;text-transform:uppercase;color:${MUTED};margin-bottom:10px">The event</div>
+            <div style="font:600 11px/1 ${SANS};letter-spacing:.14em;text-transform:uppercase;color:${MUTED};margin-bottom:10px">Their note</div>
             <div style="background:${INK3};border-left:3px solid ${SUN};border-radius:4px 12px 12px 4px;padding:16px 18px;font:400 16px/1.55 ${SANS};color:${PAPER}">${note || `<span style="color:${MUTED};font-style:italic">They didn't add any details.</span>`}</div>
           </td></tr>
         </table>
@@ -121,14 +134,16 @@ export function renderEmail({ name, email, date, venue, msg }, { site = 'https:/
 </html>`;
 
   const text = [
-    `New booking request for Sweet Babe`,
+    `New booking request for ${act}`,
     ``,
     `Name:  ${name}`,
     `Email: ${email}`,
-    `Date:  ${when || 'Not picked yet'}`,
+    `Occasion: ${kind || 'Not said'}`,
+    `Lineup:   ${lineup || 'Not said'}`,
+    `Date:  ${when || 'Not picked yet'}${at ? ', starts ' + at : ''}`,
     `Where: ${venue || 'Not said yet'}`,
     ``,
-    `The event:`,
+    `Their note:`,
     msg || '(no details)',
     ``,
     `Reply to this email to write back to ${first}.`,
