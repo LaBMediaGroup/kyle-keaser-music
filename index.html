@@ -483,6 +483,7 @@ html:not(.js) .switch{display:none}
 /* playing a clip brings it up front: it takes the whole row, centred and bigger; the others shrink to cards in play order ("Up next", then "After that") */
 .clips.focus{grid-template-columns:1fr;justify-items:center}
 .clips.focus .clip.big{order:-1;width:min(100%,calc((100svh - 230px) * 16 / 9))}
+.clip.big{font:inherit;letter-spacing:normal;font-variation-settings:normal}   /* not the headline .big: that one's tight letter-spacing squished the captions */
 @media (max-width:759px){.clips.focus .clip.big .screen{margin-inline:calc(6px - var(--gut));border-radius:12px;transition:margin .5s var(--ease)}}   /* phones: nearly edge to edge */
 .clips.focus .clip:not(.big){width:min(100%,460px);display:grid;grid-template-columns:132px 1fr;align-items:center;gap:16px;cursor:pointer;
   padding:10px;border-radius:16px;background:rgba(242,238,223,.04);border:1px solid var(--line);transition:background .2s}
