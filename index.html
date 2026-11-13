@@ -467,7 +467,9 @@ html:not(.js) .switch{display:none}
 .live{padding:clamp(70px,11vw,120px) 0 clamp(40px,7vw,80px);border-top:1px solid var(--line)}
 .live .big .serif{color:var(--sun);font-family:var(--serif);font-style:italic;font-weight:400;letter-spacing:-.01em}
 .clips{display:grid;gap:26px;margin-top:clamp(30px,5vw,50px)}
-@media (min-width:760px){.clips{grid-template-columns:1fr 1fr;gap:28px}}
+@media (min-width:760px){.clips{grid-template-columns:1fr 1fr;gap:28px}
+  /* an odd number of clips: the first one is the feature, full width on top, kept to one screen tall */
+  .clips.odd:not(.focus) .clip:first-child{grid-column:1/-1;justify-self:center;width:min(100%,calc((100svh - 230px) * 16 / 9))}}
 .clip .screen{position:relative;border-radius:16px;overflow:hidden;background:#000;aspect-ratio:16/9;box-shadow:0 24px 60px rgba(0,0,0,.55),0 0 0 1px var(--line)}
 .clip video{position:absolute;inset:0;width:100%;height:100%;object-fit:cover;background:#000}
 .clip .play{position:absolute;inset:0;display:grid;place-items:center;border:0;background:radial-gradient(circle at 50% 50%,rgba(11,10,8,.05),rgba(11,10,8,.45));cursor:pointer}
@@ -478,7 +480,7 @@ html:not(.js) .switch{display:none}
 .clip figcaption{display:flex;justify-content:space-between;align-items:baseline;gap:14px;margin-top:14px}
 .clip figcaption b{font:italic 400 clamp(22px,2.6vw,28px)/1.1 var(--serif);font-weight:400}
 .clip figcaption small{color:var(--muted);font-size:14px;text-align:right}
-/* playing a clip brings it up front: it takes the whole row, centred and bigger; the other shrinks to an "Up next" card */
+/* playing a clip brings it up front: it takes the whole row, centred and bigger; the others shrink to cards in play order ("Up next", then "After that") */
 .clips.focus{grid-template-columns:1fr;justify-items:center}
 .clips.focus .clip.big{order:-1;width:min(100%,calc((100svh - 230px) * 16 / 9))}
 @media (max-width:759px){.clips.focus .clip.big .screen{margin-inline:calc(6px - var(--gut));border-radius:12px;transition:margin .5s var(--ease)}}   /* phones: nearly edge to edge */
@@ -490,9 +492,14 @@ html:not(.js) .switch{display:none}
 .clips.focus .clip:not(.big) .play span{width:34px;height:34px}
 .clips.focus .clip:not(.big) .play svg{width:14px;height:14px;margin-left:2px}
 .clips.focus .clip:not(.big) figcaption{margin:0;flex-direction:column;align-items:flex-start;gap:2px}
-.clips.focus .clip:not(.big) figcaption::before{content:'Up next';order:-1;font:700 10px/1.2 var(--sans);letter-spacing:.12em;text-transform:uppercase;color:var(--sun)}
+.clips.focus .clip:not(.big) figcaption::before{content:'After that';order:-1;font:700 10px/1.2 var(--sans);letter-spacing:.12em;text-transform:uppercase;color:var(--sun)}
 .clips.focus .clip:not(.big) figcaption b{font-size:20px}
 .clips.focus .clip:not(.big) figcaption small{text-align:left;font-size:13px}
+.clips.focus .clip.nxt figcaption::before{content:'Up next'}
+@media (min-width:980px){.clips.focus.many{grid-template-columns:1fr 1fr}   /* three or more: the cards sit as a pair under the big one */
+  .clips.focus.many .clip.big{grid-column:1/-1}
+  .clips.focus.many .clip.lft{justify-self:end}
+  .clips.focus.many .clip.rgt{justify-self:start}}
 .clip-tools{display:none;justify-content:center;gap:10px;margin-top:16px;flex-wrap:wrap}
 .clips.focus .clip.big .clip-tools{display:flex}
 .clip-tools button{appearance:none;display:inline-flex;align-items:center;gap:8px;height:44px;padding:0 18px;border-radius:999px;font:600 15px/1 var(--sans);cursor:pointer;
@@ -655,6 +662,8 @@ html:not(.js) .switch{display:none}
 .js .clip.in figcaption{opacity:1;transform:none}
 .js .clips .clip:nth-child(2).in .screen{animation-delay:.22s}
 .js .clips .clip:nth-child(2).in figcaption{transition-delay:.92s}
+.js .clips .clip:nth-child(3).in .screen{animation-delay:.4s}
+.js .clips .clip:nth-child(3).in figcaption{transition-delay:1.1s}
 @keyframes crt{0%{opacity:1;transform:scale(.04,.012);filter:brightness(5)}30%{transform:scale(1,.012);filter:brightness(4)}
   55%{transform:scale(1,1.04);filter:brightness(1.6)}75%{transform:scale(1,.99);filter:brightness(1.1)}100%{opacity:1;transform:none;filter:none}}
 /* Put it on.: letters drop like needles on the record, then the level bars spring up */
@@ -1028,6 +1037,7 @@ const SHOWS = [
 // Live clips for the home page. Put the .mp4 (and a .jpg still with the same name) in assets/videos/.
 // Only clips Kyle has approved for the site.
 const VIDEOS = [
+  { file:'got-another-feeling.mp4',     title:'I’ve Got Another Feeling', note:'Full band · original' },
   { file:'beautiful-girl-showcase.mp4', title:'Beautiful Girl', note:'Songwriter showcase' },
   { file:'here-comes-a-regular.mp4',    title:'Here Comes a Regular', note:'With the band' },
 ];
@@ -1618,6 +1628,8 @@ if (upcoming.length) {
 if (VIDEOS.length) {
   const clipsEl = $('#clips');
   $('#live').hidden = false;
+  clipsEl.classList.toggle('odd', VIDEOS.length > 1 && VIDEOS.length % 2 === 1);
+  clipsEl.classList.toggle('many', VIDEOS.length > 2);
   clipsEl.innerHTML = VIDEOS.map(v => `
     <figure class="clip fade">
       <div class="screen">
@@ -1625,7 +1637,7 @@ if (VIDEOS.length) {
         <button class="play" type="button" aria-label="Play ${esc(v.title)}"><span><svg viewBox="0 0 24 24" fill="currentColor"><path d="M7 4.5v15l13-7.5z"/></svg></span></button>
       </div>
       <figcaption><b>${esc(v.title)}</b><small>${esc(v.note || '')}</small></figcaption>
-      <div class="clip-tools"><button class="c-small" type="button"><svg viewBox="0 0 24 24" aria-hidden="true"><path d="M4 14h6v6M20 10h-6V4M14 10l7-7M3 21l7-7"/></svg>Back to both</button>${VIDEOS.length > 1 ? '<button class="c-next" type="button">Next clip<svg viewBox="0 0 24 24" aria-hidden="true"><path d="M5 12h13M13 6l6 6-6 6"/></svg></button>' : ''}</div>
+      <div class="clip-tools"><button class="c-small" type="button"><svg viewBox="0 0 24 24" aria-hidden="true"><path d="M4 14h6v6M20 10h-6V4M14 10l7-7M3 21l7-7"/></svg>${VIDEOS.length > 2 ? 'Back to all' : 'Back to both'}</button>${VIDEOS.length > 1 ? '<button class="c-next" type="button">Next clip<svg viewBox="0 0 24 24" aria-hidden="true"><path d="M5 12h13M13 6l6 6-6 6"/></svg></button>' : ''}</div>
     </figure>`).join('');
   // bring a clip up front (and the others down to Up next cards), or put them back side by side; the move glides (FLIP)
   const clipList = () => [...clipsEl.querySelectorAll('.clip')];
@@ -1648,13 +1660,22 @@ if (VIDEOS.length) {
   const bigClip = () => clipsEl.querySelector('.clip.big');
   const enlarge = c => {
     if (clipsEl.classList.contains('focus') && c.classList.contains('big')) return;
-    const r = reflow(() => { clipList().forEach(x => x.classList.toggle('big', x === c)); clipsEl.classList.add('focus'); }).get(c);
+    const r = reflow(() => {
+      const cs = clipList(), at = cs.indexOf(c);
+      cs.forEach((x, i) => {          // the cards line up in play order after the big one, so "Up next" is the one Next clip goes to
+        const k = (i - at + cs.length) % cs.length;
+        x.classList.toggle('big', k === 0); x.classList.toggle('nxt', k === 1);
+        x.classList.toggle('lft', k % 2 === 1 && k < cs.length - (cs.length % 2 ? 0 : 1)); x.classList.toggle('rgt', k > 0 && k % 2 === 0);
+        x.style.order = k;
+      });
+      clipsEl.classList.add('focus');
+    }).get(c);
     const dy = r.top - Math.max(70, (innerHeight - r.height) / 2);    // centre it (under the top bar)
     if (Math.abs(dy) > 12) scrollTo({ top: scrollY + dy, behavior: reduce ? 'auto' : 'smooth' });
   };
   const shrink = () => {
     if (!clipsEl.classList.contains('focus')) return;
-    reflow(() => { clipsEl.classList.remove('focus'); clipList().forEach(x => x.classList.remove('big')); });
+    reflow(() => { clipsEl.classList.remove('focus'); clipList().forEach(x => { x.classList.remove('big', 'nxt', 'lft', 'rgt'); x.style.order = ''; }); });
   };
   const playClip = c => {
     const v = c.querySelector('video');
