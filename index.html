@@ -2951,15 +2951,20 @@ const ROOMS = {
   card.addEventListener('close', () => opener && opener.focus && opener.focus({ preventScroll: true }));
 })();
 
-// The photo strip drifts sideways as the page scrolls past it, until someone swipes it themselves.
+// The photo strip slides right to left as the page scrolls down past it (and back as you scroll up). It only stops
+// following the page once someone swipes the strip sideways themselves; touching it while scrolling the page doesn't count.
 (() => {
   const strip = $('#strip'); if (!strip || reduce) return;
-  let hands = false; ['pointerdown', 'wheel', 'touchstart'].forEach(t => strip.addEventListener(t, () => { hands = true; }, { passive: true }));
-  addEventListener('scroll', () => {
+  let hands = false, t0 = null;
+  strip.addEventListener('touchstart', e => { t0 = e.touches[0]; }, { passive: true });
+  strip.addEventListener('touchmove', e => { if (!t0) return; const dx = Math.abs(e.touches[0].clientX - t0.clientX), dy = Math.abs(e.touches[0].clientY - t0.clientY); if (dx > 10 && dx > dy) hands = true; }, { passive: true });
+  strip.addEventListener('wheel', e => { if (Math.abs(e.deltaX) > Math.abs(e.deltaY)) hands = true; }, { passive: true });
+  const follow = () => {
     if (hands) return;
     const r = strip.getBoundingClientRect(), vh = innerHeight; if (r.bottom < 0 || r.top > vh) return;
-    strip.scrollLeft = Math.max(0, Math.min(1, (vh - r.top) / (vh + r.height))) * (strip.scrollWidth - strip.clientWidth) * .8;
-  }, { passive: true });
+    strip.scrollLeft = Math.max(0, Math.min(1, (vh - r.top) / (vh + r.height))) * (strip.scrollWidth - strip.clientWidth);
+  };
+  addEventListener('scroll', follow, { passive: true }); addEventListener('resize', follow); follow();
 })();
 
 // The prints: tap one and it lifts off the page into a big gallery view. Swipe (or the arrows) for the
