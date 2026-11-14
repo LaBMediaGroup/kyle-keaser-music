@@ -910,6 +910,17 @@ html:not(.js) .switch{display:none}
 .flyer .t-again{margin-top:0}
 
 /* ── show alerts: leave an email, hear when a date goes up ── */
+.shows{margin-top:clamp(40px,6vw,64px);max-width:760px}
+.shows h3{font:600 12px/1 var(--sans);letter-spacing:.2em;text-transform:uppercase;color:var(--muted);margin-bottom:6px}
+.show-list{list-style:none}
+.show-list li{display:grid;grid-template-columns:auto 1fr;gap:2px 16px;align-items:baseline;padding:14px 0;border-bottom:1px dashed var(--line)}
+.show-list .d{font:italic 400 22px/1.1 var(--serif);color:var(--sun);grid-row:span 2;min-width:3.6em}
+.show-list b{font:800 18px/1.2 var(--sans);letter-spacing:-.02em}
+.show-list small{color:var(--muted);font-size:14px;line-height:1.4}
+.show-list a{color:var(--sun);text-decoration:none;white-space:nowrap}
+.show-none{color:var(--muted);font-size:15px;padding:10px 0 0;max-width:46ch}
+.show-none a{color:var(--sun)}
+.shows+.follow{margin-top:22px}
 .follow{margin-top:clamp(40px,6vw,64px);padding:22px 22px 20px;border:1px solid var(--line);border-radius:18px;background:var(--ink-3);display:grid;gap:14px;max-width:760px}
 @media (min-width:760px){.follow{grid-template-columns:1fr auto;align-items:center;gap:14px 28px}}
 .follow b{display:block;font:800 22px/1.15 var(--sans);letter-spacing:-.02em}
@@ -1108,6 +1119,12 @@ html:not(.js) .switch{display:none}
     <div class="ig fade">
       <a href="https://instagram.com/sweetbabe_music" target="_blank" rel="noopener">@sweetbabe_music on Instagram</a>
       <a href="https://instagram.com/kylekeasermusic" target="_blank" rel="noopener">@kylekeasermusic</a>
+    </div>
+    <!-- public upcoming shows (from SHOWS, only ones marked public) -->
+    <div class="shows fade" id="shows">
+      <h3>Upcoming shows</h3>
+      <ol class="show-list" id="showList"></ol>
+      <p class="show-none" id="showNone" hidden>No dates are up right now. New ones go up here and on <a href="https://instagram.com/sweetbabe_music" target="_blank" rel="noopener">@sweetbabe_music</a> as they're booked.</p>
     </div>
     <!-- show alerts: the email is saved by the mailer (POST /follow). Hidden until FOLLOW is switched on in the script. -->
     <div class="follow fade" id="follow" hidden>
@@ -1338,10 +1355,13 @@ const AUDIO = {
 // Someone has to actually write to that list when a date goes up, so switch it off (false) if nobody will.
 const FOLLOW = true;
 
-// Upcoming shows: they appear in the liner notes and as "Next show" up top, and drop off once the day has passed.
-//   date: 'YYYY-MM-DD'   room: which banner card the "Next show" pill opens (optional)
+// Shows: only entries marked public:true are ever shown on the site (or announced by email). Leave public off, or set it
+// to false, for private bookings (weddings, parties): they must never appear here.
+//   date: 'YYYY-MM-DD'   public: true to publish   act: 'solo' (Kyle Keaser) or 'band' (Sweet Babe), optional
+//   room: a key of ROOMS (gives the "Map" link and the banner card the "Next show" pill opens), optional
+//   Public, upcoming shows go in the liner notes, the "Upcoming shows" list and the "Next show" pill, and drop off once the day has passed.
 const SHOWS = [
-  { date:'2026-11-13', time:'8:30 pm', venue:'Eagles Club', city:'Rochester', short:'Rochester Eagles', room:'eagles' },   // on the Rochester Eagles' own calendar
+  { date:'2026-11-13', time:'8:30 pm', venue:'Eagles Club', city:'Rochester', short:'Rochester Eagles', room:'eagles', public:true },   // on the Rochester Eagles' own calendar (past)
 ];
 
 // Live clips for the home page. Put the .mp4 (and a .jpg still with the same name) in assets/videos/.
@@ -1926,7 +1946,7 @@ function hideGrabHint() {
 // shows + clips in the liner notes
 const showDay = s => { const [y, m, d] = s.date.split('-').map(Number); return new Date(y, m - 1, d); };
 const today = (() => { const n = new Date(); return new Date(n.getFullYear(), n.getMonth(), n.getDate()); })();
-const upcoming = SHOWS.filter(s => showDay(s) >= today).sort((a, b) => showDay(a) - showDay(b));
+const upcoming = SHOWS.filter(s => s.public === true && showDay(s) >= today).sort((a, b) => showDay(a) - showDay(b));
 const niceDay = s => showDay(s).toLocaleDateString('en-US', { weekday: 'short', month: 'short', day: 'numeric' });
 if (upcoming.length) {
   $('#dates').innerHTML = '<ol class="tracks">' + upcoming.map(s => `<li><b>${esc(s.venue)}</b><small>${esc(niceDay(s))}${s.time ? ', ' + esc(s.time) : ''}${s.city ? ' · ' + esc(s.city) : ''}</small></li>`).join('') + '</ol>';
@@ -2574,6 +2594,22 @@ const ROOMS = {
                 rows: [['Dinner or mixer', 'Solo'], ['Holiday party', 'Solo or the band']],
                 where: 'Tell Kyle the schedule and he will fit the music to it.' },
 };
+
+// ── "Upcoming shows" list by the Catch him live box (same filtered list as the liner notes) ──
+(function showList() {
+  const ol = $('#showList'), none = $('#showNone');
+  if (!ol) return;
+  if (!upcoming.length) { none.hidden = false; return; }
+  const PIN = '<svg viewBox="0 0 24 24" width="12" height="12" fill="none" stroke="currentColor" stroke-width="2" aria-hidden="true" style="vertical-align:-1px;margin-right:3px"><path d="M12 21s-6-5.6-6-11a6 6 0 0 1 12 0c0 5.4-6 11-6 11z"/><circle cx="12" cy="10" r="2"/></svg>';
+  ol.innerHTML = upcoming.map(s => {
+    const r = s.room && ROOMS[s.room];
+    const act = s.act === 'solo' ? 'Kyle solo' : s.act === 'band' ? 'Sweet Babe, full band' : '';
+    const bits = [s.time, s.city, act].filter(Boolean).map(esc).join(' · ');
+    const map = r && r.map ? ` <a href="https://www.google.com/maps/search/?api=1&query=${encodeURIComponent(r.map)}" target="_blank" rel="noopener">${PIN}Map</a>` : '';
+    return `<li><span class="d">${esc(niceDay(s))}</span><b>${esc(s.venue)}</b><small>${bits}${map}</small></li>`;
+  }).join('');
+})();
+
 (function rooms() {
   const mq = $('#marquee'), track = mq.querySelector('.track'), card = $('#roomCard');
   let x = 0, vel = 0, half = 0, drag = null, last = performance.now();
