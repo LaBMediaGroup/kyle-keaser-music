@@ -1994,6 +1994,29 @@ if (VIDEOS.length) {
     setTimeout(() => { speed += 85; }, 150);
     setTimeout(() => glide(0, 1150, k => k < .5 ? 4 * k * k * k : 1 - Math.pow(-2 * k + 2, 3) / 2), 800);   // a friction hinge: slow off the deck, slow to rest
   }
+  // the lid landing: a low, soft thud of acrylic on the deck, the catch clicking, and a lighter tap as it settles.
+  // Made on the spot (no file). If the phone hasn't let the page make sound yet, it just stays quiet.
+  function shutSound() {
+    try {
+      if (!ensureCtx()) return;
+      const go = () => {
+        if (actx.state !== 'running') return;
+        const t = actx.currentTime + .01, out = actx.createGain(); out.gain.value = .5; out.connect(fxGain);
+        const thud = actx.createOscillator(), tg = actx.createGain();
+        thud.type = 'sine'; thud.frequency.setValueAtTime(165, t); thud.frequency.exponentialRampToValueAtTime(62, t + .11);
+        tg.gain.setValueAtTime(.0001, t); tg.gain.exponentialRampToValueAtTime(.55, t + .008); tg.gain.exponentialRampToValueAtTime(.0001, t + .17);
+        thud.connect(tg).connect(out); thud.start(t); thud.stop(t + .2);
+        const n = Math.floor(actx.sampleRate * .05), buf = actx.createBuffer(1, n, actx.sampleRate), d = buf.getChannelData(0);
+        for (let i = 0; i < n; i++) d[i] = (Math.random() * 2 - 1) * Math.pow(1 - i / n, 3);
+        [[0, .3, 2300], [.075, .11, 3100]].forEach(([at, vol, hz]) => {          // the catch, then the settle
+          const src = actx.createBufferSource(), bp = actx.createBiquadFilter(), g = actx.createGain();
+          src.buffer = buf; bp.type = 'bandpass'; bp.frequency.value = hz; bp.Q.value = 1.4; g.gain.value = vol;
+          src.connect(bp).connect(g).connect(out); src.start(t + at);
+        });
+      };
+      actx.state === 'running' ? go() : actx.resume().then(go).catch(() => {});
+    } catch {}
+  }
   const PULL = 150;                                     // px of pull that shuts the lid
   addEventListener('touchstart', e => {
     y0 = null; if (going || scrollY > 0 || e.touches.length !== 1) return;
@@ -2009,7 +2032,7 @@ if (VIDEOS.length) {
   const up = () => {
     if (y0 === null) return; y0 = null;
     if (v < 1) { lid.classList.remove('ready'); return glide(0, 450, outBack); }
-    going = true; speed += 60;                           // shut: a whirl, then reload
+    going = true; speed += 60; shutSound();              // shut: a soft clunk, a whirl, then reload
     setTimeout(() => location.reload(), 420);
   };
   addEventListener('touchend', up, { passive: true }); addEventListener('touchcancel', up, { passive: true });
