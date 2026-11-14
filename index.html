@@ -759,6 +759,23 @@ html:not(.js) .switch{display:none}
 .credits .ig-at{color:var(--muted);text-decoration:none;font-size:13px;margin-left:6px}
 .credits .ig-at:hover{color:var(--sun)}
 
+/* ── the photos: one clean strip of frames, all the same height, no borders or tilt. It drifts sideways as the page
+   scrolls and can be swiped; tap a frame for the big view. (Replaces the scattered polaroids.) ── */
+.prints.strip{display:flex;align-items:stretch;gap:10px;grid-template-columns:none;margin-inline:calc(50% - 50vw);padding:0 calc(50vw - 50%) clamp(34px,6vw,64px);
+  overflow-x:auto;overflow-y:hidden;scrollbar-width:none;-webkit-overflow-scrolling:touch;overscroll-behavior-x:contain}
+.prints.strip::-webkit-scrollbar{display:none}
+.prints.strip .print{position:relative;inset:auto;flex:none;width:auto;height:clamp(230px,40vh,420px);margin:0;padding:0;background:#15130f;border-radius:6px;overflow:hidden;rotate:none;scale:none;translate:none!important;
+  box-shadow:none;cursor:zoom-in;z-index:auto;transition:filter .3s}
+.prints.strip .print img{display:block;height:100%;width:auto;aspect-ratio:auto;object-fit:cover;transition:transform .6s var(--ease)}
+.prints.strip .print::after{content:"";position:absolute;inset:auto 0 0 0;height:45%;background:linear-gradient(transparent,rgba(11,10,8,.78));pointer-events:none}
+.prints.strip .print figcaption{left:12px;right:12px;bottom:11px;z-index:1;font:italic 400 15px/1.15 var(--serif);color:var(--paper);white-space:nowrap;overflow:hidden;text-overflow:ellipsis}
+@media (hover:hover){.prints.strip .print:hover img{transform:scale(1.04)}.prints.strip:hover .print:not(:hover){filter:brightness(.6)}}
+.js .prints.strip .print{opacity:0}
+.js .prints.strip.in .print{opacity:1;animation:frameIn .9s var(--ease) backwards!important}
+.js .prints.strip.in .print:nth-child(2){animation-delay:.09s!important}.js .prints.strip.in .print:nth-child(3){animation-delay:.18s!important}
+.js .prints.strip.in .print:nth-child(4){animation-delay:.27s!important}.js .prints.strip.in .print:nth-child(5){animation-delay:.36s!important}
+@keyframes frameIn{from{opacity:0;transform:translateX(70px)}}
+
 /* ── What's the occasion?: four singles in their sleeves, one per way to book him; the record slides out when you reach for it ── */
 .occ{padding:0 0 clamp(70px,11vw,120px)}
 .occ-kicker{font:600 12px/1 var(--sans);letter-spacing:.2em;text-transform:uppercase;color:var(--sun)}
@@ -1012,12 +1029,12 @@ html:not(.js) .switch{display:none}
 
 <section class="prints-wrap">
   <div class="wrap">
-    <div class="prints">
-      <figure class="print a" data-speed="-30"><img src="assets/band-new-dodge-lounge.jpg" alt="Kyle Keaser singing with an acoustic guitar, a second guitarist behind him, under the New Dodge Lounge neon" width="1200" height="900" loading="lazy"><figcaption>New Dodge Lounge, Hamtramck</figcaption></figure>
-      <figure class="print b" data-speed="30"><img src="assets/solo-dessert-oasis.jpg" alt="Kyle Keaser seated with an acoustic guitar, playing a solo set at Dessert Oasis Coffee Roasters" width="1100" height="825" loading="lazy"><figcaption>Dessert Oasis, Rochester</figcaption></figure>
-      <figure class="print stray s1" data-speed="-55"><img src="assets/album/chicago-seated.jpg" alt="Kyle seated on a stool with an acoustic guitar under stained-glass windows and candle sconces" width="777" height="1600" loading="lazy" decoding="async"><figcaption>Chicago, candlelight</figcaption></figure>
-      <figure class="print stray s2" data-speed="40"><img src="assets/album/flag-laugh.jpg" alt="Kyle singing hard at the mic with an acoustic guitar, an American flag behind him" width="750" height="1290" loading="lazy" decoding="async"><figcaption>Singing his face off</figcaption></figure>
-      <figure class="print stray s3" data-speed="-20"><img src="assets/album/headphones.jpg" alt="Black-and-white photo of Kyle in headphones, playing an acoustic guitar" width="544" height="884" loading="lazy" decoding="async"><figcaption>Headphones on</figcaption></figure>
+    <div class="prints strip" id="strip">
+      <figure class="print a" data-speed="0"><img src="assets/band-new-dodge-lounge.jpg" alt="Kyle Keaser singing with an acoustic guitar, a second guitarist behind him, under the New Dodge Lounge neon" width="1200" height="900" loading="lazy"><figcaption>New Dodge Lounge, Hamtramck</figcaption></figure>
+      <figure class="print b" data-speed="0"><img src="assets/solo-dessert-oasis.jpg" alt="Kyle Keaser seated with an acoustic guitar, playing a solo set at Dessert Oasis Coffee Roasters" width="1100" height="825" loading="lazy"><figcaption>Dessert Oasis, Rochester</figcaption></figure>
+      <figure class="print stray s1" data-speed="0"><img src="assets/album/chicago-seated.jpg" alt="Kyle seated on a stool with an acoustic guitar under stained-glass windows and candle sconces" width="777" height="1600" loading="lazy" decoding="async"><figcaption>Chicago, candlelight</figcaption></figure>
+      <figure class="print stray s2" data-speed="0"><img src="assets/album/flag-laugh.jpg" alt="Kyle singing hard at the mic with an acoustic guitar, an American flag behind him" width="750" height="1290" loading="lazy" decoding="async"><figcaption>Singing his face off</figcaption></figure>
+      <figure class="print stray s3" data-speed="0"><img src="assets/album/headphones.jpg" alt="Black-and-white photo of Kyle in headphones, playing an acoustic guitar" width="544" height="884" loading="lazy" decoding="async"><figcaption>Headphones on</figcaption></figure>
     </div>
     <template id="morePhotos"><!-- more of Kyle's photos: they live only in the photo view, after the prints -->
       <figure><img src="assets/album/band-trio.jpg" alt="Kyle singing at the mic with an acoustic guitar, a guitarist and a bass player on either side" width="1600" height="1200"><figcaption>Sweet Babe, full band</figcaption></figure>
@@ -2932,6 +2949,17 @@ const ROOMS = {
   photo.addEventListener('click', e => { e.stopPropagation(); zoomPhoto(); });
   card.addEventListener('close', () => { if (zoomEl) { zoomEl.remove(); zoomEl = null; } photo.style.visibility = ''; });
   card.addEventListener('close', () => opener && opener.focus && opener.focus({ preventScroll: true }));
+})();
+
+// The photo strip drifts sideways as the page scrolls past it, until someone swipes it themselves.
+(() => {
+  const strip = $('#strip'); if (!strip || reduce) return;
+  let hands = false; ['pointerdown', 'wheel', 'touchstart'].forEach(t => strip.addEventListener(t, () => { hands = true; }, { passive: true }));
+  addEventListener('scroll', () => {
+    if (hands) return;
+    const r = strip.getBoundingClientRect(), vh = innerHeight; if (r.bottom < 0 || r.top > vh) return;
+    strip.scrollLeft = Math.max(0, Math.min(1, (vh - r.top) / (vh + r.height))) * (strip.scrollWidth - strip.clientWidth) * .8;
+  }, { passive: true });
 })();
 
 // The prints: tap one and it lifts off the page into a big gallery view. Swipe (or the arrows) for the
