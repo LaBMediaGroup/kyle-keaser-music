@@ -152,3 +152,110 @@ export function renderEmail({ name, email, kind, lineup, date, time, venue, msg 
 
   return { subject, html, text };
 }
+
+// The show alert fans get when a public show is announced. Same look as the booking email.
+// show: { date:'YYYY-MM-DD', time:'20:30' or '8:30 pm', venue, city, act:'solo'|'band', map?: address text for a Map link }
+export function renderShowAlert(show, { site = 'https://sweetbabemusic.com', unsubscribeUrl = '' } = {}) {
+  const { venue = '', city = '', act = '', map = '' } = show || {};
+  const when = prettyDate(show.date);
+  const at = /^\d{2}:\d{2}$/.test(show.time || '') ? prettyTime(show.time) : String(show.time || '');
+  const who = act === 'solo' ? 'Kyle Keaser, solo' : act === 'band' ? 'Sweet Babe, the full band' : 'Kyle Keaser and Sweet Babe';
+  const where = [venue, city].filter(Boolean).join(', ');
+  const subject = `New show: ${venue}${city ? ', ' + city : ''} · ${when}`;
+  const mapHref = map ? `https://www.google.com/maps/search/?api=1&query=${encodeURIComponent(map)}` : '';
+
+  const row = (label, value) => `
+          <tr>
+            <td style="padding:12px 0;border-bottom:1px dashed ${LINE};font:600 11px/1.3 ${SANS};letter-spacing:.14em;text-transform:uppercase;color:${MUTED};width:80px;vertical-align:top">${label}</td>
+            <td style="padding:12px 0;border-bottom:1px dashed ${LINE};font:400 16px/1.4 ${SANS};color:${PAPER};vertical-align:top">${value}</td>
+          </tr>`;
+
+  const html = `<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width,initial-scale=1">
+<meta name="color-scheme" content="dark">
+<meta name="supported-color-schemes" content="dark">
+<title>${esc(subject)}</title>
+<link href="https://fonts.googleapis.com/css2?family=Bricolage+Grotesque:opsz,wght@12..96,400;12..96,600;12..96,800&family=Instrument+Serif:ital@0;1&display=swap" rel="stylesheet">
+<style>
+  :root{color-scheme:dark}
+  a{color:${SUN}}
+  @media (max-width:520px){ .pad{padding-left:22px!important;padding-right:22px!important} .when{font-size:34px!important} }
+</style>
+</head>
+<body style="margin:0;padding:0;background:${INK};-webkit-text-size-adjust:100%">
+<div style="display:none;max-height:0;overflow:hidden;opacity:0">${esc(who)} at ${esc(where)}, ${esc(when)}${at ? ', ' + esc(at) : ''}.</div>
+<table role="presentation" width="100%" cellpadding="0" cellspacing="0" border="0" style="background:${INK}">
+  <tr><td align="center" style="padding:28px 12px 40px">
+    <table role="presentation" width="100%" cellpadding="0" cellspacing="0" border="0" style="max-width:560px">
+
+      <tr><td align="center" style="padding:0 0 22px;font:600 11px/1 ${SANS};letter-spacing:.28em;text-transform:uppercase;color:${MUTED}">
+        Sweet Babe &nbsp;<span style="color:${SUN}">&#9679;</span>&nbsp; A new date
+      </td></tr>
+
+      <tr><td style="background:${INK2};border:1px solid ${LINE};border-radius:22px;overflow:hidden">
+
+        <table role="presentation" width="100%" cellpadding="0" cellspacing="0" border="0">
+          <tr><td align="center" style="padding:36px 20px 6px;background:${INK2};background-image:radial-gradient(70% 90% at 50% 0%,rgba(222,214,61,.16),rgba(21,19,15,0) 70%)">
+            <table role="presentation" cellpadding="0" cellspacing="0" border="0"><tr>
+              <td style="width:150px;height:150px;border-radius:50%;background:#0d0c0a;background-image:repeating-radial-gradient(circle,#0d0c0a 0 1.6px,#1a1813 1.6px 3.2px);box-shadow:0 18px 40px rgba(0,0,0,.6);text-align:center;vertical-align:middle">
+                <img src="${esc(site)}/assets/logo.jpg" width="74" height="74" alt="Sweet Babe" style="display:inline-block;width:74px;height:74px;border-radius:50%;border:4px solid #0a0907;outline:1px solid rgba(222,214,61,.35)">
+              </td>
+            </tr></table>
+          </td></tr>
+        </table>
+
+        <table role="presentation" width="100%" cellpadding="0" cellspacing="0" border="0">
+          <tr><td class="pad" align="center" style="padding:22px 40px 6px">
+            <div style="font:600 12px/1 ${SANS};letter-spacing:.2em;text-transform:uppercase;color:${SUN}">A show just went up</div>
+            <div class="when" style="margin-top:12px;font:italic 400 40px/1.08 ${SERIF};color:${PAPER}">${esc(when)}</div>
+            <div style="margin-top:10px;font:400 18px/1.35 ${SANS};color:${SUN}">${esc(venue)}</div>
+          </td></tr>
+        </table>
+
+        <table role="presentation" width="100%" cellpadding="0" cellspacing="0" border="0">
+          <tr><td class="pad" style="padding:22px 40px 4px">
+            <table role="presentation" width="100%" cellpadding="0" cellspacing="0" border="0" style="border-top:1px dashed ${LINE}">
+              ${row('Who', esc(who))}
+              ${row('When', esc(when) + (at ? ` &nbsp;·&nbsp; ${esc(at)}` : ''))}
+              ${row('Where', esc(where))}
+            </table>
+          </td></tr>
+        </table>
+
+        <table role="presentation" width="100%" cellpadding="0" cellspacing="0" border="0">
+          <tr><td align="center" style="padding:28px 24px 36px">
+            ${mapHref ? `<a href="${esc(mapHref)}" style="display:inline-block;background:${SUN};color:${INK};font:800 16px/1 ${SANS};text-decoration:none;padding:17px 30px;border-radius:999px">Open the map &rarr;</a>` : `<a href="${esc(site)}" style="display:inline-block;background:${SUN};color:${INK};font:800 16px/1 ${SANS};text-decoration:none;padding:17px 30px;border-radius:999px">See all shows &rarr;</a>`}
+            <div style="margin-top:14px;font:400 13px/1.5 ${SANS};color:${MUTED}">Hope to see you there. &#9834;</div>
+          </td></tr>
+        </table>
+
+      </td></tr>
+
+      <tr><td align="center" style="padding:22px 20px 0;font:400 12px/1.6 ${SANS};color:${MUTED}">
+        You're getting this because you asked to hear when a show goes up at <a href="${esc(site)}" style="color:${MUTED}">sweetbabemusic.com</a>.${unsubscribeUrl ? `<br><a href="${esc(unsubscribeUrl)}" style="color:${MUTED}">Unsubscribe</a>` : ''}
+      </td></tr>
+
+    </table>
+  </td></tr>
+</table>
+</body>
+</html>`;
+
+  const text = [
+    `A show just went up: ${who}`,
+    ``,
+    `When:  ${when}${at ? ', ' + at : ''}`,
+    `Where: ${where}`,
+    mapHref ? `Map:   ${mapHref}` : '',
+    ``,
+    `Hope to see you there.`,
+    ``,
+    `You're getting this because you asked to hear when a show goes up at ${site}.`,
+    unsubscribeUrl ? `Unsubscribe: ${unsubscribeUrl}` : '',
+  ].filter((l, i, a) => l !== '' || a[i - 1] !== '').join('\n');
+
+  return { subject, html, text };
+}
