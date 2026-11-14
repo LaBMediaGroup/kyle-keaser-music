@@ -123,14 +123,37 @@ section{position:relative}
 .arm{position:absolute;right:-6%;top:-4%;width:46%;transform-origin:82% 12%;animation:drop 1.6s var(--ease) .5s both;z-index:3;filter:drop-shadow(0 8px 14px rgba(0,0,0,.6))}
 /* the dust cover: a smoked lid hinged at the back. Pulling the page down lowers it over the record; let go past the
    catch and it shuts, the page reloads, and the record comes back spinning as the lid lifts (also on a desktop refresh) */
-.lid{--lid:0;position:absolute;inset:-9% -13% -9% -9%;z-index:4;pointer-events:none;border-radius:20px;transform-origin:50% 0;
-  transform:perspective(900px) rotateX(calc((1 - var(--lid)) * 86deg));opacity:min(1,calc(var(--lid) * 6));
-  background:linear-gradient(155deg,rgba(84,78,58,.42),rgba(16,14,10,.6) 55%,rgba(40,36,26,.5));border:1px solid rgba(242,238,223,.26);
-  -webkit-backdrop-filter:blur(1.5px) brightness(.82);backdrop-filter:blur(1.5px) brightness(.82);
-  box-shadow:inset 0 1px 0 rgba(255,255,255,.3),inset 0 -10px 18px rgba(0,0,0,.35),0 calc(var(--lid) * 34px) 70px rgba(0,0,0,.55)}
-.lid::before{content:"";position:absolute;inset:0;border-radius:inherit;background:linear-gradient(115deg,transparent 22%,rgba(255,255,255,.14) 30%,transparent 38%,transparent 58%,rgba(255,255,255,.07) 64%,transparent 70%)}
-.lid::after{content:"";position:absolute;left:50%;bottom:9px;width:54px;height:5px;translate:-50% 0;border-radius:99px;background:rgba(242,238,223,.34);box-shadow:0 1px 0 rgba(0,0,0,.5)}
-.lid.ready::after{background:var(--sun);box-shadow:0 0 12px rgba(222,214,61,.7)}
+.lid{--lid:0;--d:clamp(20px,5.6vw,34px);position:absolute;inset:-9% -13% -9% -9%;z-index:4;pointer-events:none;perspective:1100px;opacity:min(1,calc(var(--lid) * 6))}
+/* it is a real box of smoked acrylic: a top sheet standing --d off the deck on four thin walls, swinging on two hinges at the back */
+.lid>i{display:block}
+.lid-base{position:absolute;inset:0;border-radius:16px;background:rgba(0,0,0,.22);border:1px solid rgba(242,238,223,.07)}
+.lid-shade{position:absolute;inset:2% 3%;border-radius:22px;background:rgba(0,0,0,.6);filter:blur(22px);opacity:calc(.25 + var(--lid) * .6);translate:0 calc((1 - var(--lid)) * 46px + 10px)}
+.lid-hinge{position:absolute;top:-7px;width:34px;height:13px;border-radius:3px;background:linear-gradient(#5b574b,#2a2720 45%,#16140f);box-shadow:inset 0 1px 0 rgba(255,255,255,.28),0 2px 4px rgba(0,0,0,.6)}
+.lid-hinge.l{left:16%}.lid-hinge.r{right:16%}
+.lid-box{position:absolute;inset:0;transform-style:preserve-3d;transform-origin:50% 0;transform:rotateX(calc((1 - var(--lid)) * 84deg))}
+.lid-box>i{position:absolute;display:block;-webkit-backface-visibility:visible;backface-visibility:visible}
+.lid-top{inset:0;border-radius:15px;transform:translateZ(var(--d));overflow:hidden;
+  background:radial-gradient(70% 45% at 50% 0%,rgba(222,214,61,.09),transparent 70%),linear-gradient(170deg,rgba(58,52,38,.36),rgba(12,10,7,.5) 60%,rgba(30,26,18,.42));
+  border:1.5px solid rgba(255,250,235,.34);
+  box-shadow:inset 0 0 0 1px rgba(0,0,0,.35),inset 0 2px 1px rgba(255,255,255,.22),inset 0 -14px 22px rgba(0,0,0,.28),inset 14px 0 22px rgba(0,0,0,.12),inset -14px 0 22px rgba(0,0,0,.12)}
+/* the room's light slides across the sheet as it tilts */
+.lid-top::before{content:"";position:absolute;inset:0;background:linear-gradient(112deg,transparent 30%,rgba(255,255,255,.2) 36%,rgba(255,255,255,.05) 41%,transparent 42%,transparent 52%,rgba(255,255,255,.1) 55%,transparent 59%) no-repeat;
+  background-size:260% 100%;background-position:calc(110% - var(--lid) * 62%) 0}
+/* a few specks of dust and one hairline scratch, as every lid has */
+.lid-top::after{content:"";position:absolute;inset:0;opacity:.55;background:
+  radial-gradient(circle 1px at 18% 24%,rgba(255,255,255,.7),transparent 1.5px),radial-gradient(circle 1px at 72% 13%,rgba(255,255,255,.5),transparent 1.5px),
+  radial-gradient(circle 1px at 63% 71%,rgba(255,255,255,.55),transparent 1.5px),radial-gradient(circle .8px at 31% 82%,rgba(255,255,255,.5),transparent 1.3px),
+  radial-gradient(circle .8px at 88% 52%,rgba(255,255,255,.45),transparent 1.3px),radial-gradient(circle 1px at 44% 40%,rgba(255,255,255,.35),transparent 1.5px),
+  linear-gradient(63deg,transparent 49.85%,rgba(255,255,255,.16) 50%,transparent 50.15%) 22% 64%/26% 20% no-repeat}
+.lid-catch{left:50%;bottom:12px;width:58px;height:6px;margin-left:-29px;border-radius:99px;transform:translateZ(calc(var(--d) + 1px));background:linear-gradient(rgba(255,250,235,.42),rgba(255,250,235,.16));box-shadow:0 1px 0 rgba(0,0,0,.55);transition:background .2s,box-shadow .2s}
+.lid.ready .lid-catch{background:var(--sun);box-shadow:0 0 14px rgba(222,214,61,.75)}
+/* the walls: acrylic seen edge-on is denser and catches the light */
+.lid-wall{background:linear-gradient(rgba(255,250,235,.3),rgba(120,108,76,.16) 40%,rgba(20,17,11,.42));border:1px solid rgba(255,250,235,.2)}
+.lid-wall.f{left:12px;right:12px;top:100%;height:var(--d);transform-origin:50% 0;transform:rotateX(90deg);
+  background:linear-gradient(rgba(20,17,11,.5),rgba(120,108,76,.2) 55%,rgba(255,250,235,.36))}
+.lid-wall.b{left:12px;right:12px;top:calc(var(--d) * -1);height:var(--d);transform-origin:50% 100%;transform:rotateX(-90deg);opacity:.6}
+.lid-wall.l{top:12px;bottom:12px;left:calc(var(--d) * -1);width:var(--d);transform-origin:100% 50%;transform:rotateY(90deg);background:linear-gradient(90deg,rgba(255,250,235,.3),rgba(20,17,11,.42))}
+.lid-wall.r{top:12px;bottom:12px;left:100%;width:var(--d);transform-origin:0 50%;transform:rotateY(-90deg);background:linear-gradient(270deg,rgba(255,250,235,.3),rgba(20,17,11,.42))}
 .relid .lid{--lid:1}
 /* CSS-only so the spin and the arm drop still play where scripts don't run (e.g. a Messages preview) */
 @keyframes spin{to{transform:rotate(360deg)}}
@@ -938,7 +961,7 @@ html:not(.js) .switch{display:none}
         <rect x="104" y="218" width="34" height="20" rx="4" transform="rotate(-30 121 228)" fill="#2a271f" stroke="#DED63D" stroke-width="2"/>
         <path class="arm-hit" d="M164 31 L150 190 Q148 214 124 230" stroke="transparent" stroke-width="46" stroke-linecap="round" fill="none"/>
       </svg>
-      <div class="lid" id="lid"></div>
+      <div class="lid" id="lid"><i class="lid-shade"></i><i class="lid-base"></i><i class="lid-hinge l"></i><i class="lid-hinge r"></i><div class="lid-box"><i class="lid-wall b"></i><i class="lid-wall l"></i><i class="lid-wall r"></i><i class="lid-top"></i><i class="lid-wall f"></i><i class="lid-catch"></i></div></div>
     </div>
     <span class="grabhint" id="grabHint" aria-hidden="true" hidden><i></i>Grab the record</span>
     <button class="playbtn" id="playBtn" type="button" aria-label="Play a song" aria-pressed="false" hidden>
@@ -1969,7 +1992,7 @@ if (VIDEOS.length) {
   if (v) {                                              // just reloaded: the record whirls under the closed lid, then the lid lifts
     set(1); root.classList.remove('relid');
     setTimeout(() => { speed += 85; }, 150);
-    setTimeout(() => glide(0, 900, outBack), 800);
+    setTimeout(() => glide(0, 1150, k => k < .5 ? 4 * k * k * k : 1 - Math.pow(-2 * k + 2, 3) / 2), 800);   // a friction hinge: slow off the deck, slow to rest
   }
   const PULL = 150;                                     // px of pull that shuts the lid
   addEventListener('touchstart', e => {
