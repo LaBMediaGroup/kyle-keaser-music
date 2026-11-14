@@ -777,7 +777,7 @@ html:not(.js) .switch{display:none}
 @keyframes frameIn{from{opacity:0;transform:translateX(70px)}}
 
 /* ── What's the occasion?: four singles in their sleeves, one per way to book him; the record slides out when you reach for it ── */
-.occ{padding:0 0 clamp(70px,11vw,120px)}
+.occ{padding:clamp(30px,5vw,60px) 0 clamp(70px,11vw,120px)}
 .occ-kicker{font:600 12px/1 var(--sans);letter-spacing:.2em;text-transform:uppercase;color:var(--sun)}
 .occ h2{font:800 clamp(30px,5.2vw,56px)/1 var(--sans);letter-spacing:-.035em;margin-top:14px}
 .occ h2 .serif{color:var(--sun);letter-spacing:-.01em}
@@ -1049,6 +1049,13 @@ html:not(.js) .switch{display:none}
   </div>
 </section>
 
+<section class="live" id="live" hidden>
+  <div class="wrap">
+    <h2 class="big rv neonhead"><span class="ln"><span>Live at</span></span><span class="ln"><span class="serif">Stray Cat Lounge.</span></span></h2>
+    <div id="clips" class="clips"></div>
+  </div>
+</section>
+
 <section class="occ" id="occasions">
   <div class="wrap">
     <p class="occ-kicker fade">Now booking</p>
@@ -1072,13 +1079,6 @@ html:not(.js) .switch{display:none}
       </button>
     </div>
     <button class="occ-else fade" type="button" data-else aria-label="Something else: tell Kyle about it"><b>Something else?</b><span>Tell Kyle about it</span></button>
-  </div>
-</section>
-
-<section class="live" id="live" hidden>
-  <div class="wrap">
-    <h2 class="big rv neonhead"><span class="ln"><span>Live at</span></span><span class="ln"><span class="serif">Stray Cat Lounge.</span></span></h2>
-    <div id="clips" class="clips"></div>
   </div>
 </section>
 
