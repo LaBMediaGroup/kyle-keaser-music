@@ -759,65 +759,48 @@ html:not(.js) .switch{display:none}
 .credits .ig-at{color:var(--muted);text-decoration:none;font-size:13px;margin-left:6px}
 .credits .ig-at:hover{color:var(--sun)}
 
-/* ── What's the occasion?: five flyers on the wall, each in its own style; each one opens its card ── */
+/* ── What's the occasion?: four singles in their sleeves, one per way to book him; the record slides out when you reach for it ── */
 .occ{padding:0 0 clamp(70px,11vw,120px)}
 .occ-kicker{font:600 12px/1 var(--sans);letter-spacing:.2em;text-transform:uppercase;color:var(--sun)}
 .occ h2{font:800 clamp(30px,5.2vw,56px)/1 var(--sans);letter-spacing:-.035em;margin-top:14px}
 .occ h2 .serif{color:var(--sun);letter-spacing:-.01em}
-.occ-grid{display:grid;grid-template-columns:1fr 1fr;gap:14px 12px;margin-top:clamp(26px,4vw,44px)}
-@media (min-width:760px){.occ-grid{grid-template-columns:repeat(3,1fr);gap:22px 20px;max-width:1040px}}
-.occ-card{appearance:none;font:inherit;cursor:pointer;position:relative;container-type:inline-size;display:flex;flex-direction:column;text-align:left;
-  aspect-ratio:1/1.12;padding:0;border-radius:16px;border:1px solid var(--line);color:var(--paper);background:var(--ink-3);overflow:hidden;
-  rotate:var(--tilt,0deg);box-shadow:0 14px 30px rgba(0,0,0,.5);
-  transition:transform .35s cubic-bezier(.2,1.4,.4,1),rotate .35s cubic-bezier(.2,1.4,.4,1),box-shadow .3s;-webkit-tap-highlight-color:transparent}
-@media (min-width:760px){.occ-card{aspect-ratio:1.3/1}}
-.occ-card:hover{transform:translateY(-6px) scale(1.025);rotate:0deg;box-shadow:0 26px 50px rgba(0,0,0,.6);z-index:1}
-.occ-card:active{transform:scale(.96);rotate:0deg}
+.occ-grid{display:grid;grid-template-columns:1fr 1fr;gap:26px 8px;margin-top:clamp(26px,4vw,44px)}
+@media (min-width:760px){.occ-grid{grid-template-columns:repeat(4,1fr);gap:14px}}
+.occ-card{appearance:none;background:none;border:0;padding:0;font:inherit;cursor:pointer;position:relative;display:block;aspect-ratio:1.22/1;container-type:inline-size;text-align:left;-webkit-tap-highlight-color:transparent}
 .occ-card:focus-visible{outline:2px solid var(--sun);outline-offset:4px}
-.occ-card .art{flex:1;min-height:0;display:flex;flex-direction:column;align-items:center;justify-content:center;gap:4cqw;padding:9cqw 7cqw 2cqw;text-align:center}
-.occ-card .cap{display:block;padding:0 8cqw 8cqw;font:600 max(12.5px,5.4cqw)/1.3 var(--sans);letter-spacing:-.005em;text-align:center}
-@media (min-width:760px){.occ-card .art{gap:3cqw;padding:6cqw 6cqw 1cqw}.occ-card .cap{font-size:max(14px,4.4cqw);padding:0 7cqw 6cqw}}
-.occ-card .cap::after{content:" \2192";font-weight:800;display:inline-block;margin-left:.3em;transition:transform .3s var(--ease)}
-.occ-card:hover .cap::after{transform:translateX(4px)}
-.occ-card b{font-weight:400}
-/* the tiles are dealt onto the wall one by one */
+.occ-rec{position:absolute;top:4%;right:0;height:92%;aspect-ratio:1;border-radius:50%;background:repeating-radial-gradient(circle,#0d0c0a 0 1.2px,#1a1813 1.2px 2.4px);
+  box-shadow:0 8px 20px rgba(0,0,0,.5),inset 0 0 0 1px rgba(242,238,223,.06);transition:transform .7s cubic-bezier(.2,1.2,.4,1)}
+.occ-rec i{position:absolute;inset:32%;border-radius:50%;background:conic-gradient(var(--lab) 0 78%,rgba(0,0,0,.28) 78% 81%,var(--lab) 81%)}
+.occ-rec i::after{content:"";position:absolute;inset:44%;border-radius:50%;background:#0b0a08}
+.occ-slv{position:absolute;left:0;top:0;height:100%;aspect-ratio:1;z-index:1;display:flex;flex-direction:column;padding:8cqw 7cqw 7cqw;border-radius:3px;overflow:hidden;
+  background:var(--bg);color:var(--fg);box-shadow:0 14px 30px rgba(0,0,0,.5),inset -7px 0 9px -7px rgba(0,0,0,.4),inset 0 0 0 1px rgba(0,0,0,.08);
+  transition:transform .5s cubic-bezier(.2,1.2,.4,1)}
+.occ-slv::after{content:"";position:absolute;inset:0;pointer-events:none;background:radial-gradient(circle at 56% 50%,transparent 53%,rgba(0,0,0,.06) 54%,transparent 57%)}   /* the ring a record wears into its sleeve */
+.occ-slv small{font:600 max(9px,3cqw)/1 var(--sans);letter-spacing:.16em;text-transform:uppercase;opacity:.6}
+.occ-slv b{margin-top:auto;font:800 12.6cqw/.9 var(--sans);letter-spacing:-.045em}
+.occ-slv em{margin-top:3.2cqw;font:italic 400 max(13.5px,5.4cqw)/1.12 var(--serif);opacity:.85}
+.occ-card:hover .occ-rec{transform:translateX(15%) rotate(210deg)}
+.occ-card:hover .occ-slv{transform:translateX(-2%) rotate(-1.5deg)}
+.occ-card:active .occ-slv{transform:scale(.97)}
+.s-cream{--bg:#e9e3d0;--fg:#16140f;--lab:#DED63D}
+.s-sun{--bg:#DED63D;--fg:#16140f;--lab:#e9e3d0}
+.s-clay{--bg:#a4482b;--fg:#f6eedd;--lab:#e9e3d0}
+.s-ink{--bg:#1c1914;--fg:#f2eedf;--lab:#DED63D}
+.s-ink .occ-slv{box-shadow:0 14px 30px rgba(0,0,0,.5),inset -7px 0 9px -7px rgba(0,0,0,.6),inset 0 0 0 1px rgba(242,238,223,.16)}
+/* they land one by one, then each record slides out of its sleeve */
 .js .occ-grid.fade{opacity:1;transform:none}
 .js .occ-grid:not(.in) .occ-card{opacity:0}
-.js .occ-grid.in .occ-card{animation:deal .75s cubic-bezier(.2,1.3,.4,1) backwards;animation-delay:calc(var(--i) * 80ms)}
-@keyframes deal{from{opacity:0;transform:translateY(46px) rotate(calc(var(--tilt) * -6)) scale(.86)}}
-/* bar nights: neon in a dark window */
-.t-bar{background:radial-gradient(90% 70% at 50% 38%,rgba(23,183,207,.2),transparent 70%),#06090b;border-color:rgba(95,220,236,.38)}
-.t-bar .art b{font:400 17cqw/.98 "Tilt Neon",system-ui,sans-serif;letter-spacing:.06em;text-transform:uppercase;color:#dcfbff;
-  text-shadow:0 0 4px #5fdcec,0 0 12px #17b7cf,0 0 26px rgba(23,183,207,.55);animation:flicker 5s linear infinite}
-.t-bar .ic-mic{width:9cqw;height:13cqw}
-.t-bar .cap{color:#a5c6cc}
-/* weddings: a cream invitation */
-.t-wed{background:linear-gradient(160deg,#f7f1e0,#ece2c8);border-color:#e6d9b6;color:#3a2f1c}
-.t-wed::after{content:"";position:absolute;inset:3.5cqw;border:1px solid #c9a961;border-radius:9px;pointer-events:none;opacity:.8}
-.t-wed .art b{font:400 21cqw/.9 "Great Vibes",cursive;color:#5a4317}
-.t-wed .ic-rings{width:19cqw;height:12.5cqw;stroke:#b8923f;stroke-width:1.5;overflow:visible}
-.t-wed .ic-rings .gem{fill:#fff;stroke:#b8923f;stroke-width:.7}
-.t-wed .cap{color:#6b5c3d}
-/* parties: a loud flyer with confetti on it */
-.t-party{background:linear-gradient(140deg,#ff4fa3,#ff7f3f 58%,#f2c53a);border-color:rgba(255,255,255,.25);color:#3a0f22}
-.t-party .art b{font:400 20cqw/1 Shrikhand,cursive;color:#fff8e6;text-shadow:.7cqw 1cqw 0 rgba(120,16,62,.5);rotate:-5deg}
-.t-party .bits i{position:absolute;display:block;border-radius:1.5px;animation:bit 2.8s ease-in-out infinite}
-@keyframes bit{0%,100%{transform:rotate(-10deg)}50%{transform:translateY(-3px) rotate(14deg)}}
-.t-party .cap{color:#3a0f22}
-/* corporate: a conference pass on a lanyard */
-.t-corp{background:linear-gradient(#1c2634,#0f151d);border-color:#3d4b5c}
-.t-corp::before{content:"";position:absolute;top:5cqw;left:50%;translate:-50% 0;width:20cqw;height:4.2cqw;border-radius:99px;background:var(--ink);box-shadow:inset 0 1px 2px rgba(0,0,0,.8),0 1px 0 rgba(255,255,255,.08)}
-.t-corp .art{padding-top:13cqw}
-.t-corp .art b{display:grid;gap:2.4cqw;justify-items:center;font:500 7.4cqw/1 "IBM Plex Mono",ui-monospace,monospace;letter-spacing:.16em;text-transform:uppercase;color:#d5dde6;
-  border:1px solid #56626f;border-radius:6px;padding:4.5cqw 5cqw;background:linear-gradient(#222b37,#161c25)}
-.t-corp .ic-case{width:10cqw;height:8.5cqw}
-.t-corp .cap{color:#9fb3c8}
-/* something else: a blank one, pencilled in; it runs the width of two */
-.t-else{grid-column:span 2;aspect-ratio:auto;flex-direction:row;align-items:center;justify-content:space-between;gap:16px;padding:22px 22px 22px 24px;
-  background:none;border:1.5px dashed rgba(222,214,61,.55);box-shadow:none}
-.t-else .art{flex:none;padding:0;align-items:flex-start;text-align:left}
-.t-else .art b{font:italic 400 clamp(28px,7.6vw,40px)/.98 var(--serif);color:var(--sun)}
-.t-else .cap{padding:0;font-size:14.5px;text-align:right;color:var(--muted)}
+.js .occ-grid:not(.in) .occ-rec{transform:translateX(-22%)}
+.js .occ-grid.in .occ-card{animation:deal .7s cubic-bezier(.2,1.2,.4,1) backwards;animation-delay:calc(var(--i) * 90ms)}
+.js .occ-grid.in .occ-rec{animation:slipout 1s cubic-bezier(.2,1.1,.4,1) backwards;animation-delay:calc(.35s + var(--i) * 90ms)}
+@keyframes deal{from{opacity:0;transform:translateY(40px) rotate(-3deg)}}
+@keyframes slipout{from{transform:translateX(-22%) rotate(-160deg)}}
+/* anything else: a quiet line under the rack */
+.occ-else{appearance:none;background:none;border:0;border-top:1px solid var(--line);width:100%;margin-top:clamp(26px,4vw,40px);padding:20px 0 0;cursor:pointer;display:flex;align-items:baseline;justify-content:space-between;gap:16px;
+  color:var(--muted);font:600 15px/1.2 var(--sans);text-align:left;-webkit-tap-highlight-color:transparent}
+.occ-else b{font:italic 400 clamp(24px,3.4vw,32px)/1 var(--serif);color:var(--sun)}
+.occ-else span::after{content:" \2192";display:inline-block;margin-left:.35em;transition:transform .3s var(--ease)}
+.occ-else:hover{color:var(--paper)}.occ-else:hover span::after{transform:translateX(4px)}
 /* the big signs on the pop-up card */
 .v-bar b{display:inline-flex;align-items:center;gap:10px;font:400 21px/1 "Tilt Neon",system-ui,sans-serif;letter-spacing:.08em;text-transform:uppercase;color:#dcfbff;
   text-shadow:0 0 4px #5fdcec,0 0 12px #17b7cf,0 0 26px rgba(23,183,207,.55)}
@@ -1022,28 +1005,24 @@ html:not(.js) .switch{display:none}
     <p class="occ-kicker fade">Book him for</p>
     <h2 class="fade">What's the <span class="serif">occasion?</span></h2>
     <div class="occ-grid fade">
-      <button class="occ-card t-bar" type="button" data-k="bar" style="--tilt:-1.4deg;--i:0" aria-label="Bar nights: how it works">
-        <span class="art" aria-hidden="true"><svg class="ic-mic" viewBox="0 0 18 26" aria-hidden="true"><rect x="5" y="1.5" width="8" height="13" rx="4"/><path d="M2 11.5a7 7 0 0 0 14 0M9 18.5v5M5 24h8"/></svg><b>Bar<br>nights</b></span>
-        <span class="cap">Live music for your room</span>
+      <button class="occ-card s-cream" type="button" data-k="bar" style="--i:0" aria-label="Bar nights: how it works">
+        <span class="occ-rec" aria-hidden="true"><i></i></span>
+        <span class="occ-slv" aria-hidden="true"><small>01 · For your room</small><b>Bar<br>nights</b><em>Live music for your room</em></span>
       </button>
-      <button class="occ-card t-wed" type="button" data-k="wed" style="--tilt:1.2deg;--i:1" aria-label="Weddings: how it works">
-        <span class="art" aria-hidden="true"><svg class="ic-rings" viewBox="0 0 34 22" aria-hidden="true"><circle cx="12" cy="12" r="7.5"/><circle cx="22" cy="12" r="7.5"/><path class="gem" d="M10 2.5l2-2 2 2-2 2.2z"/></svg><b>Weddings</b></span>
-        <span class="cap">Ceremony to last dance</span>
+      <button class="occ-card s-sun" type="button" data-k="wed" style="--i:1" aria-label="Weddings: how it works">
+        <span class="occ-rec" aria-hidden="true"><i></i></span>
+        <span class="occ-slv" aria-hidden="true"><small>02 · Private dates</small><b>Weddings</b><em>Ceremony to last dance</em></span>
       </button>
-      <button class="occ-card t-party" type="button" data-k="party" style="--tilt:1.6deg;--i:2" aria-label="Parties: how it works">
-        <span class="bits" aria-hidden="true"><i style="left:10%;top:12%;width:3cqw;height:6cqw;background:#fff8e6;animation-delay:-0s"></i><i style="left:80%;top:9%;width:4cqw;height:4cqw;background:#5cc8ff;animation-delay:-0.6s;border-radius:50%"></i><i style="left:89%;top:31%;width:3cqw;height:6cqw;background:#DED63D;animation-delay:-1.1s"></i><i style="left:6%;top:60%;width:4cqw;height:4cqw;background:#fff8e6;animation-delay:-1.6s;border-radius:50%"></i><i style="left:68%;top:20%;width:2.5cqw;height:5.5cqw;background:#ffe27a;animation-delay:-0.3s"></i><i style="left:24%;top:26%;width:3.5cqw;height:3.5cqw;background:#DED63D;animation-delay:-2s;border-radius:50%"></i><i style="left:90%;top:62%;width:3cqw;height:3cqw;background:#fff8e6;animation-delay:-0.9s;border-radius:50%"></i></span>
-        <span class="art" aria-hidden="true"><b>Parties</b></span>
-        <span class="cap">Birthdays and backyards</span>
+      <button class="occ-card s-clay" type="button" data-k="party" style="--i:2" aria-label="Parties: how it works">
+        <span class="occ-rec" aria-hidden="true"><i></i></span>
+        <span class="occ-slv" aria-hidden="true"><small>03 · Private dates</small><b>Parties</b><em>Birthdays and backyards</em></span>
       </button>
-      <button class="occ-card t-corp" type="button" data-k="corp" style="--tilt:-1deg;--i:3" aria-label="Corporate events: how it works">
-        <span class="art" aria-hidden="true"><b><svg class="ic-case" viewBox="0 0 24 20" aria-hidden="true"><rect x="2" y="6" width="20" height="12" rx="2"/><path d="M8.5 6V4a1.5 1.5 0 0 1 1.5-1.5h4A1.5 1.5 0 0 1 15.5 4v2M2 11.5h20"/></svg><span>Corporate<br>events</span></b></span>
-        <span class="cap">Company nights</span>
-      </button>
-      <button class="occ-card t-else" type="button" data-else style="--tilt:-.5deg;--i:4" aria-label="Something else: tell Kyle about it">
-        <span class="art" aria-hidden="true"><b>Something<br>else?</b></span>
-        <span class="cap">Tell Kyle about it</span>
+      <button class="occ-card s-ink" type="button" data-k="corp" style="--i:3" aria-label="Corporate events: how it works">
+        <span class="occ-rec" aria-hidden="true"><i></i></span>
+        <span class="occ-slv" aria-hidden="true"><small>04 · Private dates</small><b>Corporate<br>events</b><em>Company nights</em></span>
       </button>
     </div>
+    <button class="occ-else fade" type="button" data-else aria-label="Something else: tell Kyle about it"><b>Something else?</b><span>Tell Kyle about it</span></button>
   </div>
 </section>
 
@@ -2058,7 +2037,7 @@ function showAct() {
 }
 $('#form').addEventListener('change', e => { if (e.target.name === 'lineup') showAct(); });
 $('#form').addEventListener('reset', () => setTimeout(showAct, 0));
-document.querySelectorAll('.occ-card').forEach(c => c.addEventListener('click', () => {
+document.querySelectorAll('.occ-card, .occ-else').forEach(c => c.addEventListener('click', () => {
   if ('else' in c.dataset) { pickKind('Something else'); return goBook(); }      // the blank tile has no card: straight to the form
   window.openRoomKey && window.openRoomKey(c.dataset.k, c);
 }));
@@ -2539,7 +2518,38 @@ const ROOMS = {
     landed(k);
   }
   // a little moment when certain cards land
+  // every card has a quiet sound of its own, made on the spot: a paper flick for most, a neon buzz that stutters on with
+  // the New Dodge sign, a tube humming up for Stray Cat, glasses for weddings, a pop for parties. All kept low.
+  function cardSound(k) {
+    try {
+      if (!ensureCtx()) return;
+      const go = () => {
+        if (actx.state !== 'running') return;
+        const t = actx.currentTime + .02, out = actx.createGain(); out.gain.value = .32; out.connect(fxGain);
+        const tone = (type, f0, f1, at, len, vol) => {
+          const o = actx.createOscillator(), g = actx.createGain(); o.type = type;
+          o.frequency.setValueAtTime(f0, t + at); if (f1 !== f0) o.frequency.exponentialRampToValueAtTime(f1, t + at + len);
+          g.gain.setValueAtTime(.0001, t + at); g.gain.exponentialRampToValueAtTime(vol, t + at + Math.min(.012, len / 4)); g.gain.exponentialRampToValueAtTime(.0001, t + at + len);
+          o.connect(g).connect(out); o.start(t + at); o.stop(t + at + len + .02);
+        };
+        const puff = (hz, at, len, vol) => {
+          const n = Math.floor(actx.sampleRate * len), buf = actx.createBuffer(1, n, actx.sampleRate), d = buf.getChannelData(0);
+          for (let i = 0; i < n; i++) d[i] = (Math.random() * 2 - 1) * Math.pow(1 - i / n, 2);
+          const src = actx.createBufferSource(), bp = actx.createBiquadFilter(), g = actx.createGain();
+          src.buffer = buf; bp.type = 'bandpass'; bp.frequency.value = hz; bp.Q.value = 1.2; g.gain.value = vol;
+          src.connect(bp).connect(g).connect(out); src.start(t + at);
+        };
+        puff(1700, 0, .05, .35); tone('sine', 420, 300, 0, .07, .12);                         // the card landing
+        if (k === 'dodge') [[.40, .05], [.77, .05], [.9, .07], [1.02, .5]].forEach(([at, len], i) => { tone('sawtooth', 120, 120, at, len, i < 3 ? .1 : .045); puff(3200, at, Math.min(len, .06), .12); });
+        if (k === 'straycat') { tone('sine', 90, 190, .25, 1.7, .09); puff(2600, 1.95, .04, .2); }
+        if (k === 'wed') { tone('sine', 2093, 2093, .7, .7, .09); tone('sine', 3136, 3136, .72, .5, .05); }
+        if (k === 'party') { tone('sine', 380, 950, .37, .07, .2); puff(900, .37, .09, .35); }
+      };
+      actx.state === 'running' ? go() : actx.resume().then(go).catch(() => {});
+    } catch {}
+  }
   function landed(k) {
+    cardSound(k);
     if (k === 'party') setTimeout(confetti, 380);
     if (k === 'wed') setTimeout(clink, 330);
     if (k === 'dodge') neonOn();
