@@ -782,10 +782,10 @@ html:not(.js) .switch{display:none}
 .occ-card:hover .occ-rec{transform:translateX(15%) rotate(210deg)}
 .occ-card:hover .occ-slv{transform:translateX(-2%) rotate(-1.5deg)}
 .occ-card:active .occ-slv{transform:scale(.97)}
-.s-cream{--bg:#e9e3d0;--fg:#16140f;--lab:#DED63D}
-.s-sun{--bg:#DED63D;--fg:#16140f;--lab:#e9e3d0}
-.s-clay{--bg:#a4482b;--fg:#f6eedd;--lab:#e9e3d0}
-.s-ink{--bg:#1c1914;--fg:#f2eedf;--lab:#DED63D}
+.s-cream{--bg:#e9e3d0;--fg:#16140f;--lab:#DED63D;--tint:#e9e3d0}
+.s-sun{--bg:#DED63D;--fg:#16140f;--lab:#e9e3d0;--tint:#DED63D}
+.s-clay{--bg:#a4482b;--fg:#f6eedd;--lab:#e9e3d0;--tint:#d96a44}
+.s-ink{--bg:#1c1914;--fg:#f2eedf;--lab:#DED63D;--tint:#a9a493}
 .s-ink .occ-slv{box-shadow:0 14px 30px rgba(0,0,0,.5),inset -7px 0 9px -7px rgba(0,0,0,.6),inset 0 0 0 1px rgba(242,238,223,.16)}
 /* they land one by one, then each record slides out of its sleeve */
 .js .occ-grid.fade{opacity:1;transform:none}
@@ -795,6 +795,38 @@ html:not(.js) .switch{display:none}
 .js .occ-grid.in .occ-rec{animation:slipout 1s cubic-bezier(.2,1.1,.4,1) backwards;animation-delay:calc(.35s + var(--i) * 90ms)}
 @keyframes deal{from{opacity:0;transform:translateY(40px) rotate(-3deg)}}
 @keyframes slipout{from{transform:translateX(-22%) rotate(-160deg)}}
+/* a sleeve, picked up: it lifts out of the rack to the top of the screen and turns over to its artwork, the record
+   slides out spinning, and the liner sheet slides down out of the sleeve with how it works and the way to book */
+.ov{position:fixed;inset:0;width:100vw;max-width:none;height:100dvh;max-height:none;margin:0;border:0;background:none;color:var(--paper);overflow-x:hidden;overflow-y:auto;overscroll-behavior:contain;
+  padding:calc(max(14px,env(safe-area-inset-top)) + 58px) 16px 40px}
+.ov::backdrop{background:rgba(6,5,4,.88);-webkit-backdrop-filter:blur(8px);backdrop-filter:blur(8px)}
+.ov[open]::backdrop{animation:fadeIn .35s ease both}
+.ov.closing::backdrop{opacity:0;transition:opacity .35s}
+.ov-x{position:fixed;top:max(14px,env(safe-area-inset-top));right:14px;width:42px;height:42px;border-radius:50%;border:1px solid var(--line);background:var(--ink);color:var(--paper);font-size:15px;cursor:pointer;z-index:5}
+.ov-x:hover{border-color:var(--sun)}
+.ov-stage{position:relative;width:min(100%,430px);margin:0 auto}
+.ov-top{position:relative;z-index:2;width:min(72%,300px);aspect-ratio:1;margin-left:5%;perspective:1300px}
+.ov-slv{position:absolute;inset:0;z-index:1;transform-style:preserve-3d;transform:rotateY(180deg)}
+.ov-face{position:absolute;inset:0;border-radius:3px;overflow:hidden;-webkit-backface-visibility:hidden;backface-visibility:hidden;box-shadow:0 24px 60px rgba(0,0,0,.65),inset 0 0 0 1px rgba(242,238,223,.1)}
+.ov-front{container-type:inline-size;display:flex;flex-direction:column;padding:9.5% 8.5% 8.5%;background:var(--bg);color:var(--fg)}
+.ov-front small{font:600 max(9px,3.6cqw)/1 var(--sans);letter-spacing:.16em;text-transform:uppercase;opacity:.6}
+.ov-front b{margin-top:auto;font:800 15.3cqw/.9 var(--sans);letter-spacing:-.045em}
+.ov-front em{margin-top:4cqw;font:italic 400 6.6cqw/1.12 var(--serif);opacity:.85}
+.ov-back{transform:rotateY(180deg);background:#0b0a08}
+.ov-back img{position:absolute;inset:0;width:100%;height:100%;object-fit:cover;filter:grayscale(1) contrast(1.15) brightness(1.08)}
+.ov-back::before{content:"";position:absolute;inset:0;z-index:1;background:var(--tint);mix-blend-mode:multiply}
+.ov-back::after{content:"";position:absolute;inset:0;z-index:1;background:linear-gradient(transparent 38%,rgba(11,10,8,.9))}
+.ov-art{position:absolute;left:8%;right:8%;bottom:8%;z-index:2;display:grid;gap:9px;color:var(--paper)}
+.ov-art small{font:600 11px/1 var(--sans);letter-spacing:.18em;text-transform:uppercase;color:var(--sun)}
+.ov-art b{font:800 clamp(28px,9vw,40px)/.92 var(--sans);letter-spacing:-.04em}
+.ov-rec{position:absolute;top:4%;right:-36%;height:92%;aspect-ratio:1;border-radius:50%;background:repeating-radial-gradient(circle,#100f0c 0 1.4px,#23201a 1.4px 2.8px);
+  box-shadow:0 14px 34px rgba(0,0,0,.6),inset 0 0 0 1px rgba(242,238,223,.2),inset 0 0 0 7px #0a0907,inset 0 0 0 8px rgba(242,238,223,.07)}
+.ov-rec i{position:absolute;inset:32%;border-radius:50%;background:conic-gradient(var(--lab) 0 78%,rgba(0,0,0,.28) 78% 81%,var(--lab) 81%);animation:spin 4.5s linear infinite}
+.ov-rec i::after{content:"";position:absolute;inset:44%;border-radius:50%;background:#0b0a08}
+.ov-sheet{position:relative;z-index:1;margin-top:-30px;padding:54px 22px 22px;background:linear-gradient(var(--ink-2),var(--ink-3) 70px);border:1px solid var(--line);border-radius:3px 3px 20px 20px;box-shadow:0 30px 80px rgba(0,0,0,.6)}
+.ov-sheet .rc-body{margin-top:0}
+.ov-sheet .rc-rows li{animation-delay:calc(1s + var(--i) * 90ms)}
+.ov.closing .ov-sheet,.ov.closing .ov-rec,.ov.closing .ov-x{opacity:0;transition:opacity .2s}
 /* anything else: a quiet line under the rack */
 .occ-else{appearance:none;background:none;border:0;border-top:1px solid var(--line);width:100%;margin-top:clamp(26px,4vw,40px);padding:20px 0 0;cursor:pointer;display:flex;align-items:baseline;justify-content:space-between;gap:16px;
   color:var(--muted);font:600 15px/1.2 var(--sans);text-align:left;-webkit-tap-highlight-color:transparent}
@@ -1002,7 +1034,7 @@ html:not(.js) .switch{display:none}
 
 <section class="occ" id="occasions">
   <div class="wrap">
-    <p class="occ-kicker fade">Book him for</p>
+    <p class="occ-kicker fade">Now booking</p>
     <h2 class="fade">What's the <span class="serif">occasion?</span></h2>
     <div class="occ-grid fade">
       <button class="occ-card s-cream" type="button" data-k="bar" style="--i:0" aria-label="Bar nights: how it works">
@@ -1162,6 +1194,25 @@ html:not(.js) .switch{display:none}
 </footer>
 
 <!-- the little card that opens when a sign in the rooms banner is tapped -->
+<dialog class="ov" id="occView" aria-labelledby="ovTitle">
+  <button class="ov-x" type="button" aria-label="Close" data-close>✕</button>
+  <div class="ov-stage">
+    <div class="ov-top">
+      <span class="ov-rec" aria-hidden="true"><i></i></span>
+      <div class="ov-slv">
+        <div class="ov-face ov-front" id="ovFront" aria-hidden="true"></div>
+        <div class="ov-face ov-back"><img id="ovImg" alt=""><div class="ov-art"><small id="ovKicker"></small><b id="ovTitle"></b></div></div>
+      </div>
+    </div>
+    <div class="ov-sheet">
+      <p class="rc-body" id="ovBody"></p>
+      <ul class="rc-rows" id="ovRows"></ul>
+      <p class="rc-where" id="ovWhere"></p>
+      <div class="rc-links" id="ovLinks"></div>
+    </div>
+  </div>
+</dialog>
+
 <dialog class="roomcard" id="roomCard" aria-labelledby="roomTitle">
   <button class="rc-close" type="button" aria-label="Close" data-close>✕</button>
   <div class="rc-inner" id="roomInner">
@@ -2038,9 +2089,60 @@ function showAct() {
 $('#form').addEventListener('change', e => { if (e.target.name === 'lineup') showAct(); });
 $('#form').addEventListener('reset', () => setTimeout(showAct, 0));
 document.querySelectorAll('.occ-card, .occ-else').forEach(c => c.addEventListener('click', () => {
-  if ('else' in c.dataset) { pickKind('Something else'); return goBook(); }      // the blank tile has no card: straight to the form
-  window.openRoomKey && window.openRoomKey(c.dataset.k, c);
+  if ('else' in c.dataset) { pickKind('Something else'); return goBook(); }      // no sleeve for this one: straight to the form
+  openOcc(c.dataset.k, c);
 }));
+// ── picking up a sleeve: it lifts out of the rack, turns over to its artwork, and the liner sheet slides out of it ──
+// The artwork is one of Kyle's own photos already on the site, printed in the sleeve's colour.
+const OCC_ART = { bar: 'assets/band-new-dodge-lounge.jpg', wed: 'assets/solo-dessert-oasis.jpg', party: 'assets/videos/got-another-feeling.jpg', corp: 'assets/videos/beautiful-girl-showcase.jpg' };
+let occFrom = null, occBusy = false;
+function occOffset(src, dst) {                      // where the rack sleeve sits, as a transform of the big one
+  const a = src.getBoundingClientRect(), b = dst.getBoundingClientRect();
+  return `translate(${a.left + a.width / 2 - (b.left + b.width / 2)}px, ${a.top + a.height / 2 - (b.top + b.height / 2)}px) scale(${a.width / b.width})`;
+}
+function openOcc(k, card) {
+  const r = ROOMS[k], dlg = $('#occView'); if (!r || !dlg.showModal || occBusy) return;
+  const tone = [...card.classList].find(c => c.startsWith('s-')) || 's-cream';
+  dlg.className = 'ov ' + tone;
+  $('#ovFront').innerHTML = card.querySelector('.occ-slv').innerHTML;
+  $('#ovImg').src = OCC_ART[k] || '';
+  $('#ovKicker').textContent = r.kicker; $('#ovTitle').textContent = r.title;
+  $('#ovBody').textContent = r.body; $('#ovWhere').textContent = r.where || '';
+  const ppl = who => { const solo = /solo/i.test(who), band = /band/i.test(who);
+    return `<span class="ppl">${solo ? '<i></i>' : ''}${solo && band ? '<em>or</em>' : ''}${band ? '<i class="band"></i>' : ''}</span>`; };
+  $('#ovRows').className = 'rc-rows' + (r.seq ? ' seq' : '');
+  $('#ovRows').innerHTML = (r.rows || []).map(([what, who], i) => `<li style="--i:${i}">${esc(what)}<span class="plays">${ppl(who)}${esc(who)}</span></li>`).join('');
+  $('#ovLinks').innerHTML = `<a class="go" href="#book" data-go="${esc(r.pick)}"><span>${esc(r.go || 'Book Kyle')}</span><i><svg viewBox="0 0 24 24" aria-hidden="true"><path d="M5 12h13M13 6l6 6-6 6"/></svg></i></a>`;
+  occFrom = card;
+  dlg.showModal(); dlg.scrollTop = 0;
+  window.cardSound && window.cardSound(k);
+  if (reduce) return;
+  const slv = dlg.querySelector('.ov-slv'), from = occOffset(card.querySelector('.occ-slv'), slv);
+  card.style.visibility = 'hidden';
+  slv.animate([{ transform: `${from} rotateY(0deg)` }, { offset: .5, transform: 'translate(0,-14px) scale(1.05) rotateY(95deg)' }, { transform: 'rotateY(180deg)' }],
+    { duration: 820, easing: 'cubic-bezier(.3,.1,.2,1)' });
+  dlg.querySelector('.ov-rec').animate([{ transform: 'translateX(-42%) rotate(-200deg)', opacity: 0 }, { offset: .01, opacity: 1 }, { transform: 'none', opacity: 1 }],
+    { duration: 900, delay: 560, easing: 'cubic-bezier(.2,1.15,.4,1)', fill: 'backwards' });
+  dlg.querySelector('.ov-sheet').animate([{ transform: 'translateY(-46%)', opacity: 0 }, { offset: .25, opacity: 1 }, { transform: 'none', opacity: 1 }],
+    { duration: 800, delay: 640, easing: 'cubic-bezier(.2,1.1,.3,1)', fill: 'backwards' });
+  dlg.querySelector('.ov-x').animate([{ opacity: 0 }, { opacity: 1 }], { duration: 300, delay: 700, fill: 'backwards' });
+}
+function closeOcc(then) {                            // the sheet tucks away and the sleeve drops back into its place in the rack
+  const dlg = $('#occView'), card = occFrom; if (!dlg.open || occBusy) return;
+  const done = () => { dlg.classList.remove('closing'); dlg.close(); if (card) card.style.visibility = ''; occBusy = false; then && then(); };
+  if (reduce || !card) return done();
+  occBusy = true; dlg.classList.add('closing');
+  const slv = dlg.querySelector('.ov-slv');
+  card.style.visibility = ''; const to = occOffset(card.querySelector('.occ-slv'), slv); card.style.visibility = 'hidden';
+  const a = slv.animate([{ transform: 'rotateY(180deg)' }, { transform: `${to} rotateY(0deg)` }], { duration: 480, easing: 'cubic-bezier(.4,0,.2,1)', fill: 'forwards' });
+  a.onfinish = () => { a.cancel(); done(); }; setTimeout(() => occBusy && (a.cancel(), done()), 700);
+}
+$('#occView').addEventListener('click', e => {
+  const go = e.target.closest('a[data-go]');
+  if (go) { e.preventDefault(); return closeOcc(() => { pickKind(go.dataset.go); goBook(); }); }
+  if (e.target.closest('[data-close]') || e.target === e.currentTarget || e.target.classList.contains('ov-stage')) closeOcc();
+});
+$('#occView').addEventListener('cancel', e => { e.preventDefault(); closeOcc(); });
 
 // '2026-12-12' → a local calendar date (no time-zone shift); '20:30' → '8:30 PM'
 const dayOf = iso => { const m = /^(\d{4})-(\d{2})-(\d{2})$/.exec(iso || ''); return m ? new Date(+m[1], +m[2] - 1, +m[3]) : null; };
@@ -2548,6 +2650,7 @@ const ROOMS = {
       actx.state === 'running' ? go() : actx.resume().then(go).catch(() => {});
     } catch {}
   }
+  window.cardSound = cardSound;
   function landed(k) {
     cardSound(k);
     if (k === 'party') setTimeout(confetti, 380);
