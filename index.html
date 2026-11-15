@@ -956,6 +956,48 @@ html:not(.js) .switch{display:none}
  .ov[data-edition="corp"] .rc-rows .plays{grid-column:3;font-size:16px;max-width:105px}
 }
 
+/* Phone sleeves keep readable copy; trim artwork and spacing rather than scaling the text. */
+@media(max-width:600px){
+ .ov{padding:calc(max(12px,env(safe-area-inset-top)) + 44px) 16px 24px}
+ .ov-stage{padding-top:32px}
+ .ov .ov-sheet{min-height:0;padding:18px 20px 16px}
+ .ov .ov-meta{padding-bottom:10px;font-size:9px}
+ .ov .rc-body{font-size:15px;line-height:1.45}
+ .ov .ov-track-label{margin-top:16px}
+ .ov .rc-where{margin-top:12px;font:400 13px/1.4 var(--sans)}
+ .ov .rc-links{margin-top:14px}
+ .ov .ov-foot{margin-top:14px;font-size:8px;letter-spacing:.06em}
+ .ov[data-edition="bar"] .ov-art{min-height:145px;margin:12px -4px;padding:14px}
+ .ov[data-edition="bar"] .ov-art h3{font-size:44px;max-width:10ch}
+ .ov[data-edition="bar"] .ov-art small{font-size:9px;padding:5px 7px}
+ .ov[data-edition="bar"] .rc-rows li{padding:12px 10px;gap:9px;font-size:13px}
+ .ov[data-edition="bar"] .rc-rows .plays{font-size:21px}
+ .ov[data-edition="bar"] .ov-foot{padding-top:10px}
+ .ov.s-wedding .ov-art{min-height:120px;margin:14px 0;padding:14px}
+ .ov.s-wedding .ov-art small{margin-bottom:6px}
+ .ov.s-wedding .ov-art h3{font-size:46px}
+ .ov.s-wedding .ov-art::after{margin-top:7px;font-size:15px}
+ .ov.s-wedding .rc-body{font-size:17px;line-height:1.4}
+ .ov.s-wedding .rc-rows li{padding-block:10px}
+ .ov.s-wedding .rc-where{font:italic 15px/1.35 var(--serif)}
+ .ov[data-edition="party"] .ov-art{min-height:150px;margin:8px 0 18px;padding-left:4px}
+ .ov[data-edition="party"] .ov-art img{height:143px;width:47%;border-width:6px;inset:0 5px auto auto}
+ .ov[data-edition="party"] .ov-art h3{font-size:64px;padding-right:12px}
+ .ov[data-edition="party"] .ov-art small{padding:6px 9px;font-size:9px}
+ .ov[data-edition="party"] .ov-art::after{font-size:50px;bottom:-15px}
+ .ov[data-edition="party"] .rc-rows{gap:12px;margin:14px 0 18px}
+ .ov[data-edition="party"] .rc-rows li{padding:12px 10px;gap:9px;font-size:13px}
+ .ov[data-edition="party"] .rc-rows .plays{font-size:22px}
+ .ov[data-edition="corp"] .ov-art{min-height:130px;margin:0 0 16px;padding:16px 0}
+ .ov[data-edition="corp"] .ov-art img{height:104px;top:12px;width:31%}
+ .ov[data-edition="corp"] .ov-art h3{font-size:38px}
+ .ov[data-edition="corp"] .rc-body{grid-column:1/-1;margin-bottom:16px}
+ .ov[data-edition="corp"] .ov-track-label{grid-column:1/-1;grid-row:auto;margin:0}
+ .ov[data-edition="corp"] .rc-rows{grid-column:1/-1;grid-row:auto;margin:8px 0 14px}
+ .ov[data-edition="corp"] .rc-rows li{grid-template-columns:20px 1fr auto;padding:11px 0}
+ .ov[data-edition="corp"] .rc-rows .plays{grid-column:3;font-size:16px;max-width:105px}
+ .ov[data-edition="corp"] .rc-where{margin:0;padding-top:12px}
+}
 /* anything else: a quiet line under the rack */
 .occ-else{appearance:none;background:none;border:0;border-top:1px solid var(--line);width:100%;margin-top:clamp(26px,4vw,40px);padding:20px 0 0;cursor:pointer;display:flex;align-items:baseline;justify-content:space-between;gap:16px;
   color:var(--muted);font:600 15px/1.2 var(--sans);text-align:left;-webkit-tap-highlight-color:transparent}
@@ -2258,7 +2300,13 @@ function openOcc(k, card) {
   $('#ovEdition').textContent = 'SB / 0' + (['bar', 'wed', 'party', 'corp'].indexOf(k) + 1);
   $('#ovImg').src = OCC_ART[k] || '';
   $('#ovKicker').textContent = r.kicker; $('#ovTitle').textContent = r.title;
-  $('#ovBody').textContent = r.body; $('#ovWhere').textContent = r.where || '';
+  const sleeveCopy = {
+    bar: 'Live music for your room. Kyle plays solo in lounges and coffee shops, or brings the band for a stage and a crowd. Regular rooms include Rochester Eagles, Old Detroit Bar and Grille, and Stray Cat Lounge.',
+    wed: 'Voice and acoustic guitar for the quiet moments; the band when it’s time to dance. Kyle plays solo for your ceremony or cocktail hour. Keep the reception intimate, or bring the whole band.',
+    party: 'Birthdays, anniversaries, backyards and back rooms. Kyle solo fits a living room or restaurant corner. More space, bigger sound? Bring the band.',
+    corp: 'Company nights from Detroit to Chicago. Solo for dinner and conversation; the band for when it’s time for a show.'
+  };
+  $('#ovBody').textContent = sleeveCopy[k] || r.body; $('#ovWhere').textContent = r.where || '';
   $('#ovRows').className = 'rc-rows';
   $('#ovRows').innerHTML = (r.rows || []).map(([what, who]) => `<li><span>${esc(what)}</span><span class="plays">${esc(who)}</span></li>`).join('');
   $('#ovLinks').innerHTML = `<a class="go" href="#book" data-go="${esc(r.pick)}"><span>${esc(r.go || 'Book Kyle')}</span><i><svg viewBox="0 0 24 24" aria-hidden="true"><path d="M5 12h13M13 6l6 6-6 6"/></svg></i></a>`;
@@ -2286,22 +2334,31 @@ function openOcc(k, card) {
 }
 function closeOcc(then) {
   const dlg = $('#occView'), card = occFrom; if (!dlg.open || occBusy) return;
+  occBusy = true;
+  let finished = false;
   const done = () => {
+    if (finished) return; finished = true;
     dlg.getAnimations({ subtree: true }).forEach(a => a.cancel());
     dlg.classList.remove('closing'); dlg.close();
     if (card) { card.style.visibility = ''; card.focus({ preventScroll: true }); }
     occBusy = false; then && then();
   };
   if (reduce || !card) return done();
-  occBusy = true; dlg.classList.add('closing');
-  const jacket = dlg.querySelector('.ov-sheet');
-  const start = getComputedStyle(jacket).transform;
+  const jacket = dlg.querySelector('.ov-sheet'), record = dlg.querySelector('.ov-rec');
+  // Preserve the current frame even if Close is tapped during the opening animation.
+  const elements = [jacket, record, ...jacket.querySelectorAll('.rc-body,.ov-track-label,.rc-rows li,.rc-where,.rc-links,.ov-foot')];
+  const frames = elements.map(el => { const c = getComputedStyle(el); return { transform: c.transform, opacity: c.opacity }; });
   dlg.getAnimations({ subtree: true }).forEach(a => a.cancel());
-  card.style.visibility = ''; const to = occOffset(card.querySelector('.occ-slv'), jacket); card.style.visibility = 'hidden';
-  dlg.querySelector('.ov-rec').animate([{ opacity: 1 }, { opacity: 0, transform: 'translateY(50px) rotate(-35deg) scale(.8)' }], { duration: 350, fill: 'forwards' });
-  const a = jacket.animate([{ transform: start }, { transform: `${to} rotate(-4deg)`, opacity: 0 }],
-    { duration: 520, easing: 'cubic-bezier(.4,0,.2,1)', fill: 'forwards' });
-  a.finished.then(done, () => { if (occBusy) done(); });
+  dlg.classList.add('closing');
+  window.cardSound && window.cardSound(dlg.dataset.edition, true);
+  elements.slice(2).forEach((el, i) => el.animate([frames[i + 2], { ...frames[i + 2], opacity: 0 }], { duration: 180, fill: 'forwards' }));
+  record.animate([frames[1], { offset: .55, transform: 'translateY(18px) scale(.97)', opacity: .8 }, { transform: 'translateY(25px) scale(.94)', opacity: 0 }],
+    { duration: 460, easing: 'cubic-bezier(.4,0,.2,1)', fill: 'forwards' });
+  const a = jacket.animate([frames[0],
+    { offset: .6, transform: 'translateY(-38px) rotate(-1deg) scale(.98)', opacity: 1 },
+    { transform: 'translateY(-46px) rotate(0deg) scale(.94)', opacity: 0 }
+  ], { duration: 460, easing: 'cubic-bezier(.4,0,.2,1)', fill: 'forwards' });
+  a.finished.then(done, done);
 }
 $('#occView').addEventListener('click', e => {
   const go = e.target.closest('a[data-go]');
@@ -2804,12 +2861,14 @@ const ROOMS = {
   // a little moment when certain cards land
   // every card has a quiet sound of its own, made on the spot: a paper flick for most, a neon buzz that stutters on with
   // the New Dodge sign, a tube humming up for Stray Cat, glasses for weddings, a pop for parties. All kept low.
-  function cardSound(k) {
+  function cardSound(k, closing = false) {
     try {
       if (!ensureCtx()) return;
       const go = () => {
         if (actx.state !== 'running') return;
-        const t = actx.currentTime + .02, out = actx.createGain(); out.gain.value = .32; out.connect(fxGain);
+        const sleeve = ['bar', 'wed', 'party', 'corp'].includes(k);
+        const t = actx.currentTime + .02, out = actx.createGain(); out.gain.value = sleeve ? .10 : .32; out.connect(fxGain);
+        setTimeout(() => out.disconnect(), sleeve ? 350 : 2600);
         const tone = (type, f0, f1, at, len, vol) => {
           const o = actx.createOscillator(), g = actx.createGain(); o.type = type;
           o.frequency.setValueAtTime(f0, t + at); if (f1 !== f0) o.frequency.exponentialRampToValueAtTime(f1, t + at + len);
@@ -2818,11 +2877,12 @@ const ROOMS = {
         };
         const puff = (hz, at, len, vol) => {
           const n = Math.floor(actx.sampleRate * len), buf = actx.createBuffer(1, n, actx.sampleRate), d = buf.getChannelData(0);
-          for (let i = 0; i < n; i++) d[i] = (Math.random() * 2 - 1) * Math.pow(1 - i / n, 2);
+          for (let i = 0; i < n; i++) d[i] = (Math.random() * 2 - 1) * Math.min(1, i / (actx.sampleRate * .008)) * Math.pow(1 - i / n, 2);
           const src = actx.createBufferSource(), bp = actx.createBiquadFilter(), g = actx.createGain();
           src.buffer = buf; bp.type = 'bandpass'; bp.frequency.value = hz; bp.Q.value = 1.2; g.gain.value = vol;
           src.connect(bp).connect(g).connect(out); src.start(t + at);
         };
+        if (sleeve) { puff(closing ? 700 : 950, 0, closing ? .09 : .12, closing ? .12 : .18); return; }
         puff(1700, 0, .05, .35); tone('sine', 420, 300, 0, .07, .12);                         // the card landing
         if (k === 'dodge') [[.40, .05], [.77, .05], [.9, .07], [1.02, .5]].forEach(([at, len], i) => { tone('sawtooth', 120, 120, at, len, i < 3 ? .1 : .045); puff(3200, at, Math.min(len, .06), .12); });
         if (k === 'straycat') { tone('sine', 90, 190, .25, 1.7, .09); puff(2600, 1.95, .04, .2); }
