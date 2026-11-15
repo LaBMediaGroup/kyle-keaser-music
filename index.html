@@ -818,186 +818,141 @@ html:not(.js) .switch{display:none}
 .js .occ-grid.in .occ-rec{animation:slipout 1s cubic-bezier(.2,1.1,.4,1) backwards;animation-delay:calc(.35s + var(--i) * 90ms)}
 @keyframes deal{from{opacity:0;transform:translateY(40px) rotate(-3deg)}}
 @keyframes slipout{from{transform:translateX(-22%) rotate(-160deg)}}
-/* The entire artwork sleeve drops off the vinyl; its back is the printed booking information. */
-.ov{position:fixed;inset:0;width:100%;max-width:none;height:100dvh;max-height:none;margin:0;border:0;background:none;color:var(--fg);overflow-x:hidden;overflow-y:auto;overscroll-behavior:contain;
-  padding:calc(max(14px,env(safe-area-inset-top)) + 62px) 22px 48px}
-.ov::backdrop{background:rgba(6,5,4,.88);-webkit-backdrop-filter:blur(10px);backdrop-filter:blur(10px)}
-.ov[open]::backdrop{animation:fadeIn .35s ease both}
-.ov.closing::backdrop{opacity:0;transition:opacity .45s}
-.ov-x{position:fixed;top:max(14px,env(safe-area-inset-top));right:14px;width:42px;height:42px;border-radius:50%;border:1px solid var(--line);background:var(--ink);color:var(--paper);font-size:15px;cursor:pointer;z-index:5}
-.ov-x:hover{border-color:var(--sun)}
-.ov-stage{position:relative;width:min(100%,580px);margin:0 auto;padding-top:80px;perspective:1400px}
-.ov-rec{position:absolute;top:0;left:14%;width:72%;aspect-ratio:1;border-radius:50%;background:repeating-radial-gradient(circle,#100f0c 0 1.4px,#23201a 1.4px 2.8px);box-shadow:0 14px 34px #0009,inset 0 0 0 1px #f2eedf33}
-.ov-rec::after{content:"";position:absolute;inset:0;border-radius:50%;background:conic-gradient(transparent 5%,#ffffff16 16%,transparent 25% 55%,#ffffff12 66%,transparent 75%)}
-.ov-rec i{position:absolute;inset:32%;border-radius:50%;background:var(--lab)}
-.ov-rec i::after{content:"";position:absolute;inset:44%;border-radius:50%;background:#0b0a08}
-.ov-sheet{position:relative;z-index:1;min-height:580px;padding:26px clamp(20px,5vw,36px) 24px;background:var(--bg);border-radius:2px;color:var(--fg);transform-origin:50% 12%;
-  box-shadow:0 32px 65px #0009,inset 0 0 0 1px #0002,inset 5px 0 10px -8px #0008;isolation:isolate}
-.ov-sheet::after{content:"";position:absolute;inset:0;z-index:-1;pointer-events:none;background:repeating-linear-gradient(0deg,#00000004 0 1px,transparent 1px 3px),radial-gradient(circle at 50% 40%,transparent 37%,#00000006 38%,transparent 39%)}
-.ov-meta{display:flex;justify-content:space-between;gap:12px;padding-bottom:13px;border-bottom:1px solid currentColor;font:700 10px/1.4 var(--sans);letter-spacing:.14em;text-transform:uppercase}
-.ov-art{position:relative;margin:18px 0 20px;min-height:170px;padding:22px;display:flex;flex-direction:column;justify-content:end;overflow:hidden;background:var(--ink);color:var(--paper)}
-.ov-art img{position:absolute;inset:0;width:100%;height:100%;object-fit:cover;filter:grayscale(1) contrast(1.12)}
-.ov-art::after{content:"";position:absolute;inset:0;background:linear-gradient(transparent,#0b0a08e6),var(--tint);mix-blend-mode:multiply}
-.ov-art small,.ov-art h3{position:relative;z-index:1}
-.ov-art small{font:600 10px/1.4 var(--sans);letter-spacing:.18em;text-transform:uppercase;margin-bottom:9px}
-.ov-art h3{font:800 clamp(32px,8vw,55px)/.94 var(--sans);letter-spacing:-.045em;max-width:12ch;margin:0}
-.ov-sheet .rc-body{margin:0;font-size:15px;line-height:1.55}
-.ov-track-label{margin-top:22px;font:700 10px/1.4 var(--sans);letter-spacing:.16em;text-transform:uppercase}
-.ov-sheet .rc-rows{display:block;margin-top:8px;border-top:1px solid currentColor;counter-reset:step}
-.ov-sheet .rc-rows li{display:grid;grid-template-columns:24px 1fr auto;align-items:center;gap:12px;min-height:0;padding:12px 0;border:0;border-bottom:1px solid color-mix(in srgb,currentColor 25%,transparent);border-radius:0;background:none;animation:none;font-size:14px}
-.ov-sheet .rc-rows li::before{content:counter(step,decimal-leading-zero);width:auto;height:auto;margin:0;border-radius:0;background:none;color:inherit;font:600 10px/1 var(--sans)}
-.ov-sheet .rc-rows .plays{color:inherit;font:700 12px/1.3 var(--sans);text-align:right;max-width:110px}
-.ov-sheet .rc-where{color:inherit;opacity:.8;font:italic 14px/1.45 var(--serif);margin-top:16px}
-.ov-sheet .rc-links{margin-top:18px}
-.ov-sheet .rc-links .go{border-radius:0;background:var(--fg);color:var(--bg);box-shadow:none;font-size:14px}
-.ov-sheet .rc-links .go i{border-radius:0;background:var(--bg)}
-.ov-sheet .rc-links .go svg{stroke:var(--fg)}
-.ov-sheet .rc-links .go:hover{box-shadow:0 6px 16px #0003}
-.ov-foot{display:flex;justify-content:space-between;gap:12px;margin-top:20px;font:600 9px/1.4 var(--sans);letter-spacing:.13em;text-transform:uppercase;opacity:.65}
-@media(max-width:420px){.ov{padding-inline:16px}.ov-stage{padding-top:60px}.ov-sheet{min-height:0}.ov-art{min-height:145px;padding:18px}.ov-sheet .rc-rows li{gap:8px;font-size:13px}}
-/* The wedding sleeve reads like an invitation rather than a gig poster. */
-.ov.s-wedding .ov-sheet{background:linear-gradient(120deg,#faf7ef,#eee7db);padding-top:30px}
-.ov.s-wedding .ov-meta{color:#75654e;border-color:#c5b697;font-weight:500;letter-spacing:.18em}
-.ov.s-wedding .ov-art{align-items:center;justify-content:center;text-align:center;min-height:190px;margin:24px 0;background:none;color:#40372f;border:1px solid #c5b697;outline:1px solid #c5b697;outline-offset:-6px;overflow:visible}
-.ov.s-wedding .ov-art img{display:none}
-.ov.s-wedding .ov-art::after{content:"With love, and live music";position:static;background:none;mix-blend-mode:normal;font:italic 16px/1.5 var(--serif);color:#75654e;margin-top:15px}
-.ov.s-wedding .ov-art small{font-weight:500;font-size:9px;letter-spacing:.25em;color:#75654e;margin-bottom:15px}
-.ov.s-wedding .ov-art h3{font:italic 400 clamp(48px,11vw,66px)/1.05 var(--serif);letter-spacing:-.045em}
-.ov.s-wedding .rc-body{font:400 17px/1.55 var(--serif);text-align:center}
-.ov.s-wedding .ov-track-label{text-align:center;color:#75654e;font-weight:500;letter-spacing:.2em;margin-top:26px}
-.ov.s-wedding .rc-rows{border-color:#c5b697}
-.ov.s-wedding .rc-rows li{border-color:#c5b69780;padding-block:14px}
-.ov.s-wedding .rc-rows li>span:first-of-type{font:400 17px/1.25 var(--serif)}
-.ov.s-wedding .rc-rows .plays{font-weight:500;font-size:11px;color:#75654e}
-.ov.s-wedding .rc-where{text-align:center;color:#75654e;opacity:1}
-.ov.s-wedding .rc-links .go{background:#40372f;color:#faf7ef;font-weight:500}
-.ov.s-wedding .ov-foot{color:#75654e;opacity:1;font-weight:500;font-size:8px}
-/* Three distinct record editions: club pressing, party compilation, and event programme. */
-.occ-card[data-k="bar"] .occ-slv{background:#e9e3d0;color:#191915;border-top:8px solid #a33125}
-.occ-card[data-k="bar"] .occ-slv b{text-transform:uppercase;font-weight:900;line-height:.82;letter-spacing:-.07em}
-.occ-card[data-k="bar"] .occ-slv em{font:700 3.8cqw/1.2 var(--sans);text-transform:uppercase;border-top:1px solid;padding-top:6px}
-.occ-card[data-k="party"]{--bg:#f0ad89;--fg:#28385a;--lab:#7897b1}
-.occ-card[data-k="party"] .occ-slv{background:repeating-radial-gradient(circle at 100% 5%,transparent 0 15px,#28385a15 16px 18px,transparent 19px 29px),#f0ad89}
-.occ-card[data-k="party"] .occ-slv b{font:italic 400 15cqw/.95 var(--serif);transform:rotate(-8deg);background:#f7e9cb;padding:4px 8px;margin-left:-8px;box-shadow:3px 4px 0 #28385a}
-.occ-card[data-k="party"] .occ-slv em{margin-top:14px;font:700 4cqw/1.2 var(--sans)}
-.occ-card[data-k="corp"]{--bg:#182f35;--fg:#e9ece5;--lab:#a5bbb0}
-.occ-card[data-k="corp"] .occ-slv{background:linear-gradient(90deg,transparent 72%,#a5bbb02b 72% 74%,transparent 74% 82%,#a5bbb02b 82% 84%,transparent 84%),#182f35;border-bottom:6px solid #a5bbb0}
-.occ-card[data-k="corp"] .occ-slv b{font:400 11cqw/1 var(--serif);letter-spacing:-.01em}
-.occ-card[data-k="corp"] .occ-slv em{font:500 3.8cqw/1.3 var(--sans);letter-spacing:.08em;text-transform:uppercase}
-.ov[data-edition="bar"]{--bg:#e9e3d0;--fg:#191915;--lab:#a33125}
-.ov[data-edition="bar"] .ov-sheet{border-top:10px solid #a33125}
-.ov[data-edition="bar"] .ov-meta{font-family:monospace;border-bottom:3px solid}
-.ov[data-edition="bar"] .ov-art{margin:18px -12px;min-height:260px;justify-content:space-between;padding:20px;background:#151411}
-.ov[data-edition="bar"] .ov-art img{filter:grayscale(1) contrast(1.35);opacity:.6}
-.ov[data-edition="bar"] .ov-art::after{background:linear-gradient(transparent,#000b);mix-blend-mode:normal}
-.ov[data-edition="bar"] .ov-art small{align-self:start;background:#a33125;padding:7px 10px;color:#fff}
-.ov[data-edition="bar"] .ov-art h3{font:900 clamp(48px,11vw,78px)/.83 var(--sans);text-transform:uppercase;letter-spacing:-.065em;max-width:8ch}
-.ov[data-edition="bar"] .ov-track-label{font-family:monospace;letter-spacing:.08em}
-.ov[data-edition="bar"] .rc-rows{display:grid;grid-template-columns:1fr 1fr;gap:0;border:2px solid}
-.ov[data-edition="bar"] .rc-rows li{display:flex;align-items:start;padding:16px;border:0;gap:12px;font:700 15px/1.15 var(--sans)}
-.ov[data-edition="bar"] .rc-rows li+li{border-left:1px dashed}
-.ov[data-edition="bar"] .rc-rows li::before{content:"SIDE " counter(step,upper-alpha);font:700 10px/1 monospace;color:#a33125}
-.ov[data-edition="bar"] .rc-rows .plays{font:900 25px/1 var(--sans);text-transform:uppercase;text-align:left;max-width:none}
-.ov[data-edition="bar"] .rc-where{font:400 13px/1.5 monospace}
-.ov[data-edition="bar"] .rc-links .go{background:#a33125;color:#fff}
-.ov[data-edition="bar"] .ov-foot{border-top:1px dashed;padding-top:15px;font-family:monospace}
-.ov[data-edition="party"]{--bg:#f0ad89;--fg:#28385a;--lab:#7897b1}
-.ov[data-edition="party"] .ov-sheet{background:radial-gradient(circle at 100% 0,#f8d2a6 0 16%,transparent 16.2%),#f0ad89;padding-top:22px}
-.ov[data-edition="party"] .ov-meta{border:0;font-size:9px;letter-spacing:.09em}
-.ov[data-edition="party"] .ov-art{overflow:visible;min-height:240px;background:none;margin:12px 0 28px;justify-content:center;padding:0 0 0 12px;color:#28385a}
-.ov[data-edition="party"] .ov-art img{inset:5px 0 auto auto;width:48%;height:220px;object-position:50% 30%;border:9px solid #f7e9cb;transform:rotate(7deg);filter:grayscale(1);box-shadow:4px 6px 0 #28385a}
-.ov[data-edition="party"] .ov-art::after{content:"✦";position:absolute;inset:auto 4px -24px auto;background:none;mix-blend-mode:normal;color:#28385a;font:80px/1 var(--serif);transform:rotate(14deg)}
-.ov[data-edition="party"] .ov-art small{align-self:start;background:#28385a;color:#f7e9cb;padding:8px 12px;transform:rotate(-5deg);max-width:65%;font-size:10px}
-.ov[data-edition="party"] .ov-art h3{font:italic 400 clamp(65px,15vw,100px)/1 var(--serif);letter-spacing:-.055em;background:#f7e9cb;align-self:start;padding:0 20px 6px 8px;transform:rotate(-7deg);box-shadow:4px 5px 0 #28385a}
-.ov[data-edition="party"] .rc-body{max-width:42ch;font-weight:500}
-.ov[data-edition="party"] .ov-track-label{font-size:11px;letter-spacing:.08em;margin-top:26px}
-.ov[data-edition="party"] .rc-rows{display:grid;grid-template-columns:1fr 1fr;border:0;gap:15px;margin:18px 0 23px}
-.ov[data-edition="party"] .rc-rows li{display:flex;align-items:start;gap:12px;background:#f7e9cb;padding:17px 14px;border:1px solid #28385a;box-shadow:3px 4px 0 #28385a;rotate:-2deg;font-size:14px}
-.ov[data-edition="party"] .rc-rows li:nth-child(2){rotate:3deg;background:#c4d6dc}
-.ov[data-edition="party"] .rc-rows li::before{content:"TRACK " counter(step,decimal-leading-zero);font:700 9px/1 monospace}
-.ov[data-edition="party"] .rc-rows .plays{font:italic 400 24px/1 var(--serif);text-align:left;max-width:none}
-.ov[data-edition="party"] .rc-where{font:500 13px/1.5 var(--sans)}
-.ov[data-edition="party"] .rc-links .go{border-radius:40px;padding-left:22px}
-.ov[data-edition="party"] .rc-links .go i{border-radius:50%;background:#f7e9cb}
-.ov[data-edition="party"] .ov-foot{letter-spacing:.06em;opacity:1}
-.ov[data-edition="corp"]{--bg:#182f35;--fg:#e9ece5;--lab:#a5bbb0}
-.ov[data-edition="corp"] .ov-sheet{display:grid;grid-template-columns:1fr 1fr;column-gap:24px;background:#182f35;border-top:4px solid #a5bbb0}
-.ov[data-edition="corp"] .ov-sheet::after{display:none}
-.ov[data-edition="corp"] .ov-meta{grid-column:1/-1;border-color:#a5bbb066;color:#a5bbb0;font-size:9px;font-weight:500}
-.ov[data-edition="corp"] .ov-art{grid-column:1/-1;min-height:225px;background:none;padding:25px 0;margin:0 0 24px;border-bottom:1px solid #a5bbb066}
-.ov[data-edition="corp"] .ov-art img{inset:24px 0 auto auto;width:35%;height:175px;filter:grayscale(1);opacity:.6}
-.ov[data-edition="corp"] .ov-art::after{display:none}
-.ov[data-edition="corp"] .ov-art small{color:#a5bbb0;font-size:9px;letter-spacing:.16em}
-.ov[data-edition="corp"] .ov-art h3{font:400 clamp(38px,8vw,55px)/1 var(--serif);letter-spacing:-.025em;max-width:65%}
-.ov[data-edition="corp"] .rc-body{grid-column:1;font-size:14px;line-height:1.65;margin-bottom:24px}
-.ov[data-edition="corp"] .ov-track-label{grid-column:2;grid-row:3;align-self:start;margin:0;color:#a5bbb0;font-size:9px;letter-spacing:.14em}
-.ov[data-edition="corp"] .rc-rows{grid-column:2;grid-row:3;align-self:start;margin:28px 0 24px;border-color:#a5bbb066}
-.ov[data-edition="corp"] .rc-rows li{grid-template-columns:20px 1fr;gap:10px;padding:16px 0;border-color:#a5bbb066;font-size:13px}
-.ov[data-edition="corp"] .rc-rows li::before{color:#a5bbb0;align-self:start;padding-top:3px}
-.ov[data-edition="corp"] .rc-rows .plays{grid-column:2;font:400 18px/1.2 var(--serif);text-align:left;max-width:none;color:#a5bbb0}
-.ov[data-edition="corp"] .rc-where{grid-column:1/-1;border-top:1px solid #a5bbb066;padding-top:20px;margin-top:0;font:400 13px/1.5 var(--sans);color:#a5bbb0;opacity:1}
-.ov[data-edition="corp"] .rc-links{grid-column:1/-1}
-.ov[data-edition="corp"] .rc-links .go{background:#a5bbb0;color:#182f35;font-weight:500}
-.ov[data-edition="corp"] .rc-links .go i{background:#182f35}
-.ov[data-edition="corp"] .rc-links .go svg{stroke:#e9ece5}
-.ov[data-edition="corp"] .ov-foot{grid-column:1/-1;color:#a5bbb0;opacity:1;font-size:8px;font-weight:500;letter-spacing:.15em}
-@media(max-width:420px){
- .ov[data-edition="bar"] .ov-art{min-height:230px;margin-inline:-6px}
- .ov[data-edition="bar"] .rc-rows li{padding:13px 10px}
- .ov[data-edition="bar"] .rc-rows .plays{font-size:22px}
- .ov[data-edition="party"] .ov-art img{height:200px;width:52%}
- .ov[data-edition="corp"] .ov-sheet{column-gap:16px;padding-inline:22px}
- .ov[data-edition="corp"] .ov-art{min-height:205px}
- .ov[data-edition="corp"] .ov-art img{height:155px}
- .ov[data-edition="corp"] .rc-body{grid-column:1/-1;margin-bottom:22px}
- .ov[data-edition="corp"] .ov-track-label{grid-column:1/-1;grid-row:auto}
- .ov[data-edition="corp"] .rc-rows{grid-column:1/-1;grid-row:auto;margin-top:10px}
- .ov[data-edition="corp"] .rc-rows li{grid-template-columns:20px 1fr auto}
- .ov[data-edition="corp"] .rc-rows .plays{grid-column:3;font-size:16px;max-width:105px}
-}
+/* Pull-through album sleeves: four occasion-specific covers and inserts. */
+.ov{position:fixed;inset:0;width:100%;max-width:none;height:100dvh;max-height:none;margin:0;border:0;background:none;color:var(--paper);overflow-x:hidden;overflow-y:auto;overscroll-behavior:contain;padding:72px 20px 28px}
+.ov::backdrop{background:#080907ed;backdrop-filter:blur(8px);-webkit-backdrop-filter:blur(8px)}
+.ov[open]::backdrop{animation:fadeIn .25s ease both}
+.ov.closing::backdrop{opacity:0;transition:opacity .65s ease}
+html:has(#occView[open]){overflow:hidden}
+.ov-x{position:fixed;top:max(12px,env(safe-area-inset-top));right:14px;width:44px;height:44px;border-radius:50%;border:1px solid var(--line);background:var(--ink);color:var(--paper);font-size:17px;cursor:pointer;z-index:8}
+.ov-x:focus-visible{outline:2px solid var(--sun);outline-offset:3px}
+#ovMount{width:min(100%,510px);margin:auto}
 
-/* Phone sleeves keep readable copy; trim artwork and spacing rather than scaling the text. */
-@media(max-width:600px){
- .ov{padding:calc(max(12px,env(safe-area-inset-top)) + 44px) 16px 24px}
- .ov-stage{padding-top:32px}
- .ov .ov-sheet{min-height:0;padding:18px 20px 16px}
- .ov .ov-meta{padding-bottom:10px;font-size:9px}
- .ov .rc-body{font-size:15px;line-height:1.45}
- .ov .ov-track-label{margin-top:16px}
- .ov .rc-where{margin-top:12px;font:400 13px/1.4 var(--sans)}
- .ov .rc-links{margin-top:14px}
- .ov .ov-foot{margin-top:14px;font-size:8px;letter-spacing:.06em}
- .ov[data-edition="bar"] .ov-art{min-height:145px;margin:12px -4px;padding:14px}
- .ov[data-edition="bar"] .ov-art h3{font-size:44px;max-width:10ch}
- .ov[data-edition="bar"] .ov-art small{font-size:9px;padding:5px 7px}
- .ov[data-edition="bar"] .rc-rows li{padding:12px 10px;gap:9px;font-size:13px}
- .ov[data-edition="bar"] .rc-rows .plays{font-size:21px}
- .ov[data-edition="bar"] .ov-foot{padding-top:10px}
- .ov.s-wedding .ov-art{min-height:120px;margin:14px 0;padding:14px}
- .ov.s-wedding .ov-art small{margin-bottom:6px}
- .ov.s-wedding .ov-art h3{font-size:46px}
- .ov.s-wedding .ov-art::after{margin-top:7px;font-size:15px}
- .ov.s-wedding .rc-body{font-size:17px;line-height:1.4}
- .ov.s-wedding .rc-rows li{padding-block:10px}
- .ov.s-wedding .rc-where{font:italic 15px/1.35 var(--serif)}
- .ov[data-edition="party"] .ov-art{min-height:150px;margin:8px 0 18px;padding-left:4px}
- .ov[data-edition="party"] .ov-art img{height:143px;width:47%;border-width:6px;inset:0 5px auto auto}
- .ov[data-edition="party"] .ov-art h3{font-size:64px;padding-right:12px}
- .ov[data-edition="party"] .ov-art small{padding:6px 9px;font-size:9px}
- .ov[data-edition="party"] .ov-art::after{font-size:50px;bottom:-15px}
- .ov[data-edition="party"] .rc-rows{gap:12px;margin:14px 0 18px}
- .ov[data-edition="party"] .rc-rows li{padding:12px 10px;gap:9px;font-size:13px}
- .ov[data-edition="party"] .rc-rows .plays{font-size:22px}
- .ov[data-edition="corp"] .ov-art{min-height:130px;margin:0 0 16px;padding:16px 0}
- .ov[data-edition="corp"] .ov-art img{height:104px;top:12px;width:31%}
- .ov[data-edition="corp"] .ov-art h3{font-size:38px}
- .ov[data-edition="corp"] .rc-body{grid-column:1/-1;margin-bottom:16px}
- .ov[data-edition="corp"] .ov-track-label{grid-column:1/-1;grid-row:auto;margin:0}
- .ov[data-edition="corp"] .rc-rows{grid-column:1/-1;grid-row:auto;margin:8px 0 14px}
- .ov[data-edition="corp"] .rc-rows li{grid-template-columns:20px 1fr auto;padding:11px 0}
- .ov[data-edition="corp"] .rc-rows .plays{grid-column:3;font-size:16px;max-width:105px}
- .ov[data-edition="corp"] .rc-where{margin:0;padding-top:12px}
+#occView .sb-art{--cream:#f0e5c9;--shell:#263e8b;--paper:#de6234;--ink:#252417;--duration:950ms;--drop:5deg;background:#151511;color:var(--cream);padding:24px 24px 14px;font-family:'Bricolage Grotesque',Arial,sans-serif;min-height:690px;overflow:hidden;border-radius:8px;box-sizing:border-box}
+#occView .sb-art *{box-sizing:border-box}
+#occView .topline{display:flex;justify-content:space-between;gap:15px;font:10px/1.4 monospace;letter-spacing:.08em;color:#bab6a8}
+#occView button{font:inherit;cursor:pointer;min-height:44px}
+#occView button:focus-visible{outline:3px solid #f0bd54;outline-offset:4px}
+#occView .pull-scene{position:relative;width:min(100%,470px);aspect-ratio:1;margin:54px auto 30px;perspective:1400px;isolation:isolate}
+#occView .insert{position:absolute;inset:0;background:var(--paper);color:var(--ink);padding:6%;overflow:hidden;box-shadow:0 20px 35px #0007;transform:translateY(9px) scale(.97);transition:transform var(--duration) cubic-bezier(.22,.8,.22,1)}
+#occView .portrait{position:absolute;right:-4%;top:0;width:64%;height:69%;object-fit:cover;object-position:45% 22%;filter:grayscale(1) contrast(1.25);mix-blend-mode:multiply;opacity:.9;mask-image:linear-gradient(#000 40%,transparent 88%)}
+#occView .insert-meta{position:relative;font:9px/1.4 monospace;letter-spacing:.05em;max-width:40%}
+#occView .insert h2{position:relative;font:800 clamp(42px,9vw,69px)/.84 'Bricolage Grotesque',Arial;margin:7% 0 0;letter-spacing:-.07em;color:var(--cream)}
+#occView .insert h2 em{font:italic 400 1.3em/.8 'Instrument Serif',Georgia;letter-spacing:-.045em}
+#occView .insert-copy{position:absolute;left:6%;right:6%;bottom:10%}
+#occView p{margin:0}
+#occView .intro{font:500 15px/1.3 'Bricolage Grotesque',Arial;margin:0 0 17px;max-width:85%}
+#occView .arrangements{display:grid;grid-template-columns:1fr 1fr;gap:16px;border-top:1px solid color-mix(in srgb,var(--ink) 45%,transparent);padding-top:12px}
+#occView .arrangements p{display:flex;flex-direction:column;gap:4px}
+#occView .arrangements span{font:9px/1.3 monospace;letter-spacing:.05em}
+#occView .arrangements b{font:italic 400 29px/1 'Instrument Serif',Georgia;letter-spacing:-.02em}
+#occView .arrangements small{font:12px/1.35 Arial;max-width:23ch}
+#occView .date-link{margin-top:10px;border:0;background:none;color:var(--ink);text-align:left;padding:0;font-size:14px;text-decoration:underline;text-underline-offset:5px}
+#occView .insert-footer{position:absolute;left:6%;right:6%;bottom:4%;display:flex;justify-content:space-between;gap:10px;font:8px/1 monospace;letter-spacing:.07em}
+#occView .jacket-art{position:absolute;inset:0;transition:transform var(--duration) cubic-bezier(.25,.85,.3,1),opacity var(--duration);transform-origin:50% 15%;filter:drop-shadow(0 16px 15px #0006);color:var(--cream)}
+#occView .cut-paper{position:absolute;inset:0;background:radial-gradient(circle at 0 100%,#ffffff16,transparent 55%),var(--shell);mask-image:radial-gradient(ellipse 29% 32% at 67% 43%,transparent 98%,#000 99%)}
+#occView .shell-top{position:absolute;left:6%;right:6%;top:5%;display:flex;justify-content:space-between;font:11px monospace;letter-spacing:.08em}
+#occView .shell-title{position:absolute;left:5%;top:19%;font:800 clamp(50px,11vw,87px)/.82 'Bricolage Grotesque',Arial;letter-spacing:-.075em;transform:rotate(-6deg)}
+#occView .shell-title em{display:block;font:italic 400 1.32em/.85 'Instrument Serif',Georgia;letter-spacing:-.055em;margin-top:25%}
+#occView .shell-side{position:absolute;right:2%;top:22%;writing-mode:vertical-rl;font:8px monospace;letter-spacing:.12em}
+#occView .shell-bottom{position:absolute;bottom:5%;left:6%;right:6%;display:flex;justify-content:space-between;gap:15px;font:9px monospace;letter-spacing:.05em;border-top:1px solid currentColor;padding-top:12px}
+#occView .pull-tab{position:absolute;right:6%;top:-32px;border:0;border-radius:3px 3px 0 0;background:var(--paper);color:var(--ink);padding:10px 14px;font:10px monospace;min-height:36px;z-index:4;box-shadow:0 -3px 10px #0002}
+#occView .pulled .jacket-art{transform:translateY(92%) rotate(var(--drop));opacity:0;pointer-events:none}
+#occView .pulled .insert{transform:translateY(0) scale(1)}
+#occView .insert-meta,#occView .insert h2,#occView .insert-copy,#occView .insert-footer{opacity:0;transition:opacity .22s}
+#occView .pulled .insert-meta,#occView .pulled .insert h2,#occView .pulled .insert-copy,#occView .pulled .insert-footer{opacity:1;transition-delay:.28s}
+#occView .demo-controls{display:flex;justify-content:center;position:relative;z-index:5}
+#occView .primary-action{padding:10px 22px;background:#eee3c8;color:#28291e;border:0;border-radius:30px;font-size:13px}
+#occView .status{min-height:24px;padding-top:10px;font:12px/1.3 Arial;text-align:center;color:#e9ddbd}
+/* Bar pressing: a red club jacket, diagonal stage-light cutout, and a full-bleed live photograph. */
+#occView .bar-art{--shell:#a33029;--paper:#e5dfc7;--ink:#262921;--cream:#ede6cd;--drop:-4deg}
+#occView .bar-art .cut-paper{mask-image:linear-gradient(125deg,#000 0 39%,transparent 39.2% 69%,#000 69.2%)}
+#occView .bar-art .portrait{width:100%;height:100%;right:0;object-position:60% 30%;mask-image:linear-gradient(#000 35%,transparent 72%);mix-blend-mode:multiply}
+#occView .bar-art .shell-title{font-size:72px;transform:none;top:15%;left:6%;letter-spacing:-.065em}
+#occView .bar-art .shell-title em{font:800 .95em/.9 'Bricolage Grotesque',Arial;margin-top:90%;letter-spacing:-.065em}
+#occView .bar-art .insert-meta{color:#ede6cd;max-width:80%;text-shadow:0 1px 3px #000}
+#occView .bar-art .insert h2{margin-top:5%;font-size:70px;text-shadow:0 2px 8px #0005}
+#occView .bar-art .insert h2 em{font-style:normal;font-family:'Bricolage Grotesque',Arial;font-weight:800;font-size:1em}
+/* Wedding pressing: ivory double-oval aperture, champagne interlocking rings, and invitation lettering. */
+#occView .wedding-art{--shell:#f4efe3;--paper:#e7ddc8;--ink:#53483a;--cream:#53483a;--drop:2deg;--duration:1150ms}
+#occView .wedding-art .cut-paper{mask-image:radial-gradient(ellipse 14% 25% at 65% 41%,transparent 98%,#000 100%),radial-gradient(ellipse 14% 25% at 80% 41%,transparent 98%,#000 100%);mask-composite:intersect;background:linear-gradient(110deg,#fff9ef,var(--shell))}
+#occView .wedding-art .shell-title{font:italic 400 62px/.8 'Instrument Serif',Georgia;transform:none;top:23%;left:8%;letter-spacing:-.04em}
+#occView .wedding-art .shell-title em{font:inherit;margin-top:10%;line-height:.9}
+#occView .wedding-art .shell-top{font-size:9px;letter-spacing:.1em}
+#occView .wedding-art .shell-bottom{border-color:#b6a385;font-size:8px}
+#occView .wedding-artwork{position:absolute;inset:0;overflow:hidden;background:radial-gradient(ellipse at 90% 10%,#fffaf0,transparent 70%)}
+#occView .wedding-artwork i{position:absolute;top:14%;left:51%;width:30%;height:45%;border:2px solid #ac8f60;border-radius:50%;transform:rotate(-15deg);box-shadow:inset 2px 0 #fff9}
+#occView .wedding-artwork i+i{left:66%;transform:rotate(15deg)}
+#occView .wedding-artwork b{position:absolute;left:68%;top:24%;font:italic 400 76px 'Instrument Serif',Georgia;color:#ae946d}
+#occView .wedding-art .insert h2{font:400 53px/.9 'Instrument Serif',Georgia;letter-spacing:-.04em;margin-top:8%}
+#occView .wedding-art .insert h2 em{font:italic 400 1.1em/.9 'Instrument Serif',Georgia}
+#occView .wedding-art .intro{font:italic 400 19px/1.2 'Instrument Serif',Georgia}
+#occView .wedding-art .arrangements{border-color:#b6a385}
+#occView .wedding-art .arrangements b{font-size:28px}
+/* Company pressing: architectural slits, spruce ink and silver-green paper, offset editorial type. */
+#occView .corporate-art{--shell:#203d39;--paper:#c5d1c1;--ink:#203d39;--cream:#eee5cf;--drop:-2deg}
+#occView .corporate-art .cut-paper{mask-image:linear-gradient(90deg,#000 0 10%,transparent 10.2% 27%,#000 27.2% 31%,transparent 31.2% 48%,#000 48.2% 100%)}
+#occView .corporate-art .portrait{right:auto;left:0;width:54%;height:100%;object-position:65% 25%;mask-image:linear-gradient(#000 50%,transparent 78%)}
+#occView .corporate-art .shell-title{left:52%;top:34%;font:400 51px/.95 'Instrument Serif',Georgia;letter-spacing:-.04em;transform:none}
+#occView .corporate-art .shell-title em{font:italic 400 1.25em/.9 'Instrument Serif',Georgia;margin-top:0}
+#occView .corporate-art .shell-top{font-size:9px;background:var(--shell);padding:5px 0}
+#occView .corporate-art .shell-bottom{background:var(--shell);padding-bottom:8px}
+#occView .corporate-art .insert-meta{margin-left:46%;max-width:54%}
+#occView .corporate-art .insert h2{margin:8% 0 0 40%;font:400 56px/.9 'Instrument Serif',Georgia;color:var(--ink);letter-spacing:-.04em}
+#occView .corporate-art .insert h2 em{font:italic 400 1em/.9 'Instrument Serif',Georgia}
+#occView .corporate-art .intro{max-width:100%;font-weight:500}
+@media(max-width:520px){
+ #occView .sb-art{padding:18px 14px 12px;min-height:640px}
+ #occView .topline{font-size:8px}
+ #occView .pull-scene{margin-top:48px;min-height:420px}
+ #occView .shell-title{font-size:65px;top:22%}
+ #occView .insert h2{font-size:52px;margin-top:10%}
+ #occView .intro{font-size:14px;margin-bottom:12px;max-width:100%}
+ #occView .arrangements{gap:10px}
+ #occView .arrangements b{font-size:25px}
+ #occView .arrangements small{font-size:12px}
+ #occView .shell-bottom{font-size:8px}
+ #occView .insert-meta{font-size:8px}
+ #occView .insert-copy{bottom:10%}
+ #occView .bar-art .shell-title{font-size:57px;top:18%}
+ #occView .bar-art .shell-title em{margin-top:115%}
+ #occView .bar-art .insert h2{font-size:57px;margin-top:9%}
+ #occView .wedding-art .shell-title{font-size:54px;top:25%;left:7%}
+ #occView .wedding-art .insert h2{font-size:43px;margin-top:10%}
+ #occView .wedding-art .intro{font-size:18px}
+ #occView .wedding-art .arrangements b{font-size:25px}
+ #occView .corporate-art .shell-title{font-size:42px;left:51%}
+ #occView .corporate-art .insert h2{font-size:45px;margin-left:39%;margin-top:11%}
+ #occView .corporate-art .insert-meta{margin-left:44%;max-width:56%}
 }
+@media(max-width:360px){#occView .pull-scene{min-height:450px}#occView .shell-title{font-size:58px}#occView .corporate-art .shell-title{font-size:37px}#occView .corporate-art .insert h2{font-size:40px}#occView .arrangements b{font-size:23px}}
+#occView .bar-art .shell-bottom{background:var(--shell);padding-bottom:6px}
+#occView .bar-art .shell-title em{text-shadow:0 2px 8px #0009}
+#occView .wedding-art .insert-meta{max-width:75%}
+#occView .corporate-art .insert-meta{margin-left:54%;max-width:46%}
+#occView .corporate-art .insert h2{margin-left:56%;font-size:50px}
+#occView .corporate-art .pulled .portrait{mask-image:linear-gradient(#000 23%,transparent 49%)}
+@media(max-width:520px){#occView .corporate-art .insert h2{margin-left:56%;font-size:38px}}
+@media(max-width:360px){#occView .corporate-art .insert h2{font-size:34px}}
+#occView .bar-art .pulled .portrait{mask-image:linear-gradient(#000 28%,transparent 54%)}
+@media(prefers-reduced-motion:reduce){#occView .insert,#occView .jacket-art,#occView .insert-meta,#occView .insert h2,#occView .insert-copy,#occView .insert-footer{transition:none!important}}
+
+#occView .sb-art{min-height:0;padding:0 12px;background:none;border-radius:0;overflow:visible}
+#occView .topline{display:none}
+#occView .pull-scene{margin:36px auto 22px}
+#occView .status{display:none}
+#occView .sb-art .shell-title{pointer-events:none}
+#occView .sb-art h2{max-width:none}
+#occView.closing .sb-art{--duration:520ms!important}
+#occView .sb-art .date-link{font-size:14px}
+@media(max-width:520px){.ov{padding:64px 12px 24px}#occView .sb-art{padding:0 4px}#occView .pull-scene{min-height:440px;margin-top:32px}#occView .sb-art .arrangements small{font-size:13px}#occView .sb-art .intro{font-size:15px}#occView .wedding-art .intro{font-size:19px}}
+@media(max-width:360px){#occView .pull-scene{min-height:470px}}
+.occ-card[data-k="bar"] .occ-slv{background:#a33029;color:#ede6cd}
+.occ-card[data-k="bar"] .occ-slv b{text-transform:uppercase}
+.occ-card[data-k="party"] .occ-slv{background:#263e8b;color:#f0e5c9}
+.occ-card[data-k="party"] .occ-slv b{font:italic 400 15cqw/.95 var(--serif)}
+.occ-card[data-k="corp"] .occ-slv{background:repeating-linear-gradient(90deg,transparent 0 15%,#c5d1c122 15% 17%,transparent 17% 23%),#203d39;color:#eee5cf}
+.occ-card[data-k="corp"] .occ-slv b{font:400 11cqw/1 var(--serif)}
 /* anything else: a quiet line under the rack */
 .occ-else{appearance:none;background:none;border:0;border-top:1px solid var(--line);width:100%;margin-top:clamp(26px,4vw,40px);padding:20px 0 0;cursor:pointer;display:flex;align-items:baseline;justify-content:space-between;gap:16px;
   color:var(--muted);font:600 15px/1.2 var(--sans);text-align:left;-webkit-tap-highlight-color:transparent}
@@ -1382,22 +1337,46 @@ html:not(.js) .switch{display:none}
 </footer>
 
 <!-- the little card that opens when a sign in the rooms banner is tapped -->
-<dialog class="ov" id="occView" aria-labelledby="ovTitle">
+<dialog class="ov" id="occView" aria-label="Occasion sleeve">
   <button class="ov-x" type="button" aria-label="Close" data-close>✕</button>
-  <div class="ov-stage">
-    <span class="ov-rec" aria-hidden="true"><i></i></span>
-    <article class="ov-sheet">
-      <div class="ov-meta"><span>Sweet Babe · Kyle Keaser</span><span id="ovEdition"></span></div>
-      <div class="ov-art"><img id="ovImg" alt=""><small id="ovKicker"></small><h3 id="ovTitle"></h3></div>
-      <p class="rc-body" id="ovBody"></p>
-      <p class="ov-track-label">The lineup · your liner notes</p>
-      <ul class="rc-rows" id="ovRows"></ul>
-      <p class="rc-where" id="ovWhere"></p>
-      <div class="rc-links" id="ovLinks"></div>
-      <div class="ov-foot"><span>Live music · Made for your night</span><span>33⅓ RPM · Stereo</span></div>
-    </article>
-  </div>
+  <div id="ovMount"></div>
 </dialog>
+<template id="occ-bar">
+<div class="sb-art bar-art" aria-label="Bar nights pull-through sleeve">
+<div class="topline"><span>BAR NIGHTS / THE LIVE SESSION</span><span>SB–01</span></div>
+<div class="pull-scene">
+<div class="insert"><img class="portrait" src="assets/band-new-dodge-lounge.jpg" alt="Kyle performing at New Dodge Lounge"><div class="insert-meta">SWEET BABE / KYLE KEASER<br>LIVE IN THE ROOM WITH YOU</div><h2>turn it<br><em>up.</em></h2><div class="insert-copy"><p class="intro">Your room. A live set.<br>A reason to stay for another.</p><div class="arrangements"><p><span>SIDE A / INTIMATE</span><b>Solo.</b><small>Lounges and coffee shops.</small></p><p><span>SIDE B / FULL SOUND</span><b>The band.</b><small>A stage and a crowd.</small></p></div><button class="date-link" type="button" data-go="Bar or venue night">Tell Kyle about your room ↗</button></div><div class="insert-footer">LIVE MUSIC / FOR YOUR ROOM <span>SB–01</span></div></div>
+<div class="jacket-art" aria-hidden="true"><div class="cut-paper"></div><div class="shell-top">SWEET BABE <span>LIVE / STEREO</span></div><div class="shell-title">AFTER<br><em>HOURS.</em></div><div class="shell-side">VOICE / GUITAR / THE ROOM</div><div class="shell-bottom">BAR NIGHTS &amp; VENUES <span>SB–01</span></div></div>
+<button class="pull-tab" type="button" aria-expanded="false">PULL THE LINER NOTES ↑</button>
+</div><div class="demo-controls"><button class="primary-action" type="button">Pull the insert ↑</button></div>
+</div></template>
+<template id="occ-wed">
+<div class="sb-art wedding-art" aria-label="Wedding pull-through sleeve">
+<div class="topline"><span>WEDDINGS / THE LOVE SONG</span><span>SB–02</span></div>
+<div class="pull-scene">
+<div class="insert"><div class="wedding-artwork" aria-hidden="true"><i></i><i></i><b>&amp;</b></div><div class="insert-meta">KYLE KEASER / SWEET BABE<br>A SOUNDTRACK FOR THE TWO OF YOU</div><h2>your day.<br><em>your song.</em></h2><div class="insert-copy"><p class="intro">For the quiet moments.<br>And the ones you’ll dance through.</p><div class="arrangements"><p><span>THE BEGINNING</span><b>Just Kyle.</b><small>Voice and guitar for the ceremony or cocktails.</small></p><p><span>THE CELEBRATION</span><b>Your choice.</b><small>Keep it solo, or bring the band for the reception.</small></p></div><button class="date-link" type="button" data-go="Wedding">Let’s talk about your day ↗</button></div><div class="insert-footer">WITH LOVE / AND LIVE MUSIC <span>SB–02</span></div></div>
+<div class="jacket-art" aria-hidden="true"><div class="cut-paper"></div><div class="shell-top">KYLE KEASER &amp; SWEET BABE <span>02</span></div><div class="shell-title">a day<br><em>like no<br>other.</em></div><div class="shell-side">TO HAVE / TO HOLD / TO DANCE</div><div class="shell-bottom">THE WEDDING EDITION <span>WITH LOVE</span></div></div>
+<button class="pull-tab" type="button" aria-expanded="false">PULL THE LINER NOTES ↑</button>
+</div><div class="demo-controls"><button class="primary-action" type="button">Pull the insert ↑</button></div>
+</div></template>
+<template id="occ-party">
+<div class="sb-art party-art" aria-label="Party pull-through sleeve">
+<div class="topline"><span>PARTIES / GOOD COMPANY</span><span>SB–03</span></div>
+<div class="pull-scene">
+<div class="insert"><img class="portrait" src="assets/album/flag-laugh.jpg" alt="Kyle singing and playing acoustic guitar"><div class="insert-meta">KYLE KEASER &amp; SWEET BABE<br>THE GOOD COMPANY SESSIONS</div><h2>your<br><em>people.</em></h2><div class="insert-copy"><p class="intro">Birthdays. Backyards.<br>The people you turn it up with.</p><div class="arrangements"><p><span>KEEP IT CLOSE</span><b>Just Kyle.</b><small>Voice, guitar, your living room.</small></p><p><span>MAKE SOME ROOM</span><b>The whole band.</b><small>A bigger sound for a bigger night.</small></p></div><button class="date-link" type="button" data-go="Party">Let’s make a night of it ↗</button></div><div class="insert-footer">SIDE B / LIVE, IN GOOD COMPANY <span>SB–03</span></div></div>
+<div class="jacket-art" aria-hidden="true"><div class="cut-paper"></div><div class="shell-top">SWEET BABE <span>STEREO</span></div><div class="shell-title">house<br><em>party.</em></div><div class="shell-side">VOICE / GUITAR / GOOD COMPANY</div><div class="shell-bottom">AN EVENING WITH YOUR PEOPLE <span>SB–03</span></div></div>
+<button class="pull-tab" type="button" aria-expanded="false">PULL THE LINER NOTES ↑</button>
+</div><div class="demo-controls"><button class="primary-action" type="button">Pull the insert ↑</button></div>
+</div></template>
+<template id="occ-corp">
+<div class="sb-art corporate-art" aria-label="Corporate pull-through sleeve">
+<div class="topline"><span>CORPORATE EVENTS / OFF THE CLOCK</span><span>SB–04</span></div>
+<div class="pull-scene">
+<div class="insert"><img class="portrait" src="assets/videos/beautiful-girl-showcase.jpg" alt="Kyle singing and playing guitar onstage"><div class="insert-meta">KYLE KEASER / SWEET BABE<br>DETROIT TO CHICAGO</div><h2>good<br><em>company.</em></h2><div class="insert-copy"><p class="intro">Put the workday away.<br>Give your people a night together.</p><div class="arrangements"><p><span>THE CONVERSATION</span><b>Solo.</b><small>Alongside dinner and a mixer.</small></p><p><span>THE OCCASION</span><b>Solo or band.</b><small>A holiday party or company night.</small></p></div><button class="date-link" type="button" data-go="Company event">Plan your company night ↗</button></div><div class="insert-footer">LIVE MUSIC / OFF THE CLOCK <span>SB–04</span></div></div>
+<div class="jacket-art" aria-hidden="true"><div class="cut-paper"></div><div class="shell-top">KYLE KEASER / SWEET BABE <span>04</span></div><div class="shell-title">off the<br><em>clock.</em></div><div class="shell-side">AN EVENING / NOT A MEETING</div><div class="shell-bottom">THE COMPANY EDITION <span>LIVE</span></div></div>
+<button class="pull-tab" type="button" aria-expanded="false">PULL THE LINER NOTES ↑</button>
+</div><div class="demo-controls"><button class="primary-action" type="button">Pull the insert ↑</button></div>
+</div></template>
 
 <dialog class="roomcard" id="roomCard" aria-labelledby="roomTitle">
   <button class="rc-close" type="button" aria-label="Close" data-close>✕</button>
@@ -2281,89 +2260,54 @@ document.querySelectorAll('.occ-card, .occ-else').forEach(c => c.addEventListene
   if ('else' in c.dataset) { pickKind('Something else'); return goBook(); }      // no sleeve for this one: straight to the form
   openOcc(c.dataset.k, c);
 }));
-// ── The artwork jacket falls off the record, swings, then settles with its liner notes facing up. ──
-// The artwork is one of Kyle's own photos already on the site, printed in the sleeve's colour.
-const OCC_ART = { bar: 'assets/band-new-dodge-lounge.jpg', wed: 'assets/solo-dessert-oasis.jpg', party: 'assets/album/flag-laugh.jpg', corp: 'assets/videos/beautiful-girl-showcase.jpg' };
-let occFrom = null, occBusy = false;
-function occOffset(src, dst) {                      // where the rack sleeve sits, as a transform of the big one
-  const a = src.getBoundingClientRect(), b = dst.getBoundingClientRect();
-  return `translate(${a.left + a.width / 2 - (b.left + b.width / 2)}px, ${a.top + a.height / 2 - (b.top + b.height / 2)}px) scale(${a.width / b.width})`;
+// Pull-through sleeves: the cover drops away to reveal occasion-specific artwork and booking details.
+let occFrom = null, occBusy = false, occReveal = null;
+function setOccPulled(open, sound = true) {
+  const dlg = $('#occView'), scene = dlg.querySelector('.pull-scene'); if (!scene) return;
+  clearTimeout(occReveal);
+  scene.classList.toggle('pulled', open);
+  const insert = scene.querySelector('.insert'); insert.inert = !open; insert.setAttribute('aria-hidden', String(!open));
+  dlg.querySelector('.pull-tab').textContent = open ? 'SLIDE BACK ↓' : 'PULL THE LINER NOTES ↑';
+  dlg.querySelector('.primary-action').textContent = open ? 'Slide the sleeve back ↓' : 'Pull the insert ↑';
+  dlg.querySelectorAll('.pull-tab,.primary-action').forEach(b => b.setAttribute('aria-expanded', String(open)));
+  if (sound && window.cardSound) window.cardSound(dlg.dataset.edition, !open);
 }
 function openOcc(k, card) {
-  const r = ROOMS[k], dlg = $('#occView'); if (!r || !dlg.showModal || occBusy) return;
-  const tone = [...card.classList].find(c => c.startsWith('s-')) || 's-cream';
-  dlg.className = 'ov ' + tone;
-  dlg.dataset.edition = k;
-  dlg.querySelector('.ov-track-label').textContent = ({ bar: 'Two sides · One live night', wed: 'The soundtrack to your day', party: 'Pick your party mix', corp: 'Programme / Live music' })[k];
-  dlg.querySelector('.ov-foot').innerHTML = k === 'wed' ? '<span>Your day · Your people · Your music</span><span>With Kyle Keaser</span>' : '<span>Live music · Made for your night</span><span>33⅓ RPM · Stereo</span>';
-  if (k !== 'wed') dlg.querySelector('.ov-foot').innerHTML = ({ bar: '<span>Sweet Babe Records · Live sessions</span><span>Vol. 01 / Stereo</span>', party: '<span>Good people. Good music.</span><span>The party mix / 03</span>', corp: '<span>Kyle Keaser / Sweet Babe</span><span>Event edition / 04</span>' })[k];
-  $('#ovEdition').textContent = 'SB / 0' + (['bar', 'wed', 'party', 'corp'].indexOf(k) + 1);
-  $('#ovImg').src = OCC_ART[k] || '';
-  $('#ovKicker').textContent = r.kicker; $('#ovTitle').textContent = r.title;
-  const sleeveCopy = {
-    bar: 'Live music for your room. Kyle plays solo in lounges and coffee shops, or brings the band for a stage and a crowd. Regular rooms include Rochester Eagles, Old Detroit Bar and Grille, and Stray Cat Lounge.',
-    wed: 'Voice and acoustic guitar for the quiet moments; the band when it’s time to dance. Kyle plays solo for your ceremony or cocktail hour. Keep the reception intimate, or bring the whole band.',
-    party: 'Birthdays, anniversaries, backyards and back rooms. Kyle solo fits a living room or restaurant corner. More space, bigger sound? Bring the band.',
-    corp: 'Company nights from Detroit to Chicago. Solo for dinner and conversation; the band for when it’s time for a show.'
-  };
-  $('#ovBody').textContent = sleeveCopy[k] || r.body; $('#ovWhere').textContent = r.where || '';
-  $('#ovRows').className = 'rc-rows';
-  $('#ovRows').innerHTML = (r.rows || []).map(([what, who]) => `<li><span>${esc(what)}</span><span class="plays">${esc(who)}</span></li>`).join('');
-  $('#ovLinks').innerHTML = `<a class="go" href="#book" data-go="${esc(r.pick)}"><span>${esc(r.go || 'Book Kyle')}</span><i><svg viewBox="0 0 24 24" aria-hidden="true"><path d="M5 12h13M13 6l6 6-6 6"/></svg></i></a>`;
-  occFrom = card;
-  dlg.showModal(); dlg.scrollTop = 0;
-  window.cardSound && window.cardSound(k);
-  if (reduce) return;
-  const jacket = dlg.querySelector('.ov-sheet'), from = occOffset(card.querySelector('.occ-slv'), jacket);
-  card.style.visibility = 'hidden';
-  jacket.animate([
-    { transform: `${from} rotate(-4deg)`, opacity: .2 },
-    { offset: .34, transform: 'translateY(-76px) rotate(-7deg) scale(.94)', opacity: 1 },
-    { offset: .65, transform: 'translateY(15px) rotate(3deg)' },
-    { offset: .83, transform: 'translateY(-5px) rotate(-1.2deg)' },
-    { transform: 'none', opacity: 1 }
-  ], { duration: 1150, easing: 'cubic-bezier(.22,.7,.25,1)' });
-  dlg.querySelector('.ov-rec').animate([
-    { transform: 'translateY(70px) scale(.65) rotate(-90deg)', opacity: 0 },
-    { offset: .5, transform: 'translateY(-10px) scale(1) rotate(18deg)', opacity: 1 },
-    { transform: 'none', opacity: 1 }
-  ], { duration: 1100, easing: 'cubic-bezier(.2,.8,.3,1)' });
-  jacket.querySelectorAll('.rc-body,.ov-track-label,.rc-rows li,.rc-where,.rc-links,.ov-foot').forEach((el, i) =>
-    el.animate([{ opacity: 0, transform: 'translateY(10px)' }, { opacity: 1, transform: 'none' }],
-      { duration: 380, delay: 550 + i * 55, easing: 'ease-out', fill: 'backwards' }));
+  const dlg = $('#occView'), template = document.getElementById('occ-' + k);
+  if (!template || !dlg.showModal || dlg.open || occBusy) return;
+  $('#ovMount').replaceChildren(template.content.cloneNode(true));
+  dlg.className = 'ov'; dlg.dataset.edition = k; dlg.setAttribute('aria-label', ROOMS[k].title + ' — record sleeve');
+  occFrom = card; setOccPulled(false, false); dlg.showModal(); dlg.scrollTop = 0;
+  if (reduce) return setOccPulled(true, false);
+  $('#ovMount').animate([{ opacity: 0, transform: 'translateY(18px) scale(.94)' }, { opacity: 1, transform: 'none' }], { duration: 320, easing: 'cubic-bezier(.2,.8,.2,1)' });
+  occReveal = setTimeout(() => { if (dlg.open && !occBusy) setOccPulled(true); }, 420);
 }
 function closeOcc(then) {
-  const dlg = $('#occView'), card = occFrom; if (!dlg.open || occBusy) return;
-  occBusy = true;
-  let finished = false;
+  const dlg = $('#occView'); if (!dlg.open || occBusy) return;
+  clearTimeout(occReveal); occBusy = true;
   const done = () => {
-    if (finished) return; finished = true;
     dlg.getAnimations({ subtree: true }).forEach(a => a.cancel());
-    dlg.classList.remove('closing'); dlg.close();
-    if (card) { card.style.visibility = ''; card.focus({ preventScroll: true }); }
-    occBusy = false; then && then();
+    dlg.close(); dlg.classList.remove('closing'); occBusy = false;
+    if (occFrom) occFrom.focus({ preventScroll: true });
+    if (then) then();
   };
-  if (reduce || !card) return done();
-  const jacket = dlg.querySelector('.ov-sheet'), record = dlg.querySelector('.ov-rec');
-  // Preserve the current frame even if Close is tapped during the opening animation.
-  const elements = [jacket, record, ...jacket.querySelectorAll('.rc-body,.ov-track-label,.rc-rows li,.rc-where,.rc-links,.ov-foot')];
-  const frames = elements.map(el => { const c = getComputedStyle(el); return { transform: c.transform, opacity: c.opacity }; });
-  dlg.getAnimations({ subtree: true }).forEach(a => a.cancel());
+  if (reduce) return done();
   dlg.classList.add('closing');
-  window.cardSound && window.cardSound(dlg.dataset.edition, true);
-  elements.slice(2).forEach((el, i) => el.animate([frames[i + 2], { ...frames[i + 2], opacity: 0 }], { duration: 180, fill: 'forwards' }));
-  record.animate([frames[1], { offset: .55, transform: 'translateY(18px) scale(.97)', opacity: .8 }, { transform: 'translateY(25px) scale(.94)', opacity: 0 }],
-    { duration: 460, easing: 'cubic-bezier(.4,0,.2,1)', fill: 'forwards' });
-  const a = jacket.animate([frames[0],
-    { offset: .6, transform: 'translateY(-38px) rotate(-1deg) scale(.98)', opacity: 1 },
-    { transform: 'translateY(-46px) rotate(0deg) scale(.94)', opacity: 0 }
-  ], { duration: 460, easing: 'cubic-bezier(.4,0,.2,1)', fill: 'forwards' });
+  const wasOpen = dlg.querySelector('.pull-scene').classList.contains('pulled');
+  setOccPulled(false);
+  const mount = $('#ovMount'), current = getComputedStyle(mount);
+  const start = { opacity: current.opacity, transform: current.transform };
+  mount.getAnimations().forEach(a => a.cancel());
+  const a = mount.animate([start, { opacity: 0, transform: 'translateY(12px) scale(.97)' }],
+    { duration: 200, delay: wasOpen ? 420 : 0, easing: 'ease-in', fill: 'both' });
   a.finished.then(done, done);
 }
 $('#occView').addEventListener('click', e => {
-  const go = e.target.closest('a[data-go]');
-  if (go) { e.preventDefault(); return closeOcc(() => { pickKind(go.dataset.go); goBook(); }); }
-  if (e.target.closest('[data-close]') || e.target === e.currentTarget || e.target.classList.contains('ov-stage')) closeOcc();
+  if (occBusy) return;
+  const go = e.target.closest('[data-go]');
+  if (go) { e.preventDefault(); const kind = go.dataset.go; return closeOcc(() => { pickKind(kind); goBook(); }); }
+  if (e.target.closest('.pull-tab,.primary-action')) return setOccPulled(!$('#occView .pull-scene').classList.contains('pulled'));
+  if (e.target.closest('[data-close]') || e.target === e.currentTarget) closeOcc();
 });
 $('#occView').addEventListener('cancel', e => { e.preventDefault(); closeOcc(); });
 
