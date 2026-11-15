@@ -1194,6 +1194,26 @@ html:has(#occView[open]){overflow:hidden}
 #occView .wlr-preview .wlr-label-art{transition:opacity .5s ease}
 #occView .wlr-preview .pulled .wlr-label-art{transition-delay:.45s}
 #occView.closing .jacket-art,#occView.closing .wlr-preview .wlr-cover{transition-timing-function:cubic-bezier(.22,.7,.25,1),ease-out}
+
+/* The jacket is a retained object, not a disappearing overlay. */
+#occView .pull-scene{--park-x:-105%;--park-y:0px;--park-scale:.88;--park-angle:-5deg;transition:transform .85s cubic-bezier(.22,.8,.22,1),margin .85s cubic-bezier(.22,.8,.22,1)}
+#occView .pull-scene.pulled{transform:translateX(190px)}
+#occView .jacket-art{background:var(--paper)}
+#occView .party-jacket{background:#df603b}
+#occView .jacket-art,#occView .wlr-preview .wlr-cover{transform-origin:top left;opacity:1!important;transition:transform var(--duration) cubic-bezier(.22,.8,.22,1);cursor:pointer}
+#occView .pulled .jacket-art,#occView .wlr-preview .pulled .wlr-cover{opacity:1;transform:translate(var(--park-x),var(--park-y)) rotate(var(--park-angle)) scale(var(--park-scale))}
+#occView .wlr-preview .wlr-label-art,#occView .wlr-preview .pulled .wlr-label-art{opacity:1;transition:none}
+#occView .pull-scene.dragging .jacket-art,#occView .wlr-preview .pull-scene.dragging .wlr-cover{opacity:1;transform:translate(calc(var(--pull)*var(--park-x)),calc(var(--pull)*var(--park-y))) rotate(calc(var(--pull)*var(--park-angle))) scale(calc(1 - var(--pull)*(1 - var(--park-scale))));transition:none}
+#occView .pull-scene:not(.pulled){cursor:grab;user-select:none;-webkit-user-select:none}
+#occView .jacket-art,#occView .wlr-cover{user-select:none;-webkit-user-select:none}
+#occView.closing .pull-scene{transition-duration:600ms}
+@media(max-width:1000px){
+ #occView .pull-scene{--park-x:-3%;--park-y:-142px;--park-scale:.26;--park-angle:-7deg}
+ #occView .pull-scene.pulled,#occView .wlr-preview .pull-scene.pulled{transform:none;margin-top:174px}
+ #occView .pulled .pull-tab{top:-32px}
+}
+@media(prefers-reduced-motion:reduce){#occView .pull-scene{transition:none}}
+#occView .insert-meta,#occView .insert h2,#occView .insert-copy,#occView .insert-footer,#occView .party-notes>*,#occView .wlr-preview .wlr-insert>*{opacity:1;transition:none}
 </style>
 <link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Bodoni+Moda:opsz,wght@6..96,500&amp;display=swap">
 </head>
@@ -1484,8 +1504,7 @@ html:has(#occView[open]){overflow:hidden}
 <div class="wlr-inner-copy"><p class="wlr-intro">An intimate beginning.<br>A celebration that sounds like you.</p><div class="wlr-pair"><div><span>01 / CEREMONY &amp; COCKTAILS</span><h3>Voice &amp; guitar.</h3><p>Kyle solo for the quiet moments.</p></div><div><span>02 / THE RECEPTION</span><h3>Solo or the band.</h3><p>Keep it close, or fill the dance floor.</p></div></div><button class="wlr-book" data-go="Wedding" type="button">Tell Kyle about your day <span>↗</span></button></div>
 <div class="wlr-inner-foot"><span>YOUR DAY. YOUR PEOPLE. YOUR MUSIC.</span><span>LIVE / SB–02</span></div>
 </article>
-<div class="wlr-label-art" aria-hidden="true"><div class="wlr-disc"><div class="wlr-label"><span class="wlr-label-top">SWEET BABE</span><span class="wlr-label-side">SIDE A</span><b>the two<br><em>of you.</em></b><i></i><span class="wlr-label-bottom">KYLE KEASER<br>LIVE · 33⅓</span></div></div></div>
-<div class="wlr-cover" aria-hidden="true"><div class="wlr-paper"></div><div class="wlr-cover-top"><span>KYLE KEASER &amp; SWEET BABE</span><span>STEREO / 02</span></div><div class="wlr-title"><strong>love</strong><em>on record.</em></div><div class="wlr-dedication">A soundtrack<br>for the two<br>of you.</div><div class="wlr-side">A DAY TO REMEMBER / A NIGHT TO REPLAY</div><div class="wlr-cover-foot"><span>THE WEDDING EDITION</span><span>WITH LOVE</span></div></div>
+<div class="wlr-cover" aria-hidden="true"><div class="wlr-label-art" aria-hidden="true"><div class="wlr-disc"><div class="wlr-label"><span class="wlr-label-top">SWEET BABE</span><span class="wlr-label-side">SIDE A</span><b>the two<br><em>of you.</em></b><i></i><span class="wlr-label-bottom">KYLE KEASER<br>LIVE · 33⅓</span></div></div></div><div class="wlr-paper"></div><div class="wlr-cover-top"><span>KYLE KEASER &amp; SWEET BABE</span><span>STEREO / 02</span></div><div class="wlr-title"><strong>love</strong><em>on record.</em></div><div class="wlr-dedication">A soundtrack<br>for the two<br>of you.</div><div class="wlr-side">A DAY TO REMEMBER / A NIGHT TO REPLAY</div><div class="wlr-cover-foot"><span>THE WEDDING EDITION</span><span>WITH LOVE</span></div></div>
 <button class="wlr-tab pull-tab" type="button" aria-expanded="false" aria-controls="wlr-content">PULL TO REVEAL <span>↑</span></button>
 </div>
 
@@ -2403,11 +2422,10 @@ document.querySelectorAll('.occ-card, .occ-else').forEach(c => c.addEventListene
   if ('else' in c.dataset) { pickKind('Something else'); return goBook(); }      // no sleeve for this one: straight to the form
   openOcc(c.dataset.k, c);
 }));
-// Pull-through sleeves: the cover drops away to reveal occasion-specific artwork and booking details.
-let occFrom = null, occBusy = false, occReveal = null;
+// Manual sleeves: artwork parks beside the liner and returns when the dialog closes.
+let occFrom = null, occBusy = false;
 function setOccPulled(open, sound = true) {
   const dlg = $('#occView'), scene = dlg.querySelector('.pull-scene'); if (!scene) return;
-  clearTimeout(occReveal);
   scene.classList.toggle('pulled', open);
   const insert = scene.querySelector('.insert,.wlr-insert'); insert.inert = !open; insert.setAttribute('aria-hidden', String(!open));
   dlg.querySelector('.pull-tab').textContent = open ? 'CLOSE SLEEVE →' : 'SLIDE OPEN ←';
@@ -2419,15 +2437,19 @@ function openOcc(k, card) {
   const dlg = $('#occView'), template = document.getElementById('occ-' + k);
   if (!template || !dlg.showModal || dlg.open || occBusy) return;
   $('#ovMount').replaceChildren(template.content.cloneNode(true));
+  const scene = dlg.querySelector('.pull-scene');
+  const portrait = scene.querySelector('.portrait'), jacket = scene.querySelector('.jacket-art');
+  if (portrait && jacket) jacket.prepend(portrait.cloneNode(true));
+  scene.setAttribute('role', 'group');
+  scene.setAttribute('aria-label', 'Tap the artwork or swipe left to open the sleeve');
   dlg.className = 'ov'; dlg.dataset.edition = k; dlg.setAttribute('aria-label', ROOMS[k].title + ' — record sleeve');
   occFrom = card; setOccPulled(false, false); dlg.showModal(); dlg.scrollTop = 0;
-  if (reduce) return setOccPulled(true, false);
+  if (reduce) return;
   $('#ovMount').animate([{ opacity: 0, transform: 'translateY(18px) scale(.94)' }, { opacity: 1, transform: 'none' }], { duration: 320, easing: 'cubic-bezier(.2,.8,.2,1)' });
-  occReveal = setTimeout(() => { if (dlg.open && !occBusy) setOccPulled(true); }, k === 'wed' ? 4500 : 3500);
 }
 function closeOcc(then) {
   const dlg = $('#occView'); if (!dlg.open || occBusy) return;
-  clearTimeout(occReveal); occDrag = null; occBusy = true;
+  occDrag = null; occBusy = true;
   const done = () => {
     dlg.getAnimations({ subtree: true }).forEach(a => a.cancel());
     dlg.close(); dlg.classList.remove('closing'); occBusy = false;
@@ -2449,17 +2471,17 @@ $('#occView').addEventListener('click', e => {
   if (occBusy) return;
   const go = e.target.closest('[data-go]');
   if (go) { e.preventDefault(); const kind = go.dataset.go; return closeOcc(() => { pickKind(kind); goBook(); }); }
-  if (e.target.closest('.pull-tab,.primary-action')) { if (performance.now() < occSuppressClick) return; return $('#occView .pull-scene').classList.contains('pulled') ? closeOcc() : setOccPulled(true); }
+  if (e.target.closest('.pull-tab,.primary-action') || (e.target.closest('.pull-scene') && !$('#occView .pull-scene').classList.contains('pulled'))) { if (performance.now() < occSuppressClick) return; return $('#occView .pull-scene').classList.contains('pulled') ? closeOcc() : setOccPulled(true); }
   if (e.target.closest('[data-close]') || e.target === e.currentTarget) closeOcc();
 });
 $('#occView').addEventListener('cancel', e => { e.preventDefault(); closeOcc(); });
 // The tab follows a deliberate pull. A rightward return closes, never strands a covered dialog.
 let occDrag = null, occSuppressClick = 0;
 $('#occView').addEventListener('pointerdown', e => {
-  const tab = e.target.closest('.pull-tab');
-  if (!tab || occBusy || e.button !== 0) return;
-  const scene = tab.closest('.pull-scene');
-  clearTimeout(occReveal);
+  const scene = e.target.closest('.pull-scene');
+  if (!scene || occBusy || e.button !== 0 || e.target.closest('[data-go]')) return;
+  const tab = e.target.closest('.pull-tab') || (!scene.classList.contains('pulled') ? scene : null);
+  if (!tab) return;
   occDrag = {tab, scene, x:e.clientX, open:scene.classList.contains('pulled'), moved:false, progress:scene.classList.contains('pulled') ? 1 : 0};
   tab.setPointerCapture(e.pointerId);
 });
@@ -2479,8 +2501,9 @@ function finishOccDrag(e) {
   occSuppressClick = performance.now() + 400;
   // Keep the current visual pose when returning control to CSS transitions.
   d.scene.classList.remove('dragging'); d.scene.style.removeProperty('--pull');
-  if (e.type !== 'pointercancel' && (d.open ? d.progress < .85 : d.progress < .22)) closeOcc();
-  else setOccPulled(true, !d.open);
+  if (e.type === 'pointercancel') return setOccPulled(d.open, false);
+  if (d.open && d.progress < .85) closeOcc();
+  else setOccPulled(d.open || d.progress >= .22, !d.open && d.progress >= .22);
 }
 $('#occView').addEventListener('pointerup', finishOccDrag);
 $('#occView').addEventListener('pointercancel', finishOccDrag);
