@@ -1071,7 +1071,73 @@ html:has(#occView[open]){overflow:hidden}
   .js .statement .w{opacity:1}
   html{scroll-behavior:auto}
 }
+
+/* Approved wedding artwork: Love on record. */
+
+#occView .wlr-preview{--wine:#682f3d;--ivory:#f4eedf;--gold:#b39b69;--duration:1000ms;font-family:Arial,sans-serif;box-sizing:border-box;background:#191715;color:var(--ivory);padding:24px 24px 12px;overflow:hidden;border-radius:8px}
+#occView .wlr-preview *{box-sizing:border-box}
+#occView .wlr-preview .wlr-caption{display:flex;justify-content:space-between;gap:15px;font:10px/1.4 Arial;letter-spacing:.13em;color:#bdb6a6}
+#occView .wlr-preview button{cursor:pointer;font-family:Arial,sans-serif}
+#occView .wlr-preview button:focus-visible{outline:3px solid #c6a76d;outline-offset:5px}
+#occView .wlr-preview .wlr-stage{position:relative;isolation:isolate;width:min(100%,480px);aspect-ratio:1;margin:54px auto 24px}
+#occView .wlr-preview .wlr-insert{position:absolute;inset:0;background:var(--wine);color:var(--ivory);padding:6%;box-shadow:0 14px 35px #0005;transform:translateY(7px) scale(.98);transition:transform var(--duration) cubic-bezier(.22,.8,.22,1);overflow:hidden}
+#occView .wlr-preview .wlr-insert::before{content:'';position:absolute;inset:0;pointer-events:none;background:repeating-linear-gradient(0deg,transparent 0 3px,#ffffff03 3px 4px)}
+#occView .wlr-preview .wlr-inner-top,#occView .wlr-preview .wlr-inner-foot{display:flex;justify-content:space-between;gap:10px;font:8px/1.4 Arial;letter-spacing:.1em;position:relative}
+#occView .wlr-preview .wlr-inner-art{position:relative;margin-top:7%;padding-left:3%;border-left:1px solid #b39b6977}
+#occView .wlr-preview .wlr-inner-art>span{display:block;font:italic 400 21px/.9 'Instrument Serif',Georgia;margin-bottom:3px;color:#e4cbbb}
+#occView .wlr-preview h2{font:400 51px/.87 'Instrument Serif',Georgia;letter-spacing:-.035em;margin:0 0 8px}
+#occView .wlr-preview h2 em{font-weight:400}
+#occView .wlr-preview .wlr-inner-copy{position:absolute;left:6%;right:6%;bottom:10%}
+#occView .wlr-preview p{margin:0}
+#occView .wlr-preview .wlr-intro{font:14px/1.35 Arial;letter-spacing:.01em;margin-bottom:17px;color:#f3e1d7}
+#occView .wlr-preview .wlr-pair{display:grid;grid-template-columns:1fr 1fr;gap:18px;border-top:1px solid #d5bba955;padding-top:12px}
+#occView .wlr-preview .wlr-pair span{font:8px/1.4 Arial;letter-spacing:.08em;color:#dfc5b1}
+#occView .wlr-preview h3{font:italic 400 25px/1.1 'Instrument Serif',Georgia;margin:6px 0}
+#occView .wlr-preview .wlr-pair p{font:12px/1.35 Arial;max-width:22ch}
+#occView .wlr-preview .wlr-book{display:flex;align-items:center;justify-content:space-between;background:none;border:0;border-bottom:1px solid #d5bba955;color:var(--ivory);padding:0;min-height:44px;width:100%;font-size:13px;text-align:left;margin-top:10px}
+#occView .wlr-preview .wlr-book span{font-size:20px}
+#occView .wlr-preview .wlr-inner-foot{position:absolute;left:6%;right:6%;bottom:4%;font-size:7px}
+#occView .wlr-preview .wlr-label-art{position:absolute;inset:0;pointer-events:none;overflow:hidden;transition:opacity .35s}
+#occView .wlr-preview .wlr-disc{position:absolute;width:51%;aspect-ratio:1;border-radius:50%;left:47%;top:39%;background:repeating-radial-gradient(circle,#682f3d 0 2px,#844957 2.5px 3px);display:grid;place-items:center}
+#occView .wlr-preview .wlr-label{width:78%;height:78%;border-radius:50%;background:#ead6be;color:var(--wine);display:flex;flex-direction:column;align-items:center;justify-content:center;text-align:center;position:relative}
+#occView .wlr-preview .wlr-label-top{font:9px/1 Arial;letter-spacing:.15em;margin-bottom:8px}
+#occView .wlr-preview .wlr-label-side{font:7px/1 Arial;letter-spacing:.12em;margin-bottom:7px}
+#occView .wlr-preview .wlr-label b{font:400 28px/.85 'Instrument Serif',Georgia;letter-spacing:-.02em}
+#occView .wlr-preview .wlr-label i{width:6px;height:6px;border-radius:50%;background:var(--wine);margin:7px 0}
+#occView .wlr-preview .wlr-label-bottom{font:7px/1.4 Arial;letter-spacing:.09em}
+#occView .wlr-preview .wlr-cover{position:absolute;inset:0;color:var(--wine);transform-origin:50% 10%;transition:transform var(--duration) cubic-bezier(.25,.85,.3,1),opacity var(--duration);filter:drop-shadow(0 10px 12px #0003);pointer-events:none}
+#occView .wlr-preview .wlr-paper{position:absolute;inset:0;background:var(--ivory);mask-image:radial-gradient(circle at 72.5% 64.5%,transparent 0 23%,#000 23.2%)}
+#occView .wlr-preview .wlr-cover-top,#occView .wlr-preview .wlr-cover-foot{position:absolute;left:6%;right:6%;display:flex;justify-content:space-between;gap:12px;font:8px/1.4 Arial;letter-spacing:.11em}
+#occView .wlr-preview .wlr-cover-top{top:6%}
+#occView .wlr-preview .wlr-cover-foot{bottom:5%;padding-top:12px;border-top:1px solid #682f3d55}
+#occView .wlr-preview .wlr-title{position:absolute;left:6%;top:12%;width:88%}
+#occView .wlr-preview .wlr-title strong{display:block;font:500 130px/.94 'Bodoni Moda',Georgia;letter-spacing:-.09em}
+#occView .wlr-preview .wlr-title em{display:block;margin-top:-3px;margin-left:5%;font:italic 400 53px/.9 'Instrument Serif',Georgia;letter-spacing:-.03em}
+#occView .wlr-preview .wlr-dedication{position:absolute;left:8%;top:58%;font:italic 400 25px/1 'Instrument Serif',Georgia}
+#occView .wlr-preview .wlr-side{position:absolute;right:1.6%;top:29%;writing-mode:vertical-rl;font:7px/1 Arial;letter-spacing:.11em}
+#occView .wlr-preview .wlr-tab{position:absolute;top:-31px;right:6%;min-height:36px;background:var(--wine);color:var(--ivory);border:0;border-radius:2px 2px 0 0;padding:10px 15px;font:9px Arial;letter-spacing:.09em;z-index:3}
+#occView .wlr-preview .wlr-tab span{margin-left:10px}
+#occView .wlr-preview .wlr-controls{position:relative;z-index:3;display:flex;justify-content:center}
+#occView .wlr-preview .wlr-toggle{border:1px solid #bdb6a655;background:transparent;color:var(--ivory);min-height:44px;border-radius:24px;padding:10px 22px;font:13px Arial}
+#occView .wlr-preview .wlr-status{min-height:24px;font:12px/1.4 Arial;text-align:center;padding-top:10px;color:#d0c5b3}
+#occView .wlr-preview .wlr-insert>*{opacity:0;transition:opacity .2s}
+#occView .wlr-preview .pulled .wlr-insert{transform:none}
+#occView .wlr-preview .pulled .wlr-insert>*{opacity:1;transition-delay:.3s}
+#occView .wlr-preview .pulled .wlr-cover{transform:translateY(92%) rotate(3deg);opacity:0}
+#occView .wlr-preview .pulled .wlr-label-art{opacity:0}
+@media(max-width:520px){#occView .wlr-preview{padding:18px 12px 10px}#occView .wlr-preview .wlr-caption{font-size:8px}#occView .wlr-preview .wlr-stage{min-height:465px;margin-top:48px}#occView .wlr-preview .wlr-title strong{font-size:112px}#occView .wlr-preview .wlr-title em{font-size:47px}#occView .wlr-preview .wlr-paper{mask-image:radial-gradient(circle at 72.5% 65%,transparent 0 20%,#000 20.3%)}#occView .wlr-preview .wlr-disc{width:57%;left:44%;top:45%;}#occView .wlr-preview .wlr-dedication{font-size:24px;top:58%}#occView .wlr-preview .wlr-inner-art{margin-top:8%}#occView .wlr-preview h2{font-size:46px}#occView .wlr-preview .wlr-intro{font-size:14px;margin-bottom:13px}#occView .wlr-preview .wlr-pair{gap:12px}#occView .wlr-preview h3{font-size:24px}#occView .wlr-preview .wlr-pair p{font-size:12px}#occView .wlr-preview .wlr-cover-top{font-size:7px}}
+@media(max-width:370px){#occView .wlr-preview .wlr-title strong{font-size:96px}#occView .wlr-preview .wlr-title em{font-size:41px}#occView .wlr-preview .wlr-dedication{font-size:21px}#occView .wlr-preview .wlr-label b{font-size:24px}#occView .wlr-preview .wlr-label-top{font-size:7px}#occView .wlr-preview .wlr-label-side{font-size:6px}#occView .wlr-preview .wlr-label-bottom{font-size:6px}#occView .wlr-preview .wlr-pair span{font-size:7px}}
+@media(max-width:520px){#occView .wlr-preview .wlr-stage{min-height:480px}#occView .wlr-preview .wlr-inner-art{margin-top:6%}#occView .wlr-preview h2{font-size:40px}#occView .wlr-preview .wlr-inner-art>span{font-size:19px}}
+@media(prefers-reduced-motion:reduce){#occView .wlr-preview .wlr-insert,#occView .wlr-preview .wlr-insert>*,#occView .wlr-preview .wlr-cover,#occView .wlr-preview .wlr-label-art{transition:none!important}}
+
+#occView .wlr-preview{padding:0 12px;overflow:visible;background:none;border-radius:0}
+#occView .wlr-preview .wlr-caption{display:none}
+#occView .wlr-preview .wlr-stage{margin:36px auto 24px}
+#occView.closing .wlr-preview{--duration:520ms}
+@media(max-width:520px){#occView .wlr-preview{padding:0 4px}#occView .wlr-preview .wlr-stage{margin-top:32px;min-height:480px}}
+
 </style>
+<link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Bodoni+Moda:opsz,wght@6..96,500&amp;display=swap">
 </head>
 <body>
 
@@ -1351,14 +1417,23 @@ html:has(#occView[open]){overflow:hidden}
 </div><div class="demo-controls"><button class="primary-action" type="button">Pull the insert ↑</button></div>
 </div></template>
 <template id="occ-wed">
-<div class="sb-art wedding-art" aria-label="Wedding pull-through sleeve">
-<div class="topline"><span>WEDDINGS / THE LOVE SONG</span><span>SB–02</span></div>
-<div class="pull-scene">
-<div class="insert"><div class="wedding-artwork" aria-hidden="true"><i></i><i></i><b>&amp;</b></div><div class="insert-meta">KYLE KEASER / SWEET BABE<br>A SOUNDTRACK FOR THE TWO OF YOU</div><h2>your day.<br><em>your song.</em></h2><div class="insert-copy"><p class="intro">For the quiet moments.<br>And the ones you’ll dance through.</p><div class="arrangements"><p><span>THE BEGINNING</span><b>Just Kyle.</b><small>Voice and guitar for the ceremony or cocktails.</small></p><p><span>THE CELEBRATION</span><b>Your choice.</b><small>Keep it solo, or bring the band for the reception.</small></p></div><button class="date-link" type="button" data-go="Wedding">Let’s talk about your day ↗</button></div><div class="insert-footer">WITH LOVE / AND LIVE MUSIC <span>SB–02</span></div></div>
-<div class="jacket-art" aria-hidden="true"><div class="cut-paper"></div><div class="shell-top">KYLE KEASER &amp; SWEET BABE <span>02</span></div><div class="shell-title">a day<br><em>like no<br>other.</em></div><div class="shell-side">TO HAVE / TO HOLD / TO DANCE</div><div class="shell-bottom">THE WEDDING EDITION <span>WITH LOVE</span></div></div>
-<button class="pull-tab" type="button" aria-expanded="false">PULL THE LINER NOTES ↑</button>
-</div><div class="demo-controls"><button class="primary-action" type="button">Pull the insert ↑</button></div>
-</div></template>
+<div class="wlr-preview" aria-label="Wedding album sleeve: Love on record">
+<div class="wlr-caption"><span>THE WEDDING EDITION</span><span>SWEET BABE / SB–02</span></div>
+<div class="wlr-stage pull-scene">
+<article class="wlr-insert" id="wlr-content" aria-label="Wedding liner notes">
+<div class="wlr-inner-top">KYLE KEASER &amp; SWEET BABE <span>SIDE B</span></div>
+<div class="wlr-inner-art"><span>from the</span><h2>first note.</h2><span>to the</span><h2><em>last dance.</em></h2></div>
+<div class="wlr-inner-copy"><p class="wlr-intro">An intimate beginning.<br>A celebration that sounds like you.</p><div class="wlr-pair"><div><span>01 / CEREMONY &amp; COCKTAILS</span><h3>Voice &amp; guitar.</h3><p>Kyle solo for the quiet moments.</p></div><div><span>02 / THE RECEPTION</span><h3>Solo or the band.</h3><p>Keep it close, or fill the dance floor.</p></div></div><button class="wlr-book" data-go="Wedding" type="button">Tell Kyle about your day <span>↗</span></button></div>
+<div class="wlr-inner-foot"><span>YOUR DAY. YOUR PEOPLE. YOUR MUSIC.</span><span>LIVE / SB–02</span></div>
+</article>
+<div class="wlr-label-art" aria-hidden="true"><div class="wlr-disc"><div class="wlr-label"><span class="wlr-label-top">SWEET BABE</span><span class="wlr-label-side">SIDE A</span><b>the two<br><em>of you.</em></b><i></i><span class="wlr-label-bottom">KYLE KEASER<br>LIVE · 33⅓</span></div></div></div>
+<div class="wlr-cover" aria-hidden="true"><div class="wlr-paper"></div><div class="wlr-cover-top"><span>KYLE KEASER &amp; SWEET BABE</span><span>STEREO / 02</span></div><div class="wlr-title"><strong>love</strong><em>on record.</em></div><div class="wlr-dedication">A soundtrack<br>for the two<br>of you.</div><div class="wlr-side">A DAY TO REMEMBER / A NIGHT TO REPLAY</div><div class="wlr-cover-foot"><span>THE WEDDING EDITION</span><span>WITH LOVE</span></div></div>
+<button class="wlr-tab pull-tab" type="button" aria-expanded="false" aria-controls="wlr-content">PULL TO REVEAL <span>↑</span></button>
+</div>
+<div class="wlr-controls"><button class="wlr-toggle primary-action" type="button" aria-expanded="false">Pull the liner notes ↑</button></div>
+
+</div>
+</template>
 <template id="occ-party">
 <div class="sb-art party-art" aria-label="Party pull-through sleeve">
 <div class="topline"><span>PARTIES / GOOD COMPANY</span><span>SB–03</span></div>
@@ -2266,7 +2341,7 @@ function setOccPulled(open, sound = true) {
   const dlg = $('#occView'), scene = dlg.querySelector('.pull-scene'); if (!scene) return;
   clearTimeout(occReveal);
   scene.classList.toggle('pulled', open);
-  const insert = scene.querySelector('.insert'); insert.inert = !open; insert.setAttribute('aria-hidden', String(!open));
+  const insert = scene.querySelector('.insert,.wlr-insert'); insert.inert = !open; insert.setAttribute('aria-hidden', String(!open));
   dlg.querySelector('.pull-tab').textContent = open ? 'SLIDE BACK ↓' : 'PULL THE LINER NOTES ↑';
   dlg.querySelector('.primary-action').textContent = open ? 'Slide the sleeve back ↓' : 'Pull the insert ↑';
   dlg.querySelectorAll('.pull-tab,.primary-action').forEach(b => b.setAttribute('aria-expanded', String(open)));
