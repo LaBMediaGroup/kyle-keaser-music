@@ -949,8 +949,8 @@ html:has(#occView[open]){overflow:hidden}
 @media(max-width:360px){#occView .pull-scene{min-height:470px}}
 .occ-card[data-k="bar"] .occ-slv{background:#a33029;color:#ede6cd}
 .occ-card[data-k="bar"] .occ-slv b{text-transform:uppercase}
-.occ-card[data-k="party"] .occ-slv{background:#263e8b;color:#f0e5c9}
-.occ-card[data-k="party"] .occ-slv b{font:italic 400 15cqw/.95 var(--serif)}
+.occ-card[data-k="party"] .occ-slv{background:radial-gradient(circle at 90% 30%,#213e99 0 30%,transparent 30.5%),#df603b;color:#f2e6c8}
+.occ-card[data-k="party"] .occ-slv b{font:800 13cqw/.95 var(--sans);letter-spacing:-.06em}
 .occ-card[data-k="corp"] .occ-slv{background:repeating-linear-gradient(90deg,transparent 0 15%,#c5d1c122 15% 17%,transparent 17% 23%),#203d39;color:#eee5cf}
 .occ-card[data-k="corp"] .occ-slv b{font:400 11cqw/1 var(--serif)}
 /* anything else: a quiet line under the rack */
@@ -1136,6 +1136,59 @@ html:has(#occView[open]){overflow:hidden}
 #occView.closing .wlr-preview{--duration:520ms}
 @media(max-width:520px){#occView .wlr-preview{padding:0 4px}#occView .wlr-preview .wlr-stage{margin-top:32px;min-height:480px}}
 
+
+/* Good Company: a two-ink, groove-led party pressing. */
+#occView .party-art{--shell:#df603b;--paper:#f2e6c8;--ink:#213e99;--cream:#f2e6c8;--drop:1.5deg}
+#occView .party-art .pull-scene{width:min(100%,480px);container-type:inline-size}
+#occView .party-jacket{background:#df603b;overflow:hidden}
+#occView .party-jacket:after{content:'';position:absolute;inset:0;pointer-events:none;background:repeating-linear-gradient(0deg,transparent 0 2px,#482b1d08 2px 3px);mix-blend-mode:multiply}
+#occView .party-meta{position:absolute;top:5%;left:6%;right:6%;display:flex;justify-content:space-between;gap:12px;font:9px/1.4 Arial;letter-spacing:.12em;z-index:1}
+#occView .party-grooves{position:absolute;top:12%;right:-8%;width:75%;aspect-ratio:1;border-radius:50%;background:#213e99;overflow:hidden;transform:rotate(-18deg)}
+#occView .party-grooves i{position:absolute;border:2px solid #df603b;border-radius:50%;inset:4% 4% 4% 12%}
+#occView .party-grooves i:nth-child(2){inset:9% 9% 9% 20%}#occView .party-grooves i:nth-child(3){inset:14% 14% 14% 28%}#occView .party-grooves i:nth-child(4){inset:19% 19% 19% 36%}#occView .party-grooves i:nth-child(5){inset:24% 24% 24% 44%}#occView .party-grooves i:nth-child(6){inset:29% 29% 29% 52%}#occView .party-grooves i:nth-child(7){inset:34% 34% 34% 60%}#occView .party-grooves i:nth-child(8){inset:39% 39% 39% 68%}
+#occView .party-grooves b{position:absolute;top:37%;left:13%;font:italic 400 21px/.95 'Instrument Serif',Georgia;color:#f2e6c8;transform:rotate(18deg)}
+#occView .party-title{position:absolute;left:5%;right:3%;top:41%;color:#f2e6c8;letter-spacing:-.075em}
+#occView .party-title>span{display:block;font:800 112px/.8 'Bricolage Grotesque',Arial;font-size:23cqw;letter-spacing:-.08em}
+#occView .party-title strong{display:block;font:800 79px/.95 'Bricolage Grotesque',Arial;font-size:16.5cqw;letter-spacing:-.075em}
+#occView .party-title em{display:block;font:italic 400 30px/1 'Instrument Serif',Georgia;letter-spacing:-.02em;margin:4% 0 0 2%;color:#213e99}
+#occView .party-foot{position:absolute;bottom:5%;left:6%;right:6%;border-top:1px solid currentColor;padding-top:12px;display:flex;justify-content:space-between;gap:12px;font:8px/1.4 Arial;letter-spacing:.08em}
+#occView .party-notes{padding:0;background:#f2e6c8;color:#213e99}
+#occView .party-inner-title{position:absolute;top:13%;left:6%;right:6%;height:30%}
+#occView .party-inner-title>span{font:9px Arial;letter-spacing:.08em}
+#occView .party-art .party-inner-title h2{margin:10px 0 0;color:#213e99;font:800 50px/.85 'Bricolage Grotesque',Arial;letter-spacing:-.06em}
+#occView .party-art .party-inner-title h2 em{font:italic 400 68px/.8 'Instrument Serif',Georgia;letter-spacing:-.04em;color:#bc4428}
+#occView .party-small-grooves{position:absolute;right:-11%;top:-8%;width:40%;aspect-ratio:1;border-radius:50%;background:repeating-radial-gradient(ellipse at 70% 50%,#213e99 0 2px,transparent 3px 10px);transform:rotate(-25deg);opacity:.85}
+#occView .party-copy{position:absolute;left:6%;right:6%;bottom:13%}
+#occView .party-intro{font:14px/1.4 Arial;margin-bottom:16px;max-width:38ch}
+#occView .party-tracks{display:grid;grid-template-columns:1fr 1fr;gap:20px;border-top:1px solid #213e9955;padding-top:13px}
+#occView .party-tracks span{font:8px/1.4 Arial;letter-spacing:.07em}
+#occView .party-tracks h3{font:italic 400 27px/1 'Instrument Serif',Georgia;letter-spacing:-.02em;margin:6px 0}
+#occView .party-tracks p{font:12px/1.4 Arial}
+#occView .party-art .party-book{width:100%;display:flex;align-items:center;justify-content:space-between;border:0;border-bottom:1px solid #213e9955;background:none;color:#213e99;font:14px Arial;text-align:left;padding:8px 0;margin-top:12px}
+#occView .party-book span{font-size:24px}
+#occView .party-notes>*{opacity:0;transition:opacity .24s}
+#occView .pulled .party-notes>*{opacity:1;transition-delay:.2s}
+#occView .party-art .pull-tab{background:#213e99;color:#f2e6c8}
+@media(max-width:520px){#occView .party-art .pull-scene{min-height:480px}#occView .party-title{top:45%}#occView .party-title em{font-size:27px;margin-top:6%}#occView .party-grooves{top:14%;width:82%;right:-13%}#occView .party-meta{font-size:8px}#occView .party-tracks{gap:13px}#occView .party-tracks h3{font-size:24px}#occView .party-foot{font-size:7px}#occView .party-copy{bottom:12%}#occView .party-intro{font-size:13px}#occView .party-art .party-inner-title h2{font-size:43px}#occView .party-art .party-inner-title h2 em{font-size:59px}}
+@media(max-width:360px){#occView .party-art .pull-scene{min-height:500px}#occView .party-tracks h3{font-size:22px}}
+/* One continuous reveal; a close returns the jacket and leaves the scene. */
+#occView .demo-controls,#occView .wlr-controls{display:none}
+#occView .pull-tab{touch-action:none;user-select:none;cursor:grab}
+#occView .pull-tab:active{cursor:grabbing}
+#occView .sb-art,#occView .wlr-preview{--duration:850ms}
+#occView .jacket-art,#occView .wlr-preview .wlr-cover{transition:transform var(--duration) cubic-bezier(.32,.05,.15,1),opacity var(--duration) cubic-bezier(.7,0,.85,1)}
+#occView .pulled .jacket-art,#occView .wlr-preview .pulled .wlr-cover{transform:translateY(105%) rotate(1.5deg)}
+#occView .pull-scene.dragging .jacket-art,#occView .wlr-preview .pull-scene.dragging .wlr-cover{transition:none;transform:translateY(calc(var(--pull)*105%)) rotate(calc(var(--pull)*1.5deg));opacity:calc(1 - var(--pull))}
+#occView.closing .sb-art,#occView.closing .wlr-preview{--duration:600ms!important}
+@media(prefers-reduced-motion:reduce){#occView .party-notes>*{transition:none}}
+
+#occView .party-inner-title{top:11%}
+#occView .party-art .party-inner-title h2{font-size:43px}
+#occView .party-art .party-inner-title h2 em{font-size:58px}
+#occView .party-copy{bottom:11%}
+#occView .party-intro{margin-bottom:12px}
+#occView .party-title em{color:#f2e6c8}
+#occView .party-art .party-book{border-bottom:0}
 </style>
 <link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Bodoni+Moda:opsz,wght@6..96,500&amp;display=swap">
 </head>
@@ -1435,14 +1488,24 @@ html:has(#occView[open]){overflow:hidden}
 </div>
 </template>
 <template id="occ-party">
-<div class="sb-art party-art" aria-label="Party pull-through sleeve">
-<div class="topline"><span>PARTIES / GOOD COMPANY</span><span>SB–03</span></div>
+<div class="sb-art party-art" aria-label="Party album sleeve: Good Company">
 <div class="pull-scene">
-<div class="insert"><img class="portrait" src="assets/album/flag-laugh.jpg" alt="Kyle singing and playing acoustic guitar"><div class="insert-meta">KYLE KEASER &amp; SWEET BABE<br>THE GOOD COMPANY SESSIONS</div><h2>your<br><em>people.</em></h2><div class="insert-copy"><p class="intro">Birthdays. Backyards.<br>The people you turn it up with.</p><div class="arrangements"><p><span>KEEP IT CLOSE</span><b>Just Kyle.</b><small>Voice, guitar, your living room.</small></p><p><span>MAKE SOME ROOM</span><b>The whole band.</b><small>A bigger sound for a bigger night.</small></p></div><button class="date-link" type="button" data-go="Party">Let’s make a night of it ↗</button></div><div class="insert-footer">SIDE B / LIVE, IN GOOD COMPANY <span>SB–03</span></div></div>
-<div class="jacket-art" aria-hidden="true"><div class="cut-paper"></div><div class="shell-top">SWEET BABE <span>STEREO</span></div><div class="shell-title">house<br><em>party.</em></div><div class="shell-side">VOICE / GUITAR / GOOD COMPANY</div><div class="shell-bottom">AN EVENING WITH YOUR PEOPLE <span>SB–03</span></div></div>
-<button class="pull-tab" type="button" aria-expanded="false">PULL THE LINER NOTES ↑</button>
-</div><div class="demo-controls"><button class="primary-action" type="button">Pull the insert ↑</button></div>
-</div></template>
+<article class="insert party-notes" aria-label="Party liner notes">
+<div class="party-meta"><span>SWEET BABE / KYLE KEASER</span><span>SIDE B — LIVE</span></div>
+<div class="party-inner-title"><span>the good company sessions</span><h2>One more<br><em>song.</em></h2><div class="party-small-grooves" aria-hidden="true"></div></div>
+<div class="party-copy"><p class="party-intro">Birthdays. Backyards. Your people.<br>A night worth keeping.</p>
+<div class="party-tracks"><div><span>01 / THE LIVING ROOM SET</span><h3>Pull up a chair.</h3><p>Kyle solo. Voice, guitar, close company.</p></div><div><span>02 / ROOM TO MOVE</span><h3>Bring everybody.</h3><p>Solo or the band. A little more room, a bigger sound.</p></div></div>
+<button class="party-book" type="button" data-go="Party">Let’s make a night of it <span>↗</span></button></div>
+<div class="party-foot"><span>RECORDED IN GOOD COMPANY</span><span>PRIVATE PARTIES / SB–03</span></div>
+</article>
+<div class="jacket-art party-jacket" aria-hidden="true">
+<div class="party-meta"><span>SWEET BABE</span><span>STEREO / 33⅓</span></div>
+<div class="party-grooves"><i></i><i></i><i></i><i></i><i></i><i></i><i></i><i></i></div>
+<div class="party-title"><span>good</span><strong>company</strong><em>a night worth keeping.</em></div>
+<div class="party-foot"><span>KYLE KEASER &amp; YOUR PEOPLE</span><span>SIDE A / 03</span></div>
+</div>
+<button class="pull-tab" type="button" aria-expanded="false">PULL TO OPEN ↑</button>
+</div></div></template>
 <template id="occ-corp">
 <div class="sb-art corporate-art" aria-label="Corporate pull-through sleeve">
 <div class="topline"><span>CORPORATE EVENTS / OFF THE CLOCK</span><span>SB–04</span></div>
@@ -2342,8 +2405,8 @@ function setOccPulled(open, sound = true) {
   clearTimeout(occReveal);
   scene.classList.toggle('pulled', open);
   const insert = scene.querySelector('.insert,.wlr-insert'); insert.inert = !open; insert.setAttribute('aria-hidden', String(!open));
-  dlg.querySelector('.pull-tab').textContent = open ? 'SLIDE BACK ↓' : 'PULL THE LINER NOTES ↑';
-  dlg.querySelector('.primary-action').textContent = open ? 'Slide the sleeve back ↓' : 'Pull the insert ↑';
+  dlg.querySelector('.pull-tab').textContent = open ? 'CLOSE SLEEVE ↓' : 'PULL TO OPEN ↑';
+  const extra = dlg.querySelector('.primary-action'); if (extra) extra.textContent = open ? 'Close sleeve' : 'Pull to open';
   dlg.querySelectorAll('.pull-tab,.primary-action').forEach(b => b.setAttribute('aria-expanded', String(open)));
   if (sound && window.cardSound) window.cardSound(dlg.dataset.edition, !open);
 }
@@ -2355,11 +2418,11 @@ function openOcc(k, card) {
   occFrom = card; setOccPulled(false, false); dlg.showModal(); dlg.scrollTop = 0;
   if (reduce) return setOccPulled(true, false);
   $('#ovMount').animate([{ opacity: 0, transform: 'translateY(18px) scale(.94)' }, { opacity: 1, transform: 'none' }], { duration: 320, easing: 'cubic-bezier(.2,.8,.2,1)' });
-  occReveal = setTimeout(() => { if (dlg.open && !occBusy) setOccPulled(true); }, 420);
+  occReveal = setTimeout(() => { if (dlg.open && !occBusy) setOccPulled(true); }, 260);
 }
 function closeOcc(then) {
   const dlg = $('#occView'); if (!dlg.open || occBusy) return;
-  clearTimeout(occReveal); occBusy = true;
+  clearTimeout(occReveal); occDrag = null; occBusy = true;
   const done = () => {
     dlg.getAnimations({ subtree: true }).forEach(a => a.cancel());
     dlg.close(); dlg.classList.remove('closing'); occBusy = false;
@@ -2374,17 +2437,49 @@ function closeOcc(then) {
   const start = { opacity: current.opacity, transform: current.transform };
   mount.getAnimations().forEach(a => a.cancel());
   const a = mount.animate([start, { opacity: 0, transform: 'translateY(12px) scale(.97)' }],
-    { duration: 200, delay: wasOpen ? 420 : 0, easing: 'ease-in', fill: 'both' });
+    { duration: 260, delay: wasOpen ? 430 : 0, easing: 'cubic-bezier(.4,0,1,1)', fill: 'both' });
   a.finished.then(done, done);
 }
 $('#occView').addEventListener('click', e => {
   if (occBusy) return;
   const go = e.target.closest('[data-go]');
   if (go) { e.preventDefault(); const kind = go.dataset.go; return closeOcc(() => { pickKind(kind); goBook(); }); }
-  if (e.target.closest('.pull-tab,.primary-action')) return setOccPulled(!$('#occView .pull-scene').classList.contains('pulled'));
+  if (e.target.closest('.pull-tab,.primary-action')) { if (performance.now() < occSuppressClick) return; return $('#occView .pull-scene').classList.contains('pulled') ? closeOcc() : setOccPulled(true); }
   if (e.target.closest('[data-close]') || e.target === e.currentTarget) closeOcc();
 });
 $('#occView').addEventListener('cancel', e => { e.preventDefault(); closeOcc(); });
+// The tab follows a deliberate pull. A downward return closes, never strands a covered dialog.
+let occDrag = null, occSuppressClick = 0;
+$('#occView').addEventListener('pointerdown', e => {
+  const tab = e.target.closest('.pull-tab');
+  if (!tab || occBusy || e.button !== 0) return;
+  const scene = tab.closest('.pull-scene');
+  clearTimeout(occReveal);
+  occDrag = {tab, scene, y:e.clientY, open:scene.classList.contains('pulled'), moved:false, progress:scene.classList.contains('pulled') ? 1 : 0};
+  tab.setPointerCapture(e.pointerId);
+});
+$('#occView').addEventListener('pointermove', e => {
+  if (!occDrag) return;
+  const d = occDrag, distance = e.clientY - d.y;
+  if (Math.abs(distance) < 7 && !d.moved) return;
+  d.moved = true;
+  d.progress = Math.max(0, Math.min(1, (d.open ? 1 : 0) - distance / Math.min(240, d.scene.clientHeight * .5)));
+  d.scene.style.setProperty('--pull', d.progress);
+  d.scene.classList.add('dragging');
+});
+function finishOccDrag(e) {
+  const d = occDrag; if (!d) return; occDrag = null;
+  if (d.tab.hasPointerCapture(e.pointerId)) d.tab.releasePointerCapture(e.pointerId);
+  if (!d.moved) return;
+  occSuppressClick = performance.now() + 400;
+  // Keep the current visual pose when returning control to CSS transitions.
+    d.scene.classList.remove('dragging'); d.scene.style.removeProperty('--pull');
+  if (e.type !== 'pointercancel' && (d.open ? d.progress < .85 : d.progress < .22)) closeOcc();
+  else setOccPulled(true, !d.open);
+}
+$('#occView').addEventListener('pointerup', finishOccDrag);
+$('#occView').addEventListener('pointercancel', finishOccDrag);
+
 
 // '2026-12-12' → a local calendar date (no time-zone shift); '20:30' → '8:30 PM'
 const dayOf = iso => { const m = /^(\d{4})-(\d{2})-(\d{2})$/.exec(iso || ''); return m ? new Date(+m[1], +m[2] - 1, +m[3]) : null; };
