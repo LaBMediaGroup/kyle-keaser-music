@@ -1175,10 +1175,10 @@ html:has(#occView[open]){overflow:hidden}
 #occView .demo-controls,#occView .wlr-controls{display:none}
 #occView .pull-tab{touch-action:none;user-select:none;cursor:grab}
 #occView .pull-tab:active{cursor:grabbing}
-#occView .sb-art,#occView .wlr-preview{--duration:850ms}
+#occView .sb-art,#occView .wlr-preview{--duration:1100ms}
 #occView .jacket-art,#occView .wlr-preview .wlr-cover{transition:transform var(--duration) cubic-bezier(.32,.05,.15,1),opacity var(--duration) cubic-bezier(.7,0,.85,1)}
-#occView .pulled .jacket-art,#occView .wlr-preview .pulled .wlr-cover{transform:translateY(105%) rotate(1.5deg)}
-#occView .pull-scene.dragging .jacket-art,#occView .wlr-preview .pull-scene.dragging .wlr-cover{transition:none;transform:translateY(calc(var(--pull)*105%)) rotate(calc(var(--pull)*1.5deg));opacity:calc(1 - var(--pull))}
+#occView .pulled .jacket-art,#occView .wlr-preview .pulled .wlr-cover{transform:translateX(-108%) rotate(-1deg)}
+#occView .pull-scene.dragging .jacket-art,#occView .wlr-preview .pull-scene.dragging .wlr-cover{transition:none;transform:translateX(calc(var(--pull)*-108%)) rotate(calc(var(--pull)*-1deg));opacity:calc(1 - var(--pull))}
 #occView.closing .sb-art,#occView.closing .wlr-preview{--duration:600ms!important}
 @media(prefers-reduced-motion:reduce){#occView .party-notes>*{transition:none}}
 
@@ -1189,6 +1189,11 @@ html:has(#occView[open]){overflow:hidden}
 #occView .party-intro{margin-bottom:12px}
 #occView .party-title em{color:#f2e6c8}
 #occView .party-art .party-book{border-bottom:0}
+/* Let the cover read before the jacket slips horizontally off the liner. */
+#occView .pull-scene{touch-action:pan-y}
+#occView .wlr-preview .wlr-label-art{transition:opacity .5s ease}
+#occView .wlr-preview .pulled .wlr-label-art{transition-delay:.45s}
+#occView.closing .jacket-art,#occView.closing .wlr-preview .wlr-cover{transition-timing-function:cubic-bezier(.22,.7,.25,1),ease-out}
 </style>
 <link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Bodoni+Moda:opsz,wght@6..96,500&amp;display=swap">
 </head>
@@ -1467,7 +1472,7 @@ html:has(#occView[open]){overflow:hidden}
 <div class="insert"><img class="portrait" src="assets/band-new-dodge-lounge.jpg" alt="Kyle performing at New Dodge Lounge"><div class="insert-meta">SWEET BABE / KYLE KEASER<br>LIVE IN THE ROOM WITH YOU</div><h2>turn it<br><em>up.</em></h2><div class="insert-copy"><p class="intro">Your room. A live set.<br>A reason to stay for another.</p><div class="arrangements"><p><span>SIDE A / INTIMATE</span><b>Solo.</b><small>Lounges and coffee shops.</small></p><p><span>SIDE B / FULL SOUND</span><b>The band.</b><small>A stage and a crowd.</small></p></div><button class="date-link" type="button" data-go="Bar or venue night">Tell Kyle about your room ↗</button></div><div class="insert-footer">LIVE MUSIC / FOR YOUR ROOM <span>SB–01</span></div></div>
 <div class="jacket-art" aria-hidden="true"><div class="cut-paper"></div><div class="shell-top">SWEET BABE <span>LIVE / STEREO</span></div><div class="shell-title">AFTER<br><em>HOURS.</em></div><div class="shell-side">VOICE / GUITAR / THE ROOM</div><div class="shell-bottom">BAR NIGHTS &amp; VENUES <span>SB–01</span></div></div>
 <button class="pull-tab" type="button" aria-expanded="false">PULL THE LINER NOTES ↑</button>
-</div><div class="demo-controls"><button class="primary-action" type="button">Pull the insert ↑</button></div>
+</div>
 </div></template>
 <template id="occ-wed">
 <div class="wlr-preview" aria-label="Wedding album sleeve: Love on record">
@@ -1483,7 +1488,7 @@ html:has(#occView[open]){overflow:hidden}
 <div class="wlr-cover" aria-hidden="true"><div class="wlr-paper"></div><div class="wlr-cover-top"><span>KYLE KEASER &amp; SWEET BABE</span><span>STEREO / 02</span></div><div class="wlr-title"><strong>love</strong><em>on record.</em></div><div class="wlr-dedication">A soundtrack<br>for the two<br>of you.</div><div class="wlr-side">A DAY TO REMEMBER / A NIGHT TO REPLAY</div><div class="wlr-cover-foot"><span>THE WEDDING EDITION</span><span>WITH LOVE</span></div></div>
 <button class="wlr-tab pull-tab" type="button" aria-expanded="false" aria-controls="wlr-content">PULL TO REVEAL <span>↑</span></button>
 </div>
-<div class="wlr-controls"><button class="wlr-toggle primary-action" type="button" aria-expanded="false">Pull the liner notes ↑</button></div>
+
 
 </div>
 </template>
@@ -1513,7 +1518,7 @@ html:has(#occView[open]){overflow:hidden}
 <div class="insert"><img class="portrait" src="assets/videos/beautiful-girl-showcase.jpg" alt="Kyle singing and playing guitar onstage"><div class="insert-meta">KYLE KEASER / SWEET BABE<br>DETROIT TO CHICAGO</div><h2>good<br><em>company.</em></h2><div class="insert-copy"><p class="intro">Put the workday away.<br>Give your people a night together.</p><div class="arrangements"><p><span>THE CONVERSATION</span><b>Solo.</b><small>Alongside dinner and a mixer.</small></p><p><span>THE OCCASION</span><b>Solo or band.</b><small>A holiday party or company night.</small></p></div><button class="date-link" type="button" data-go="Company event">Plan your company night ↗</button></div><div class="insert-footer">LIVE MUSIC / OFF THE CLOCK <span>SB–04</span></div></div>
 <div class="jacket-art" aria-hidden="true"><div class="cut-paper"></div><div class="shell-top">KYLE KEASER / SWEET BABE <span>04</span></div><div class="shell-title">off the<br><em>clock.</em></div><div class="shell-side">AN EVENING / NOT A MEETING</div><div class="shell-bottom">THE COMPANY EDITION <span>LIVE</span></div></div>
 <button class="pull-tab" type="button" aria-expanded="false">PULL THE LINER NOTES ↑</button>
-</div><div class="demo-controls"><button class="primary-action" type="button">Pull the insert ↑</button></div>
+</div>
 </div></template>
 
 <dialog class="roomcard" id="roomCard" aria-labelledby="roomTitle">
@@ -2405,7 +2410,7 @@ function setOccPulled(open, sound = true) {
   clearTimeout(occReveal);
   scene.classList.toggle('pulled', open);
   const insert = scene.querySelector('.insert,.wlr-insert'); insert.inert = !open; insert.setAttribute('aria-hidden', String(!open));
-  dlg.querySelector('.pull-tab').textContent = open ? 'CLOSE SLEEVE ↓' : 'PULL TO OPEN ↑';
+  dlg.querySelector('.pull-tab').textContent = open ? 'CLOSE SLEEVE →' : 'SLIDE OPEN ←';
   const extra = dlg.querySelector('.primary-action'); if (extra) extra.textContent = open ? 'Close sleeve' : 'Pull to open';
   dlg.querySelectorAll('.pull-tab,.primary-action').forEach(b => b.setAttribute('aria-expanded', String(open)));
   if (sound && window.cardSound) window.cardSound(dlg.dataset.edition, !open);
@@ -2418,7 +2423,7 @@ function openOcc(k, card) {
   occFrom = card; setOccPulled(false, false); dlg.showModal(); dlg.scrollTop = 0;
   if (reduce) return setOccPulled(true, false);
   $('#ovMount').animate([{ opacity: 0, transform: 'translateY(18px) scale(.94)' }, { opacity: 1, transform: 'none' }], { duration: 320, easing: 'cubic-bezier(.2,.8,.2,1)' });
-  occReveal = setTimeout(() => { if (dlg.open && !occBusy) setOccPulled(true); }, 260);
+  occReveal = setTimeout(() => { if (dlg.open && !occBusy) setOccPulled(true); }, k === 'wed' ? 4500 : 3500);
 }
 function closeOcc(then) {
   const dlg = $('#occView'); if (!dlg.open || occBusy) return;
@@ -2448,22 +2453,22 @@ $('#occView').addEventListener('click', e => {
   if (e.target.closest('[data-close]') || e.target === e.currentTarget) closeOcc();
 });
 $('#occView').addEventListener('cancel', e => { e.preventDefault(); closeOcc(); });
-// The tab follows a deliberate pull. A downward return closes, never strands a covered dialog.
+// The tab follows a deliberate pull. A rightward return closes, never strands a covered dialog.
 let occDrag = null, occSuppressClick = 0;
 $('#occView').addEventListener('pointerdown', e => {
   const tab = e.target.closest('.pull-tab');
   if (!tab || occBusy || e.button !== 0) return;
   const scene = tab.closest('.pull-scene');
   clearTimeout(occReveal);
-  occDrag = {tab, scene, y:e.clientY, open:scene.classList.contains('pulled'), moved:false, progress:scene.classList.contains('pulled') ? 1 : 0};
+  occDrag = {tab, scene, x:e.clientX, open:scene.classList.contains('pulled'), moved:false, progress:scene.classList.contains('pulled') ? 1 : 0};
   tab.setPointerCapture(e.pointerId);
 });
 $('#occView').addEventListener('pointermove', e => {
   if (!occDrag) return;
-  const d = occDrag, distance = e.clientY - d.y;
+  const d = occDrag, distance = e.clientX - d.x;
   if (Math.abs(distance) < 7 && !d.moved) return;
   d.moved = true;
-  d.progress = Math.max(0, Math.min(1, (d.open ? 1 : 0) - distance / Math.min(240, d.scene.clientHeight * .5)));
+  d.progress = Math.max(0, Math.min(1, (d.open ? 1 : 0) - distance / Math.min(240, d.scene.clientWidth * .5)));
   d.scene.style.setProperty('--pull', d.progress);
   d.scene.classList.add('dragging');
 });
@@ -2473,7 +2478,7 @@ function finishOccDrag(e) {
   if (!d.moved) return;
   occSuppressClick = performance.now() + 400;
   // Keep the current visual pose when returning control to CSS transitions.
-    d.scene.classList.remove('dragging'); d.scene.style.removeProperty('--pull');
+  d.scene.classList.remove('dragging'); d.scene.style.removeProperty('--pull');
   if (e.type !== 'pointercancel' && (d.open ? d.progress < .85 : d.progress < .22)) closeOcc();
   else setOccPulled(true, !d.open);
 }
