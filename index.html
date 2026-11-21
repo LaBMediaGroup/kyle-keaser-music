@@ -799,6 +799,7 @@ html:not(.js) .switch{display:none}
 .occ-card:hover .occ-rec{transform:translateX(15%) rotate(210deg)}
 .occ-card:hover .occ-slv{transform:translateX(-2%) rotate(-1.5deg)}
 .occ-card:active .occ-slv{transform:scale(.97)}
+.occ-card.lifted .occ-slv{visibility:hidden}   /* the sleeve is up in the dialog; its spot in the row stays empty */
 .s-cream{--bg:#e9e3d0;--fg:#16140f;--lab:#DED63D;--tint:#e9e3d0}
 .s-sun{--bg:#DED63D;--fg:#16140f;--lab:#e9e3d0;--tint:#DED63D}
 /* Wedding edition: warm ivory stationery, champagne rules, and invitation typography. */
@@ -2444,8 +2445,28 @@ function openOcc(k, card) {
   scene.setAttribute('aria-label', 'Tap the artwork or swipe left to open the sleeve');
   dlg.className = 'ov'; dlg.dataset.edition = k; dlg.setAttribute('aria-label', ROOMS[k].title + ' — record sleeve');
   occFrom = card; setOccPulled(false, false); dlg.showModal(); dlg.scrollTop = 0;
-  if (reduce) return;
-  $('#ovMount').animate([{ opacity: 0, transform: 'translateY(18px) scale(.94)' }, { opacity: 1, transform: 'none' }], { duration: 320, easing: 'cubic-bezier(.2,.8,.2,1)' });
+  if (reduce) return setOccPulled(true, false);
+  // One tap: the sleeve lifts out of its spot in the row, comes forward, then the liner slides out on its own.
+  const mount = $('#ovMount'), fly = flyFrom(card, scene);
+  scene.parentElement.querySelectorAll(':scope > :not(.pull-scene)').forEach(el =>
+    el.animate([{ opacity: 0 }, { opacity: 1 }], { duration: 380, delay: 420, easing: 'ease-out', fill: 'backwards' }));
+  const a = fly
+    ? mount.animate([{ transformOrigin: fly.origin, transform: fly.at + ' rotate(-1.5deg)', easing: 'cubic-bezier(.5,0,.2,1)' },
+        { offset: .74, transformOrigin: fly.origin, transform: 'translateY(-10px) scale(1.035)', easing: 'cubic-bezier(.4,0,.3,1)' },
+        { transformOrigin: fly.origin, transform: 'none' }], { duration: 820 })
+    : mount.animate([{ opacity: 0, transform: 'translateY(18px) scale(.94)' }, { opacity: 1, transform: 'none' }], { duration: 320, easing: 'cubic-bezier(.2,.8,.2,1)' });
+  if (fly) card.classList.add('lifted');
+  a.finished.then(() => setTimeout(() => {
+    if (dlg.open && !occBusy && !occDrag && !scene.classList.contains('pulled') && dlg.contains(scene)) setOccPulled(true);
+  }, 90), () => {});
+}
+// Where the card's sleeve sits, as a transform that puts the dialog's sleeve right on top of it.
+function flyFrom(card, scene) {
+  const slv = card && card.querySelector('.occ-slv'); if (!slv) return null;
+  const f = slv.getBoundingClientRect(), t = scene.getBoundingClientRect(), m = $('#ovMount').getBoundingClientRect();
+  if (!f.width || !t.width) return null;
+  const k = f.width / t.width, dy = f.top + f.height / 2 - (t.top + t.height * k / 2);   // centred on the card (on phones the dialog sleeve is taller)
+  return { origin: `${t.left - m.left}px ${t.top - m.top}px`, at: `translate(${f.left - t.left}px,${dy}px) scale(${k})` };
 }
 function closeOcc(then) {
   const dlg = $('#occView'); if (!dlg.open || occBusy) return;
@@ -2453,6 +2474,7 @@ function closeOcc(then) {
   const done = () => {
     dlg.getAnimations({ subtree: true }).forEach(a => a.cancel());
     dlg.close(); dlg.classList.remove('closing'); occBusy = false;
+    document.querySelectorAll('.occ-card.lifted').forEach(c => c.classList.remove('lifted'));
     if (occFrom) occFrom.focus({ preventScroll: true });
     if (then) then();
   };
@@ -2463,8 +2485,14 @@ function closeOcc(then) {
   const mount = $('#ovMount'), current = getComputedStyle(mount);
   const start = { opacity: current.opacity, transform: current.transform };
   mount.getAnimations().forEach(a => a.cancel());
-  const a = mount.animate([start, { opacity: 0, transform: 'translateY(12px) scale(.97)' }],
-    { duration: 260, delay: wasOpen ? 430 : 0, easing: 'cubic-bezier(.4,0,1,1)', fill: 'both' });
+  const fly = occFrom && occFrom.classList.contains('lifted') && !then && flyFrom(occFrom, dlg.querySelector('.pull-scene'));
+  const a = fly      // the liner tucks back in, then the sleeve drops back into its spot in the row
+    ? mount.animate([{ ...start, transformOrigin: fly.origin, easing: 'cubic-bezier(.45,0,.25,1)' }, { offset: .88, opacity: 1, transformOrigin: fly.origin, transform: fly.at + ' rotate(-1.5deg)' },
+        { opacity: 0, transformOrigin: fly.origin, transform: fly.at + ' rotate(-1.5deg)' }],
+        { duration: 620, delay: wasOpen ? 620 : 0, fill: 'both' })
+    : mount.animate([start, { opacity: 0, transform: 'translateY(12px) scale(.97)' }],
+        { duration: 260, delay: wasOpen ? 430 : 0, easing: 'cubic-bezier(.4,0,1,1)', fill: 'both' });
+  if (fly) dlg.querySelectorAll('.pull-scene ~ *, .topline').forEach(el => el.animate([{ opacity: 1 }, { opacity: 0 }], { duration: 300, delay: wasOpen ? 450 : 0, fill: 'both' }));
   a.finished.then(done, done);
 }
 $('#occView').addEventListener('click', e => {
